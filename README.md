@@ -11,3 +11,5 @@ Organisation du groupe sur GitHub, et compréhension du sujet de la méthode de 
 
 Réunion avec toute l'équipe, création de la liste des tâches à réaliser pendant le projet, 
 et détermination du niveau de difficultés de chaque tâches. 
+
+#### Séance du 09 avril : 
