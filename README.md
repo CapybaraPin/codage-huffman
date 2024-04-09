@@ -13,3 +13,5 @@ Réunion avec toute l'équipe, création de la liste des tâches à réaliser pe
 et détermination du niveau de difficultés de chaque tâches. 
 
 #### Séance du 09 avril : 
+
+Organisation de la première itération et mise en place du diagramme de Gantt pour celle-ci.
