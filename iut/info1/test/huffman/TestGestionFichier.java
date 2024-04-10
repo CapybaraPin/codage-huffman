@@ -50,6 +50,15 @@ class TestGestionFichier {
     }
 
     @Test
+    void testLectureFichier() {
+    	for (int indiceTest = 0; 
+    			indiceTest < LIEN_FICHIERS.length; indiceTest++) {
+    		
+    		assertArrayEquals(CONTENU_DE_FICHIERS[indiceTest], GestionFichier.lectureFichier(LIEN_FICHIERS[indiceTest]));
+    	}
+    }
+
+    @Test
     void testAffichageFichier() {
 
         for (int indiceTest = 0;
