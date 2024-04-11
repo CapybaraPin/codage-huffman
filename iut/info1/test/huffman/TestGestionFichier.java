@@ -16,6 +16,15 @@ class TestGestionFichier {
     private final PrintStream sortieStandard = System.out;
     private final ByteArrayOutputStream capteurDeSortie = new ByteArrayOutputStream();
     
+    /** TODO : faire la javadoc de LIEN_FICHIER **/
+    public static final String[] LIEN_FICHIERS = {
+    		"C:\\fichier1.txt",
+    		"C:\\fichier2.txt",
+    		"C:\\fichier3.txt",
+    		"C:\\fichier4.txt",
+    		"C:\\fichier5.txt",
+    		"C:\\fichier6.txt"
+    };
     
     /** TODO Faire la javadoc de CONTENU_DE_FICHIERS*/
     public static final String[][] CONTENU_DE_FICHIERS = {
