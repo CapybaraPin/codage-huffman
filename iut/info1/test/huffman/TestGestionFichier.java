@@ -1,4 +1,4 @@
-package iut.info1.test.huffman.fichier;
+package iut.info1.test.huffman;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -24,6 +24,8 @@ class TestGestionFichier {
     		"C:\\fichier4.txt",
     		"C:\\fichier5.txt",
     		"C:\\fichier6.txt"
+    		// "C:\\fichier6.TXT"
+    		// "C:\\fichier6.java"
     };
     
     /** TODO Faire la javadoc de CONTENU_DE_FICHIERS*/
@@ -57,7 +59,7 @@ class TestGestionFichier {
         System.out.println("---FIN DE TEST DE LA CLASSE GestionFichier---");
 
     }
-
+    
     @Test
     void testLectureFichier() {
     	for (int indiceTest = 0; 
