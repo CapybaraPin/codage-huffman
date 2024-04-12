@@ -37,6 +37,29 @@ class TestGestionFichier {
         {"Lorem", "DELETE FROM mysql.user", "Ipsum",  "Dolor sit amet"},
         {}
     };
+
+    /** TODO Faire la javadoc de CONTENU_DE_FICHIERS*/
+    public static final String[][][] OCCURRENCE_DES_CARACTERES = {
+    		{
+    			{"A", "1"}, {"B", "1"}, {"C", "1"}, {"D", "1"}
+    		},    		{
+    			{"L", "1"}, {"o", "1"}, {"r", "1"}, {"e", "1"}, {"m", "2"},
+    			{"\n", "2"}, {"I", "1"}, {"p", "1"}, {"s", "1"}, {"u", "1"}
+    		},    		{
+    			{"a", "1"}, {"\n", "4"}, {"b", "1"}
+    		},    		{
+    			{"\n", "3"}
+    		},    		{
+    			{"L", "2"},  {"o", "3"}, {"r", "3"}, {"e", "3"}, {"m", "4"}, 
+    			{"\n", "3"}, {"D", "2"}, {"E", "3"}, {"T", "1"}, {" ", "4"},
+    			{"F", "1"},  {"R", "1"},
+    			{"O", "1"},  {"M", "1"}, {"y", "1"}, {"s", "4"}, {"q", "1"},
+    			{"l", "2"},  {".", "1"}, {"u", "2"}, {"I", "1"}, {"p", "1"},
+    			{"i", "1"},  {"t", "2"}, {"a", "1"}
+    		},    		{
+    			{"", "0"}
+    		},
+    };
     
     /** TODO Faire la javadoc de RESULTAT_POUR_CONTENU*/
     public static final String[] RESULTAT_POUR_CONTENU = {
@@ -69,6 +92,38 @@ class TestGestionFichier {
     	}
     }
 
+   
+    @Test
+    void testCompterOccurrence() {
+
+    	String[][] occurrenceActuelleAttendu;
+    	String[][] occurrenceActuelleObtenue;
+    	
+    	
+    	// Initialise avec un mauvais élément
+    	occurrenceActuelleAttendu = occurrenceActuelleObtenue = null;
+    	
+    	for (int indexDeTest = 0; 
+    			indexDeTest < CONTENU_DE_FICHIERS.length; 
+    			indexDeTest++) {
+    		
+    		occurrenceActuelleAttendu = OCCURRENCE_DES_CARACTERES[indexDeTest];
+    		occurrenceActuelleObtenue = GestionFichier
+    								   .compterOccurrence(CONTENU_DE_FICHIERS
+    										   			 [indexDeTest]);	
+		
+    		for (int indexActuel = 0;
+    				indexActuel < occurrenceActuelleObtenue.length;
+    				indexActuel++) {
+
+        		assertArrayEquals(occurrenceActuelleAttendu[indexActuel],
+        				occurrenceActuelleObtenue[indexActuel]);
+
+			}
+		}
+    	
+    }
+    
     @Test
     void testAffichageFichier() {
 
