@@ -118,6 +118,85 @@ public class GestionFichier {
 		return contenu;
 	}
 
+		/**
+	 * rechercher tous les caractères stockés dans 
+	 * un tableau de chaîne de caractères, et d'en extraire 
+	 * le nombre de fois qu'ils apparaissent dans le tableau 
+	 * de chaîne entier.
+	 * @param ligneFichier, un tableau pour qui chacune des
+	 * chaînes de caractères est la ligne d'un fichier
+	 * 
+	 * @return un tableau de chaîne de caractères, avec l'occurence
+	 * de chaque caractère
+	 * 
+	 */
+	public static String[][] compterOccurrence(String[] ligneFichier) {
+		
+		if (ligneFichier.length == 0) {
+			return  new String[][]{{"", "0"}};
+		}
+		
+		String[][] occurrencesDesCaracteres;
+		String contenuFichier = String.join("\n", ligneFichier);
+		boolean estDejaApparue;
+		
+
+		
+		occurrencesDesCaracteres = new String[][]{
+			{String.valueOf(contenuFichier.charAt(0)), "0"}		
+		};
+		
+		
+		for (int indexDeRecherche = 0;
+				indexDeRecherche < contenuFichier.length();
+				indexDeRecherche++) {
+		
+			estDejaApparue = false;
+			for (String[] caractereCompte : occurrencesDesCaracteres) {
+							
+				// Si le caractère actuel est dans les caractères compté
+				if (caractereCompte[0].toCharArray()[0] == (contenuFichier.charAt(indexDeRecherche))) {
+					estDejaApparue = true;
+					
+					// On ajoute 1
+					caractereCompte[1] =  String.valueOf(Integer.parseInt(caractereCompte[1]) + 1);
+				}
+			}
+			
+			if (!estDejaApparue) {
+				
+				// On crée un tableau qui permet d'ajouter un caractère
+				// aux occurrences
+				String[][] nouvelleTableDesOccurences 
+							= new String[occurrencesDesCaracteres.length + 1][2];
+				
+				// On transfert les éléments de notre table
+				for (int indexActuel = 0;
+						indexActuel < occurrencesDesCaracteres.length;
+						indexActuel++) {
+					
+					nouvelleTableDesOccurences[indexActuel] 
+							= occurrencesDesCaracteres[indexActuel];
+				}
+				
+				// On ajoute le caractère trouvé
+				nouvelleTableDesOccurences[occurrencesDesCaracteres.length][0]
+						= String.valueOf(contenuFichier.charAt(indexDeRecherche));
+				
+				nouvelleTableDesOccurences[occurrencesDesCaracteres.length][1]
+						= "1";
+				
+				// On remplace l'ancien tableau
+				
+				occurrencesDesCaracteres = nouvelleTableDesOccurences;
+	
+			}
+		
+		}
+				
+		return occurrencesDesCaracteres;
+	}
+	
 	/**
 	 * L'objectif est d'afficher le contenu d'un tableau de
 	 * chaîne de caractères, pour qui chaque éléments de
