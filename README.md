@@ -15,3 +15,8 @@ et détermination du niveau de difficultés de chaque tâches.
 #### Séance du 09 avril : 
 
 Organisation de la première itération et mise en place du diagramme de Gantt pour celle-ci.
+
+
+#### Séance du 12 avril : 
+
+Vérification de la définition générale des besoins, mise en place du plan de projet et création du "product backlog" pour la première itération. 
