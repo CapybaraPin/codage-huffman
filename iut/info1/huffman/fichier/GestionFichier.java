@@ -196,6 +196,32 @@ public class GestionFichier {
 				
 		return occurrencesDesCaracteres;
 	}
+
+	/**
+	 * Enregistre une arborescence de Huffman
+	 * générée par la classe GestionFichier. 
+	 * Il mettra dans un fichier 3 éléments en évidence. 
+	 * Le code huffman associé à un encodage Unicode UTF-8, 
+	 * et le caractère associé à son encodage. 
+	 * 
+	 * @param tblArbreHuffman un tableau de tableau de chaînes
+	 *  de caractères, ayant pour chaque sous-tableau un caractère
+	 *   puis la position de ce dernier dans l'arborescence Huffman
+	 */
+	public static void stockageABHuffman(String[][] tblArbreHuffman) {
+		//TODO Faire le corps de la fonction
+		
+		/*TODO Faire un tri dans l'ordre croissant en fct de l'encodage
+		 * 	   Restituer l'encode de chaque caractères
+		 * 	   Enregistrer les données dans un fichier
+		 */
+		
+		for (String[] feuilleABHuffman : tblArbreHuffman) {
+			System.out.printf("codeHuffman = %s ; encode = TODO ; symbole = %s\n",
+							   feuilleABHuffman[1], feuilleABHuffman[0]);
+		}
+		
+	}
 	
 	/**
 	 * L'objectif est d'afficher le contenu d'un tableau de
