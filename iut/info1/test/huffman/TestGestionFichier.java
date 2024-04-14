@@ -38,6 +38,54 @@ class TestGestionFichier {
         {}
     };
 
+    /** TODO Faire la javadoc de ARBRES_BINAIRES_VALIDES*/
+    public static final String[][][] ARBRES_BINAIRES_VALIDES = 
+    	{
+    			{{"e", "101"}, {"b", "010"}, {"d", "110101"}},
+    			{{"a", "101"}, {"t", "010"}, {"X", "11011"}},
+    			{{"x", "101"}, {" ", "010"}, {"m", "11001"}},
+    			{{" ", "11"}, {"W", "01"}, {"8", "011"}},
+    			{{"\t", "101"}, {"x", "010"}, {"/", "11101"}},
+    			{{"W", "101"}, {"F", "010"}, {"A", "11111"}}
+    	};
+    
+    public static final String[] NOMS_DES_FICHIERS_A_COMPRESSE = {
+    		"C:\\huffmantest\\fichier1",
+    		"C:\\huffmantest\\fichier2",
+    		"C:\\huffmantest\\fichier3",
+    		"C:\\huffmantest\\fichier4",
+    		"C:\\huffmantest\\fichier5",
+    		"C:\\huffmantest\\fichier6",
+
+    };
+    
+    public static final String[] FICHIER_AB_HUFFMAN_ATTENDU = {
+    		"codeHuffman =              101 ; encode = 01100101 ; symbole = e\r\n"
+    		+ "codeHuffman =              010 ; encode = 01100010 ; symbole = b\r\n"
+    		+ "codeHuffman =           110101 ; encode = 01100100 ; symbole = d\r\n"
+    		+ "",
+    		"codeHuffman =              101 ; encode = 01100001 ; symbole = a\r\n"
+    		+ "codeHuffman =              010 ; encode = 01110100 ; symbole = t\r\n"
+    		+ "codeHuffman =            11011 ; encode = 01011000 ; symbole = X\r\n"
+    		+ "",
+    		"codeHuffman =              101 ; encode = 01111000 ; symbole = x\r\n"
+    		+ "codeHuffman =              010 ; encode = 00100000 ; symbole =  \r\n"
+    		+ "codeHuffman =            11001 ; encode = 01101101 ; symbole = m\r\n"
+    		+ "",
+    		"codeHuffman =               11 ; encode = 00100000 ; symbole =  \r\n"
+    		+ "codeHuffman =               01 ; encode = 01010111 ; symbole = W\r\n"
+    		+ "codeHuffman =              011 ; encode = 00111000 ; symbole = 8\r\n"
+    		+ "",
+    		"codeHuffman =              101 ; encode = 00001001 ; symbole = 	\r\n"
+    		+ "codeHuffman =              010 ; encode = 01111000 ; symbole = x\r\n"
+    		+ "codeHuffman =            11101 ; encode = 00101111 ; symbole = /\r\n"
+    		+ "",
+    		"codeHuffman =              101 ; encode = 01010111 ; symbole = W\r\n"
+    		+ "codeHuffman =              010 ; encode = 01000110 ; symbole = F\r\n"
+    		+ "codeHuffman =            11111 ; encode = 01000001 ; symbole = A\r\n"
+    		+ ""
+    };
+	
     /** TODO Faire la javadoc de CONTENU_DE_FICHIERS*/
     public static final String[][][] OCCURRENCE_DES_CARACTERES = {
     		{
@@ -92,6 +140,49 @@ class TestGestionFichier {
     	}
     }
 
+
+    @Test
+    void testStockageABHuffman() {
+    	
+    	FileReader fichierVerifie;
+    	BufferedReader liseurDeLignes;
+    	String contenuDuFichierVerifie;
+    	
+    	contenuDuFichierVerifie = "";
+    	for (int indexDeTest = 0;
+    			indexDeTest < NOMS_DES_FICHIERS_A_COMPRESSE.length;
+    			indexDeTest++) {
+
+    		GestionFichier.stockageABHuffman(ARBRES_BINAIRES_VALIDES[indexDeTest]
+    				, NOMS_DES_FICHIERS_A_COMPRESSE[indexDeTest]);
+    		
+    		try {
+    			fichierVerifie = new FileReader(
+    					NOMS_DES_FICHIERS_A_COMPRESSE[indexDeTest] 
+    							+ "_EncodeH.txt");
+
+    			liseurDeLignes = new BufferedReader(fichierVerifie);
+    			
+    			String ligne = liseurDeLignes.readLine();
+    			
+    			while (ligne != null) {
+    				contenuDuFichierVerifie += ligne +  "\r\n";
+    				
+    				// lecture de la prochaine ligne
+    				ligne = liseurDeLignes.readLine();
+    			}
+    			fichierVerifie.close();
+    		} catch (IOException pbOuverture) {
+    			pbOuverture.printStackTrace();
+    		}    	
+    		
+    		assertEquals(FICHIER_AB_HUFFMAN_ATTENDU[indexDeTest]
+    					, contenuDuFichierVerifie);
+    		
+    		contenuDuFichierVerifie = "";
+    	
+    	}
+    }
    
     @Test
     void testCompterOccurrence() {
