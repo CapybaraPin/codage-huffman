@@ -18,6 +18,7 @@ import java.io.IOException;
  */
 public class GestionFichier {
 
+
 	/** impossible d'ouvrir le fichier renseigné */
 	private static final String ERREUR_OUVERTURE_FICHIER = 
 			"erreur : Impossible d'ouvrir le fichier au lien : ";
@@ -41,6 +42,14 @@ public class GestionFichier {
 	/** indication du paramètre à renseigner pour l'utilisateur **/
 	private static final String AIDE_USAGE = 
 			"usage : data\\\\MonSource.txt";
+	
+    /** Code d'erreur lors d'un soucis de lecture fichier */
+    public static int CODE_ERREUR_FICHIER_LECTURE = 10;
+
+    private static String MSG_ERREUR_FICHIER_LECTURE
+    = "Il y a eu un problème lors de l'ovuerture du fichier...";
+	
+	private static final String SUFFIXE_FICHIER = ".txt";
 	
 	/**
 	 * Lit le contenu d'un fichier texte ligne par ligne 
