@@ -197,6 +197,7 @@ public class GestionFichier {
 		return occurrencesDesCaracteres;
 	}
 
+
 	/**
 	 * Enregistre une arborescence de Huffman
 	 * générée par la classe GestionFichier. 
@@ -208,19 +209,65 @@ public class GestionFichier {
 	 *  de caractères, ayant pour chaque sous-tableau un caractère
 	 *   puis la position de ce dernier dans l'arborescence Huffman
 	 */
-	public static void stockageABHuffman(String[][] tblArbreHuffman) {
-		//TODO Faire le corps de la fonction
-		
-		/*TODO Faire un tri dans l'ordre croissant en fct de l'encodage
-		 * 	   Restituer l'encode de chaque caractères
-		 * 	   Enregistrer les données dans un fichier
-		 */
-		
-		for (String[] feuilleABHuffman : tblArbreHuffman) {
-			System.out.printf("codeHuffman = %s ; encode = TODO ; symbole = %s\n",
-							   feuilleABHuffman[1], feuilleABHuffman[0]);
+	public static void stockageABHuffman(String[][] tblArbreHuffman, String nomDuFichier) {
+
+		String encodageDuCaractere;
+
+
+		// System.out.printf("codeHuffman = %s ; encode = %s ; symbole = %s\n",
+		// 				   feuilleABHuffman[1], encodageDuCaractere
+		// 				   , feuilleABHuffman[0]);
+
+		try {
+			File fichierEnregistrement = new File(
+											 	 nomDuFichier
+											 	 +"_EncodeH"
+											 	 +SUFFIXE_FICHIER);
+
+			if (fichierEnregistrement.createNewFile()) {
+				System.out.println("Fichier créé " 
+						+ fichierEnregistrement.getName());
+			} else {
+				System.out.println("Ce fichier existe déjà");
+			}
+
+		} catch (IOException pbLecture) {
+			System.err.println(MSG_ERREUR_FICHIER_LECTURE);
+			System.exit(CODE_ERREUR_FICHIER_LECTURE);
 		}
-		
+
+		try {
+			FileWriter ecritureFichier = new FileWriter(
+													   nomDuFichier
+													   +"_EncodeH"
+													   +SUFFIXE_FICHIER);
+
+			// Ecriture de chaque données
+
+			for (String[] feuilleABHuffman : tblArbreHuffman) {
+				
+				encodageDuCaractere = Integer.toBinaryString(Character.hashCode(
+						feuilleABHuffman[0].charAt(0) // Converti le string en char
+						));
+				
+				if (encodageDuCaractere.length() != 8) {
+					encodageDuCaractere = "0".repeat(8 - encodageDuCaractere.length()) 
+							+ encodageDuCaractere;
+				}
+
+
+				ecritureFichier.write(
+						String.format("codeHuffman = %16s ; encode = %8s ; "
+								+ "symbole = %1s\n",
+								feuilleABHuffman[1], encodageDuCaractere,
+								feuilleABHuffman[0]));
+			}
+
+			ecritureFichier.close();
+		} catch (IOException pbEcriture) {
+			// Too late !!
+		}
+
 	}
 	
 	/**
