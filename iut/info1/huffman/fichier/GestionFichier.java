@@ -128,7 +128,7 @@ public class GestionFichier {
 		return contenu;
 	}
 
-		/**
+	/**
 	 * rechercher tous les caractères stockés dans 
 	 * un tableau de chaîne de caractères, et d'en extraire 
 	 * le nombre de fois qu'ils apparaissent dans le tableau 
@@ -215,9 +215,10 @@ public class GestionFichier {
 	 * Le code huffman associé à un encodage Unicode UTF-8, 
 	 * et le caractère associé à son encodage. 
 	 * 
-	 * @param tblArbreHuffman un tableau de tableau de chaînes
+	 * @param tblArbreHuffman, nomDuFichier un tableau de tableau de chaînes
 	 *  de caractères, ayant pour chaque sous-tableau un caractère
-	 *   puis la position de ce dernier dans l'arborescence Huffman
+	 *   puis la position de ce dernier dans l'arborescence Huffman. Il est
+  	 *   également demandé le nom du fichier compressé.
 	 */
 	public static void stockageABHuffman(String[][] tblArbreHuffman, String nomDuFichier) {
 
