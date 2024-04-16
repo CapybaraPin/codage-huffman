@@ -45,9 +45,9 @@ public class GestionFichier {
 			"usage : data\\\\MonSource.txt";
 	
     /** Code d'erreur lors d'un soucis de lecture fichier */
-    public static int CODE_ERREUR_FICHIER_LECTURE = 10;
+    public static final int CODE_ERREUR_FICHIER_LECTURE = 10;
 
-    private static String MSG_ERREUR_FICHIER_LECTURE
+    private static final String MSG_ERREUR_FICHIER_LECTURE
     = "Il y a eu un problème lors de l'ovuerture du fichier...";
 	
 	private static final String SUFFIXE_FICHIER = ".txt";
