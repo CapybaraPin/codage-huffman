@@ -128,6 +128,59 @@ public class GestionFichier {
 		return contenu;
 	}
 
+	
+	/**
+	 * Permet d'obtenir la taille d'un fichier
+	 * @param cheminFichier le chemin du fichier analysé
+	 * @return la taille du fichier
+	 */
+	public static double tailleDuFichier(String cheminFichier) {
+		
+		File fichierAnalyse;
+
+		
+		if (!cheminFichier.isEmpty()) {
+			try {
+				fichierAnalyse = new File(cheminFichier);
+
+				
+				if (!fichierAnalyse.getName().toLowerCase().endsWith(".txt")){
+					err.println(ERREUR_EXTENSION_FICHIER); 
+				} else {
+					return fichierAnalyse.length();
+				}
+			} catch (NullPointerException pbOuverture) {
+				err.println(ERREUR_OUVERTURE_FICHIER + cheminFichier);
+				err.println(AIDE_USAGE);
+			}
+			
+			
+		} else {
+			err.println(ERREUR_FORMAT_PARAMETRE);
+			err.println(AIDE_USAGE);
+		}
+
+		return -1.0;
+		
+	}
+	
+	/**
+	 * Permet de comparer la taille de deux fichiers
+	 * pour en extraire un taux. Le but est de comparer
+	 * le taux de compression d'un fichier
+	 * Si le taux est supérieur à 1, alors la compression est efficace
+	 * Si il est de 1, la compression est nulle
+	 * Sinon, la compression est inefficace 
+	 * @param tailleFichierInitiale la taille du fichier à compresser
+	 * @param tailleFichierCompresse la taille du fichier compressé
+	 * @return le rapport entre le fichier initial et le fichier compressé
+	 */
+	public static double rapportEntreDeuxFichiers(double tailleFichierInitiale
+						      , double tailleFichierCompresse) {
+		
+		return tailleFichierInitiale/tailleFichierCompresse;
+	}
+
 	/**
 	 * rechercher tous les caractères stockés dans 
 	 * un tableau de chaîne de caractères, et d'en extraire 
