@@ -217,7 +217,20 @@ class TestGestionFichier {
 		}
     	
     }
-    
+
+    @Test
+    void testTailleDuFichiers() {
+    	
+    	for (int indexDeParcours = 0;
+    			indexDeParcours < ARBRES_BINAIRES_VALIDES.length;
+    			indexDeParcours++) {
+			
+    		assertEquals(TAILLE_FICHIERS[indexDeParcours],
+    					GestionFichier.tailleDuFichier(LIEN_FICHIERS[indexDeParcours]));
+		}
+    	
+    }
+
     @Test
     void testAffichageFichier() {
 
