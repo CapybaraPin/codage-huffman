@@ -42,15 +42,21 @@ public class GestionFichier {
 
 	/** indication du paramètre à renseigner pour l'utilisateur **/
 	private static final String AIDE_USAGE = 
-			"usage : data\\\\MonSource.txt";
+			"usage : data:\\\\MonSource.txt";
 	
-    /** Code d'erreur lors d'un soucis de lecture fichier */
+    /** code d'erreur lors d'un soucis de lecture fichier */
     public static final int CODE_ERREUR_FICHIER_LECTURE = 10;
 
-    private static final String MSG_ERREUR_FICHIER_LECTURE
-    = "Il y a eu un problème lors de l'ovuerture du fichier...";
+    /** problème de lecture du fichier **/
+    private static final String ERREUR_FICHIER_LECTURE
+    = "Il y a eu un problème lors de l'ovuerture du fichier : ";
 	
+    /** suffixe des fichiers pris en charge **/
 	private static final String SUFFIXE_FICHIER = ".txt";
+	
+	/** le numerateur indiqué ne respecte pas les critères **/
+	private static final String ERREUR_NUMERATEUR_INVALIDE
+	= "erreur : Impossible d'effectuer la division, numérateur invalide.";
 	
 	/**
 	 * Lit le contenu d'un fichier texte ligne par ligne 
@@ -128,22 +134,21 @@ public class GestionFichier {
 		return contenu;
 	}
 
-	
 	/**
 	 * Permet d'obtenir la taille d'un fichier
 	 * @param cheminFichier le chemin du fichier analysé
 	 * @return la taille du fichier
 	 */
 	public static double tailleDuFichier(String cheminFichier) {
-		
+
 		File fichierAnalyse;
 
-		
+
 		if (!cheminFichier.isEmpty()) {
 			try {
 				fichierAnalyse = new File(cheminFichier);
 
-				
+
 				if (!fichierAnalyse.getName().toLowerCase().endsWith(".txt")){
 					err.println(ERREUR_EXTENSION_FICHIER); 
 				} else {
@@ -153,17 +158,17 @@ public class GestionFichier {
 				err.println(ERREUR_OUVERTURE_FICHIER + cheminFichier);
 				err.println(AIDE_USAGE);
 			}
-			
-			
+
+
 		} else {
 			err.println(ERREUR_FORMAT_PARAMETRE);
 			err.println(AIDE_USAGE);
 		}
 
 		return -1.0;
-		
+
 	}
-	
+
 	/**
 	 * Permet de comparer la taille de deux fichiers
 	 * pour en extraire un taux. Le but est de comparer
@@ -177,10 +182,10 @@ public class GestionFichier {
 	 */
 	public static double rapportEntreDeuxFichiers(double tailleFichierInitiale
 						      , double tailleFichierCompresse) {
-		
+
 		return tailleFichierInitiale/tailleFichierCompresse;
 	}
-
+	
 	/**
 	 * rechercher tous les caractères stockés dans 
 	 * un tableau de chaîne de caractères, et d'en extraire 
@@ -296,7 +301,7 @@ public class GestionFichier {
 			}
 
 		} catch (IOException pbLecture) {
-			System.err.println(MSG_ERREUR_FICHIER_LECTURE);
+			System.err.println(ERREUR_FICHIER_LECTURE + nomDuFichier);
 			System.exit(CODE_ERREUR_FICHIER_LECTURE);
 		}
 
@@ -348,6 +353,39 @@ public class GestionFichier {
 		for (String ligne : contenuFichier) {
 			System.out.println(ligne);
 		}
+	}
+	
+	/**
+	 * Calcul la fréquence d'apparition de chaque caractère. 
+	 * 
+	 * @param occurrences Tableau contenu le caractère et sont
+	 * nombre d'occurences. 
+	 * @return frequences d'apparition de chaque caractères. 
+	 */
+	public static float[] calculFrequences(String[][] occurrences){
+		int nbOccurrences;
+		int nbLignes;
+		float[] frequences;
+		
+		nbOccurrences = 0;
+		for (String[] occurrence : occurrences) {
+			nbOccurrences += Integer.valueOf(occurrence[1]);
+		}
+		
+		if (nbOccurrences <= 0 || nbOccurrences >= Integer.MAX_VALUE) {
+			err.println(ERREUR_NUMERATEUR_INVALIDE);
+			return null;
+		}
+		
+		nbLignes = occurrences.length;
+		frequences = new float[nbLignes];
+		
+		for(int indiceFreq = 0; indiceFreq < nbLignes; indiceFreq++) {
+			frequences[indiceFreq] = Float.valueOf(occurrences[indiceFreq][1]) 
+												/ nbOccurrences;
+		}
+		
+		return frequences;		
 	}
 
 }
