@@ -52,6 +52,7 @@ class TestGestionFichier {
     			{{"W", "101"}, {"F", "010"}, {"A", "11111"}}
     	};
     
+    /** TODO Faire la javadoc de NOMS_DES_FICHIERS_A_COMPRESSE*/
     public static final String[] NOMS_DES_FICHIERS_A_COMPRESSE = {
     		"C:\\huffmantest\\fichier1",
     		"C:\\huffmantest\\fichier2",
@@ -62,6 +63,7 @@ class TestGestionFichier {
 
     };
     
+    /** TODO Faire la javadoc de FICHIER_AB_HUFFMAN_ATTENDU*/
     public static final String[] FICHIER_AB_HUFFMAN_ATTENDU = {
     		"codeHuffman =              101 ; encode = 01100101 ; symbole = e\r\n"
     		+ "codeHuffman =              010 ; encode = 01100010 ; symbole = b\r\n"
@@ -89,7 +91,7 @@ class TestGestionFichier {
     		+ ""
     };
 	
-    /** TODO Faire la javadoc de CONTENU_DE_FICHIERS*/
+    /** TODO Faire la javadoc de OCCURRENCE_DES_CARACTERES*/
     public static final String[][][] OCCURRENCE_DES_CARACTERES = {
     		{
     			{"A", "1"}, {"B", "1"}, {"C", "1"}, {"D", "1"}
@@ -121,8 +123,30 @@ class TestGestionFichier {
             "\r\n\r\n\r\n\r\n",
             "Lorem\r\nDELETE FROM mysql.user\r\nIpsum\r\nDolor sit amet\r\n",
             ""
-        };
+    };
     
+    /** TODO Faire la javadoc de FREQUENCE_DES_OCCURENCES*/
+    public static final float[][] FREQUENCE_DES_OCCURENCES = {
+    	    {1.0f/4.0f, 1.0f/4.0f, 1.0f/4.0f, 1.0f/4.0f},
+    	    {1.0f/12.0f, 1.0f/12.0f, 1.0f/12.0f, 1.0f/12.0f, 2.0f/12.0f, 2.0f/12.0f, 1.0f/12.0f, 1.0f/12.0f, 1.0f/12.0f, 1.0f/12.0f},
+    	    {1.0f/6.0f, 4.0f/6.0f, 1.0f/6.0f},
+    	    {3.0f/3.0f},
+    	    {2.0f/49.0f, 3.0f/49.0f, 3.0f/49.0f, 3.0f/49.0f, 4.0f/49.0f, 3.0f/49.0f, 2.0f/49.0f, 3.0f/49.0f, 1.0f/49.0f, 4.0f/49.0f, 1.0f/49.0f, 1.0f/49.0f,
+    	     1.0f/49.0f, 1.0f/49.0f, 1.0f/49.0f, 4.0f/49.0f, 1.0f/49.0f, 2.0f/49.0f, 1.0f/49.0f, 2.0f/49.0f, 1.0f/49.0f, 1.0f/49.0f, 1.0f/49.0f, 2.0f/49.0f,
+    	     1.0f/49.0f},
+    	    null
+    	};
+
+    /** TODO Faire la javadoc de TAILLE_FICHIERS*/
+    public static final int[] TAILLE_FICHIERS = {
+            4, 
+            14,
+            10,
+            8,
+            52,
+            0
+    }; 
+
     @BeforeAll
     static void setUpBeforeClass() throws Exception {
         System.out.println("------TEST DE LA CLASSE GestionFichier------");
@@ -217,20 +241,7 @@ class TestGestionFichier {
 		}
     	
     }
-
-    @Test
-    void testTailleDuFichiers() {
-    	
-    	for (int indexDeParcours = 0;
-    			indexDeParcours < ARBRES_BINAIRES_VALIDES.length;
-    			indexDeParcours++) {
-			
-    		assertEquals(TAILLE_FICHIERS[indexDeParcours],
-    					GestionFichier.tailleDuFichier(LIEN_FICHIERS[indexDeParcours]));
-		}
-    	
-    }
-
+    
     @Test
     void testAffichageFichier() {
 
@@ -252,4 +263,25 @@ class TestGestionFichier {
         
     }
 
+    @Test
+    void testCalculFrequence() {
+    	
+        for (int indiceTest = 0; indiceTest < CONTENU_DE_FICHIERS.length; indiceTest++) {
+            assertArrayEquals(FREQUENCE_DES_OCCURENCES[indiceTest], 
+            		GestionFichier.calculFrequences(GestionFichier.compterOccurrence(CONTENU_DE_FICHIERS[indiceTest])));
+        }
+    }
+    
+    @Test
+    void testTailleDuFichiers() {
+
+    	for (int indexDeParcours = 0;
+    			indexDeParcours < ARBRES_BINAIRES_VALIDES.length;
+    			indexDeParcours++) {
+
+    		assertEquals(TAILLE_FICHIERS[indexDeParcours],
+    					GestionFichier.tailleDuFichier(LIEN_FICHIERS[indexDeParcours]));
+		}
+
+    }
 }
