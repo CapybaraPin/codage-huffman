@@ -71,12 +71,13 @@ public class GestionFichier {
 		BufferedReader lecteur;
 		File fichier;
 		String[] contenu;
+		int nbLignes;
 
 		if (!cheminFichier.isEmpty()) {
 			try {
 				fichier = new File(cheminFichier);
 
-				if (!fichier.getName().toLowerCase().endsWith(".txt")){
+				if (!fichier.getName().toLowerCase().endsWith(".txt")){ // TODO indiquer l'extention la constante
 					err.println(ERREUR_EXTENSION_FICHIER); 
 				}
 			} catch (NullPointerException pbOuverture) {
@@ -96,14 +97,14 @@ public class GestionFichier {
 			err.println(AIDE_USAGE);
 		}
 
-		int nbLignes = 0;
+		nbLignes = 0;
 
 		try {
 			while (lecteur.readLine() != null) {
 				nbLignes++;
 			}
 
-			lecteur.close(); 
+			lecteur.close(); // TODO autres solutions ?
 			lecteur = new BufferedReader(new FileReader(cheminFichier));
 
 			contenu = new String[nbLignes]; 
@@ -140,19 +141,20 @@ public class GestionFichier {
 	 * @return la taille du fichier
 	 */
 	public static double tailleDuFichier(String cheminFichier) {
-
+		double tailleFichier;
 		File fichierAnalyse;
 
 
+		tailleFichier = -1.0;
 		if (!cheminFichier.isEmpty()) {
 			try {
 				fichierAnalyse = new File(cheminFichier);
 
 
-				if (!fichierAnalyse.getName().toLowerCase().endsWith(".txt")){
+				if (!fichierAnalyse.getName().toLowerCase().endsWith(".txt")){ // TODO utiliser la constante
 					err.println(ERREUR_EXTENSION_FICHIER); 
 				} else {
-					return fichierAnalyse.length();
+					tailleFichier = fichierAnalyse.length(); 
 				}
 			} catch (NullPointerException pbOuverture) {
 				err.println(ERREUR_OUVERTURE_FICHIER + cheminFichier);
@@ -165,7 +167,7 @@ public class GestionFichier {
 			err.println(AIDE_USAGE);
 		}
 
-		return -1.0;
+		return tailleFichier;
 
 	}
 
@@ -191,54 +193,48 @@ public class GestionFichier {
 	 * un tableau de chaîne de caractères, et d'en extraire 
 	 * le nombre de fois qu'ils apparaissent dans le tableau 
 	 * de chaîne entier.
-	 * @param ligneFichier, un tableau pour qui chacune des
+	 * @param lignesFichier, un tableau pour qui chacune des
 	 * chaînes de caractères est la ligne d'un fichier
 	 * 
 	 * @return un tableau de chaîne de caractères, avec l'occurence
 	 * de chaque caractère
 	 * 
 	 */
-	public static String[][] compterOccurrence(String[] ligneFichier) {
+	public static String[][] compterOccurrence(String[] lignesFichier) {
 		
-		if (ligneFichier.length == 0) {
+		if (lignesFichier.length == 0) {
 			return  new String[][]{{"", "0"}};
 		}
 		
 		String[][] occurrencesDesCaracteres;
-		String contenuFichier = String.join("\n", ligneFichier);
+		String contenuFichier = String.join("\n", lignesFichier);
 		boolean estDejaApparue;
-		
-
 		
 		occurrencesDesCaracteres = new String[][]{
 			{String.valueOf(contenuFichier.charAt(0)), "0"}		
 		};
 		
-		
-		for (int indexDeRecherche = 0;
-				indexDeRecherche < contenuFichier.length();
-				indexDeRecherche++) {
+		for (int indexRecherche = 0;
+				indexRecherche < contenuFichier.length();
+				indexRecherche++) {
 		
 			estDejaApparue = false;
 			for (String[] caractereCompte : occurrencesDesCaracteres) {
 							
-				// Si le caractère actuel est dans les caractères compté
-				if (caractereCompte[0].toCharArray()[0] == (contenuFichier.charAt(indexDeRecherche))) {
+				if (caractereCompte[0].toCharArray()[0] 
+						== (contenuFichier.charAt(indexRecherche))) {
 					estDejaApparue = true;
 					
-					// On ajoute 1
-					caractereCompte[1] =  String.valueOf(Integer.parseInt(caractereCompte[1]) + 1);
+					caractereCompte[1] =  String.valueOf(
+							Integer.parseInt(caractereCompte[1]) + 1);
 				}
 			}
 			
 			if (!estDejaApparue) {
 				
-				// On crée un tableau qui permet d'ajouter un caractère
-				// aux occurrences
 				String[][] nouvelleTableDesOccurences 
-							= new String[occurrencesDesCaracteres.length + 1][2];
+							= new String[occurrencesDesCaracteres.length+1][2];
 				
-				// On transfert les éléments de notre table
 				for (int indexActuel = 0;
 						indexActuel < occurrencesDesCaracteres.length;
 						indexActuel++) {
@@ -247,14 +243,12 @@ public class GestionFichier {
 							= occurrencesDesCaracteres[indexActuel];
 				}
 				
-				// On ajoute le caractère trouvé
 				nouvelleTableDesOccurences[occurrencesDesCaracteres.length][0]
-						= String.valueOf(contenuFichier.charAt(indexDeRecherche));
+						= String.valueOf(contenuFichier.charAt(indexRecherche));
 				
-				nouvelleTableDesOccurences[occurrencesDesCaracteres.length][1]
+				nouvelleTableDesOccurences[occurrencesDesCaracteres.length][1] 
 						= "1";
 				
-				// On remplace l'ancien tableau
 				
 				occurrencesDesCaracteres = nouvelleTableDesOccurences;
 	
@@ -279,9 +273,7 @@ public class GestionFichier {
   	 *   également demandé le nom du fichier compressé.
 	 */
 	public static void stockageABHuffman(String[][] tblArbreHuffman, String nomDuFichier) {
-
 		String encodageDuCaractere;
-
 
 		// System.out.printf("codeHuffman = %s ; encode = %s ; symbole = %s\n",
 		// 				   feuilleABHuffman[1], encodageDuCaractere
@@ -297,11 +289,11 @@ public class GestionFichier {
 				System.out.println("Fichier créé " 
 						+ fichierEnregistrement.getName());
 			} else {
-				System.out.println("Ce fichier existe déjà");
+				System.out.println("Ce fichier existe déjà"); //TODO constante
 			}
 
 		} catch (IOException pbLecture) {
-			System.err.println(ERREUR_FICHIER_LECTURE + nomDuFichier);
+			System.err.println(ERREUR_FICHIER_LECTURE + nomDuFichier);//TODO ERREUR_FICHIER_CREATION
 			System.exit(CODE_ERREUR_FICHIER_LECTURE);
 		}
 
@@ -311,12 +303,10 @@ public class GestionFichier {
 													   +"_EncodeH"
 													   +SUFFIXE_FICHIER);
 
-			// Ecriture de chaque données
-
 			for (String[] feuilleABHuffman : tblArbreHuffman) {
 				
 				encodageDuCaractere = Integer.toBinaryString(Character.hashCode(
-						feuilleABHuffman[0].charAt(0) // Converti le string en char
+						feuilleABHuffman[0].charAt(0)
 						));
 				
 				if (encodageDuCaractere.length() != 8) {
@@ -332,9 +322,9 @@ public class GestionFichier {
 								feuilleABHuffman[0]));
 			}
 
-			ecritureFichier.close();
+			ecritureFichier.close(); // TODO ERREUR FERMETURE
 		} catch (IOException pbEcriture) {
-			// Too late !!
+			// TODO ERREUR ECRITURE
 		}
 
 	}
