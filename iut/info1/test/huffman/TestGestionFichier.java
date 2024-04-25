@@ -14,6 +14,7 @@ import org.junit.jupiter.api.Test;
 
 import iut.info1.huffman.fichier.GestionFichier;
 
+
 class TestGestionFichier {
     
     private final PrintStream sortieStandard = System.out;
@@ -176,16 +177,16 @@ class TestGestionFichier {
     	String contenuDuFichierVerifie;
     	
     	contenuDuFichierVerifie = "";
-    	for (int indexDeTest = 0;
-    			indexDeTest < NOMS_DES_FICHIERS_A_COMPRESSE.length;
-    			indexDeTest++) {
+    	for (int indiceTest = 0;
+    			indiceTest < NOMS_DES_FICHIERS_A_COMPRESSE.length;
+    			indiceTest++) {
 
-    		GestionFichier.stockageABHuffman(ARBRES_BINAIRES_VALIDES[indexDeTest]
-    				, NOMS_DES_FICHIERS_A_COMPRESSE[indexDeTest]);
+    		GestionFichier.stockageABHuffman(ARBRES_BINAIRES_VALIDES[indiceTest]
+    				, NOMS_DES_FICHIERS_A_COMPRESSE[indiceTest]);
     		
     		try {
     			fichierVerifie = new FileReader(
-    					NOMS_DES_FICHIERS_A_COMPRESSE[indexDeTest] 
+    					NOMS_DES_FICHIERS_A_COMPRESSE[indiceTest] 
     							+ "_EncodeH.txt");
 
     			liseurDeLignes = new BufferedReader(fichierVerifie);
@@ -195,7 +196,6 @@ class TestGestionFichier {
     			while (ligne != null) {
     				contenuDuFichierVerifie += ligne +  "\r\n";
     				
-    				// lecture de la prochaine ligne
     				ligne = liseurDeLignes.readLine();
     			}
     			fichierVerifie.close();
@@ -203,7 +203,7 @@ class TestGestionFichier {
     			pbOuverture.printStackTrace();
     		}    	
     		
-    		assertEquals(FICHIER_AB_HUFFMAN_ATTENDU[indexDeTest]
+    		assertEquals(FICHIER_AB_HUFFMAN_ATTENDU[indiceTest]
     					, contenuDuFichierVerifie);
     		
     		contenuDuFichierVerifie = "";
@@ -217,18 +217,16 @@ class TestGestionFichier {
     	String[][] occurrenceActuelleAttendu;
     	String[][] occurrenceActuelleObtenue;
     	
+       	occurrenceActuelleAttendu = occurrenceActuelleObtenue = null;
     	
-    	// Initialise avec un mauvais élément
-    	occurrenceActuelleAttendu = occurrenceActuelleObtenue = null;
-    	
-    	for (int indexDeTest = 0; 
-    			indexDeTest < CONTENU_DE_FICHIERS.length; 
-    			indexDeTest++) {
+    	for (int indiceTest = 0; 
+    			indiceTest < CONTENU_DE_FICHIERS.length; 
+    			indiceTest++) {
     		
-    		occurrenceActuelleAttendu = OCCURRENCE_DES_CARACTERES[indexDeTest];
+    		occurrenceActuelleAttendu = OCCURRENCE_DES_CARACTERES[indiceTest];
     		occurrenceActuelleObtenue = GestionFichier
     								   .compterOccurrence(CONTENU_DE_FICHIERS
-    										   			 [indexDeTest]);	
+    										   			 [indiceTest]);	
 		
     		for (int indexActuel = 0;
     				indexActuel < occurrenceActuelleObtenue.length;
