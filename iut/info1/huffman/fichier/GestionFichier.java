@@ -378,4 +378,30 @@ public class GestionFichier {
 		return frequences;		
 	}
 
+	/**
+	 * Convertit une chaîne de caractères en binaire à
+	 * l'aide d'un tableau de codage.
+	 * Ne vérifie pas le tableau de codages.
+	 * @param tabCodages
+	 * @param chaine
+	 * @return chaineBinaire
+	 */
+	public static String conversionBinaire(String[][] tabCodages, String chaine) {
+		String chaineBinaire;
+
+		if (chaine.isEmpty()) {
+			err.println(ERREUR_FORMAT_PARAMETRE);
+			return "";
+		}
+
+		chaineBinaire = "";
+		for (int index = 0; index < chaine.length(); index++) {
+			for (String[] codage : tabCodages) {
+				if (codage[0].equals(String.valueOf(chaine.charAt(index)))) {
+					chaineBinaire += codage[1];
+				}
+			}
+		}
+		return chaineBinaire;
+	}
 }

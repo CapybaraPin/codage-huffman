@@ -41,7 +41,41 @@ class TestGestionFichier {
         {"Lorem", "DELETE FROM mysql.user", "Ipsum",  "Dolor sit amet"},
         {}
     };
+    
+    /** TODO Faire la javadoc de TABLEAU_CODAGE*/
+    public static final String[][][] TABLEAU_CODAGE = 
+        {
+            {{"A", "00"}, {"B", "01"}, {"C", "10"}, {"D", "1100"}, {"\r", "1101"}, {"\n", "1110"}},
+            {{"L", "00"}, {"o", "01"}, {"r", "10"}, {"e", "110"}, {"m", "111"}, {"\r", "1100"}, {"\n", "1101"},
+            {"I", "11100"}, {"p", "11101"}, {"s", "11110"}, {"u", "111100"}},
+            {{"a", "00"}, {"\r", "01"}, {"b", "10"}, {"\n", "11"}},
+            {{"\r","0"},{"\n","1"}},
+            //{{"L", "00"}, {"o", "01"}, {"r", "10"}, {"e", "110"}, {"m", "111"}, {"\r", "1100"}, {"\n", "1101"}, {"D", "11100"}, {"E", "11101"}, {"T", "11110"}, {" ", "11111"}, {"F", "110000"}, {"R", "110001"}, {"m", "110010"}, {"s", "110011"}, {"i", "110100"}, {"t", "110101"}, {"a", "110110"}, {"e", "110111"}, {"\r", "111000"}, {"\n", "111001"}},
+            {{}}
+        }; 
 
+    /** TODO Faire la javadoc de RESULTAT_POUR_CONTENU*/
+    public static final String[] RESULTAT_POUR_CONTENU = {
+            
+            "ABCD\r\n",
+            "Lorem\r\n\r\nIpsum\r\n",
+            "a\r\n\r\n\r\n\r\nb\r\n",
+            "\r\n\r\n\r\n\r\n",
+            //"Lorem\r\nDELETE FROM mysql.user\r\nIpsum\r\nDolor sit amet\r\n",
+            ""
+    };
+    
+    /** TODO Faire la javadoc de CHAINES_BINAIRES_VALIDES*/
+    public static final String[] CHAINES_BINAIRES_VALIDES = {
+    		 "000110110011011110",
+    		 "000110110111110011011100110111100111011111011110011111001101",
+    		 "000111011101110111100111",
+    		 "01010101",
+    		// TODO : Lorem\r\nDELETE FROM mysql.user\r\nIpsum\r\nDolor sit amet\r\n
+    		 ""
+    };
+    
+    
     /** TODO Faire la javadoc de ARBRES_BINAIRES_VALIDES*/
     public static final String[][][] ARBRES_BINAIRES_VALIDES = 
     	{
@@ -115,16 +149,7 @@ class TestGestionFichier {
     		},
     };
     
-    /** TODO Faire la javadoc de RESULTAT_POUR_CONTENU*/
-    public static final String[] RESULTAT_POUR_CONTENU = {
-            
-            "ABCD\r\n",
-            "Lorem\r\n\r\nIpsum\r\n",
-            "a\r\n\r\n\r\n\r\nb\r\n",
-            "\r\n\r\n\r\n\r\n",
-            "Lorem\r\nDELETE FROM mysql.user\r\nIpsum\r\nDolor sit amet\r\n",
-            ""
-    };
+
     
     /** TODO Faire la javadoc de FREQUENCE_DES_OCCURENCES*/
     public static final float[][] FREQUENCE_DES_OCCURENCES = {
@@ -281,5 +306,16 @@ class TestGestionFichier {
     					GestionFichier.tailleDuFichier(LIEN_FICHIERS[indexDeParcours]));
 		}
 
+    }
+    
+    @Test
+    void testConversionBinaire() {
+    	for (int indexParcours = 0;
+    			indexParcours < TABLEAU_CODAGE.length;
+    			indexParcours++) {
+    		assertEquals(CHAINES_BINAIRES_VALIDES[indexParcours],
+    				GestionFichier.conversionBinaire(TABLEAU_CODAGE[indexParcours], RESULTAT_POUR_CONTENU[indexParcours]));
+    		
+    	}
     }
 }
