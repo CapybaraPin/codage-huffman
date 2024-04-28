@@ -20,3 +20,7 @@ Organisation de la première itération et mise en place du diagramme de Gantt p
 #### Séance du 12 avril : 
 
 Vérification de la définition générale des besoins, mise en place du plan de projet et création du "product backlog" pour la première itération. 
+
+#### Séance du 25 avril :
+
+Vérification des premières taches, et merge de celle-ci. https://github.com/CapybaraPin/codage-huffman/pull/14
