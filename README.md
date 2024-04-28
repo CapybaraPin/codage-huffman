@@ -24,3 +24,7 @@ Vérification de la définition générale des besoins, mise en place du plan de
 #### Séance du 25 avril :
 
 Vérification des premières taches, et merge de celle-ci. https://github.com/CapybaraPin/codage-huffman/pull/14
+
+#### Séance du 28 avril :
+
+Mise en place + explicatif de l'arbre binaire Huffman
