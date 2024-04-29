@@ -1,6 +1,6 @@
 ---
 name: Résumé de cas d'utilisation
-about: Describe this issue template's purpose here.
+about: Décrivez votre fonctionnalité dans ce cas d'utilisation
 title: ''
 labels: ''
 assignees: ''
