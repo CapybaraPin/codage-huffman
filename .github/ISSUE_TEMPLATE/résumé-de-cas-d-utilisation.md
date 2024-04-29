@@ -8,16 +8,16 @@ assignees: ''
 ---
 
 ### Résumé de cas d'utilisation
-**Titre du cas : **
+**Titre du cas :**
 
-**Acteur : **
+**Acteur :**
 
-**Pré-condition(s) : **
+**Pré-condition(s) :**
 
-**Résumé du scénario nominal : **
+**Résumé du scénario nominal :**
 
 
 
-**Scénario d'échec : **
+**Scénario d'échec :**
 
-**Post-condition(s) : **
+**Post-condition(s) :**
