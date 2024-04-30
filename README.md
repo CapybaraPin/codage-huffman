@@ -28,3 +28,7 @@ Vérification des premières taches, et merge de celle-ci. https://github.com/Ca
 #### Séance du 28 avril :
 
 Mise en place + explicatif de l'arbre binaire Huffman
+
+#### Séance du 30 avril :
+
+Vérification de l'arbre binaire huffman + Architecturage de la suite de la compression. 
