@@ -191,7 +191,7 @@ class ArbreBinaireHuffman {
 
     }
 
-    /**
+        /**
      * Permet le parcours préfixe d'un Arbre binaire huffman
      * @param arbreBinaire l'arbre sur qui le parcours est opéré
      * @return tableau ayant pour chaque sous-tableau le caractère 
@@ -213,18 +213,21 @@ class ArbreBinaireHuffman {
         int[] cheminPossible;
 
         String[][] donneesArbre;
+        String[][] nouvellesDonneesArbres;
                 
         profondeurEstValide = true;
         indiceDonneesArbre = 0;
         nombreDeLiens = 0;
-        donneesArbre = new String[50][2];
+        donneesArbre = new String[0][2];
+        nouvellesDonneesArbres = new String[1][2];
+        
         cheminsPossibles = new String[]{"0", "1"};
         liensExistants = new String[4];
         nouveauxCheminsPossibles = new String[4];
         valeurChemin = "";    
         while (profondeurEstValide) {
 
-
+        	
             for (int indiceParcours = 0;
                  indiceParcours < cheminsPossibles.length;
                  indiceParcours++) {
@@ -232,7 +235,6 @@ class ArbreBinaireHuffman {
                 if (cheminsPossibles[indiceParcours] != null 
                     && !cheminsPossibles[indiceParcours].contains("null")) {
 
-                    System.out.println(Arrays.toString(cheminsPossibles));
 
                     cheminPartitionne = cheminsPossibles[indiceParcours]
                                         .split(", ");
@@ -249,29 +251,53 @@ class ArbreBinaireHuffman {
                     }  
     
                     valeurChemin = this.valeurDuNoeudCherche(cheminPossible);
-
+                    
                     if (valeurChemin != null && valeurChemin.equals("lien")) {
 
                         liensExistants[nombreDeLiens] = 
                                 cheminsPossibles[indiceParcours];
-
-                        nombreDeLiens++;
+                        
+                        
+                        nombreDeLiens += 1;
     
                     } else if (valeurChemin != null) {
-                        donneesArbre[indiceDonneesArbre][0] = valeurChemin;
-                        donneesArbre[indiceDonneesArbre][1] = 
+                    	
+                    	nouvellesDonneesArbres
+                    				= new String[donneesArbre.length + 1][2];
+                    	
+                    	
+                    	for (int indiceRemplacement = 0;
+                    		 indiceRemplacement < donneesArbre.length;
+                    		 indiceRemplacement++) {
+                    		
+                    		nouvellesDonneesArbres[indiceRemplacement] 
+                    				= donneesArbre[indiceRemplacement];
+                    		
+                    	}
+                    	
+                    	
+                    	nouvellesDonneesArbres[indiceDonneesArbre][0] 
+                    			= valeurChemin;
+                    	
+                    	nouvellesDonneesArbres[indiceDonneesArbre][1] = 
                                 cheminsPossibles[indiceParcours];
 
+                    	donneesArbre = nouvellesDonneesArbres;
+                    	
                         indiceDonneesArbre++;
                     }
                 }
 
             }
 
-
+            
             if (liensExistants.length == 0) {
                 profondeurEstValide = false;
             }
+            
+
+            nouveauxCheminsPossibles = new String[nombreDeLiens * 2];
+
 
             if (profondeurEstValide) {
                 
@@ -286,11 +312,14 @@ class ArbreBinaireHuffman {
                nouveauxCheminsPossibles[indiceParcours + 1] = 
                            liensExistants[indiceParcours / 2] + ", 1";
                
+               
                 }
             }
 
-
+            
             liensExistants = new String[nombreDeLiens * 2];
+
+            
             cheminsPossibles = nouveauxCheminsPossibles;
             nombreDeLiens = 0;
         }         
