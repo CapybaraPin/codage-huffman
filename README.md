@@ -37,3 +37,7 @@ Vérification de l'arbre binaire huffman + Architecturage de la suite de la comp
 
 Mise en place des tâches de la deuxième itération en fonction de celles réalisées pendant la première itération. 
 Organisation de la roadmap et attribution des tâches pour cette deuxième itération. 
+
+#### Séance du 3 mai : 
+
+Bilan de la première itération + Review des dernières taches de la premières itération. https://github.com/CapybaraPin/codage-huffman/pull/23
