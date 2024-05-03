@@ -9,7 +9,7 @@ import java.util.Arrays;
 /**
  * AB de test
  */
-class ArbreBinaireHuffman {
+public class ArbreBinaireHuffman {
 
     private String valeurDuNoeud;
     private ArbreBinaireHuffman noeudDroit;
@@ -43,8 +43,8 @@ class ArbreBinaireHuffman {
      */
     public static ArbreBinaireHuffman lienEntreDeuxObjets(Object premierObject
                                                  , Object secondObject
-                                                 , double frequencePremierObjet
-                                                 , double frequenceSecondObjet) {
+                                                 , float frequencePremierObjet
+                                                 , float frequenceSecondObjet) {
 
         ArbreBinaireHuffman premierArbre;
         ArbreBinaireHuffman secondArbre;
@@ -77,16 +77,16 @@ class ArbreBinaireHuffman {
      * @param caracteres
      * @param frequences
      */
-    public static ArbreBinaireHuffman insertionHuffman(Object[] caracteres, double[] frequences) {
+    public static ArbreBinaireHuffman insertionHuffman(Object[] caracteres, float[] frequences) {
 
-        double plusPetiteFrequence;
-        double secondePlusPetiteFrequence;
+        float plusPetiteFrequence;
+        float secondePlusPetiteFrequence;
         int indexPlusPetiteFrequence;
         int indexSecondePlusPetiteFrequence;
         int indexDeReequilibrage;
 
         Object[] tblDeCaracteres = Arrays.copyOf(caracteres, caracteres.length);
-        double[] frequenceDesCaracteres = Arrays.copyOf(frequences, frequences.length);
+        float[] frequenceDesCaracteres = Arrays.copyOf(frequences, frequences.length);
 
         indexDeReequilibrage = 0;
         // Initialisation avec des valeures minimales absurdes
@@ -94,9 +94,7 @@ class ArbreBinaireHuffman {
         indexPlusPetiteFrequence = indexSecondePlusPetiteFrequence = -1;
         while (frequenceDesCaracteres.length > 1) {
 
-            // System.out.print(Arrays.toString(tblDeCaracteres));
-            // System.out.println(Arrays.toString(frequenceDesCaracteres));
-            
+
             for (int indexDeParcours = 0;
                 indexDeParcours < frequenceDesCaracteres.length;
                 indexDeParcours++) {
@@ -123,24 +121,14 @@ class ArbreBinaireHuffman {
                 }
             }
 
-            // System.out.println("------------------------");
-            // System.out.println(plusPetiteFrequence);
-            // System.out.println(secondePlusPetiteFrequence);
-            // System.out.println("------------------------");
-
-            //Nous avons les 2 plus petites fréquences
-
             Object[] nouvelleTblDeCaracteres 
                         = new Object[tblDeCaracteres.length - 1];
-            double[] nouvellesFrequencesDesCaracteres 
-                        = new double[frequenceDesCaracteres.length - 1];
+            float[] nouvellesFrequencesDesCaracteres 
+                        = new float[frequenceDesCaracteres.length - 1];
 
             for (int indexDeParcours = 0; 
                 indexDeParcours < frequenceDesCaracteres.length;
                 indexDeParcours++) {
-
-                    // Cette condition est respectée exactement 
-                    // une fois par itération  
 
                     if (indexDeParcours == Math.min(indexPlusPetiteFrequence, indexSecondePlusPetiteFrequence)) {
 
@@ -153,19 +141,12 @@ class ArbreBinaireHuffman {
 
                         nouvellesFrequencesDesCaracteres[indexDeParcours] 
                             = plusPetiteFrequence + secondePlusPetiteFrequence;
-
-                        //System.out.printf("A frequence : %f indice : %d les frequences : %d %d\n", frequenceDesCaracteres[indexDeParcours], indexDeParcours, indexPlusPetiteFrequence, indexSecondePlusPetiteFrequence);
-
-                                
+        
                     } else if (indexDeParcours == Math.max(indexPlusPetiteFrequence, indexSecondePlusPetiteFrequence)) {
                         indexDeReequilibrage = 1;
                     }else {
 
-                        
 
-                        // System.out.printf("B frequence : %f indice : %d\n", frequenceDesCaracteres[indexDeParcours], indexDeParcours);
-
-                        // L'index de rééquilibrage évite les problèmes d'indexage
                         nouvelleTblDeCaracteres[indexDeParcours - indexDeReequilibrage] 
                             = tblDeCaracteres[indexDeParcours];
                         nouvellesFrequencesDesCaracteres[indexDeParcours - indexDeReequilibrage] 
@@ -178,7 +159,6 @@ class ArbreBinaireHuffman {
             tblDeCaracteres = nouvelleTblDeCaracteres;
             frequenceDesCaracteres = nouvellesFrequencesDesCaracteres;
 
-            // Reinitailisation des attributs pour la prochaine itération
             indexPlusPetiteFrequence = -1;
             indexSecondePlusPetiteFrequence = -1; 
             plusPetiteFrequence = 1;
