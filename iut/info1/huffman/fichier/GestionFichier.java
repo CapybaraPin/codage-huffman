@@ -378,4 +378,69 @@ public class GestionFichier {
 		return frequences;		
 	}
 
+	/**
+	 * Convertit un tableau de codage type String[] issue
+	 * d'un fichier.<br>
+	 * Exemple de tableau de codage en paramètre :
+	 * <ul>
+	 * 	<li>
+	 *  {codeHuffman =             0010 ; encode = 01100010 ; symbole = b},<br>
+	 *  {codeHuffman =                0 ; encode = 01100101 ; symbole = e},<br>
+	 *  {codeHuffman =              101 ; encode = 01100001 ; symbole = a} <br>
+	 * 	</li>	
+	 * return :
+	 * 	<li>
+	 * 	{{"b", "0010"}, {"e", "0"}, {"a", "101"}}
+	 *  </li>
+	 * </ul>
+	 * 
+	 * @param tabFichierCodages 
+	 * @return tabCodages
+	 */
+	public static String[][] conversionTableauCodage(String[] tabFichierCodages) {
+		String[][] tabCodages;
+		String ligneActuelle;
+
+		tabCodages = new String[tabFichierCodages.length][2];
+
+		for (int index = 0; index < tabFichierCodages.length; index++) {
+			ligneActuelle = tabFichierCodages[index];
+			if(ligneActuelle.length() < 64) {
+				err.println(ERREUR_FORMAT_PARAMETRE);
+				return null;
+			}
+
+			tabCodages[index][0] = ligneActuelle.substring(63,64);
+			tabCodages[index][1] = ligneActuelle.substring(14,31).trim();
+		}
+
+		return tabCodages;
+	}
+
+	/**
+	 * Convertit une chaîne de caractères en binaire à
+	 * l'aide d'un tableau de codage.
+	 * Ne vérifie pas le tableau de codages.
+	 * @param tabCodages
+	 * @param chaine
+	 * @return chaineBinaire
+	 */
+	public static String conversionBinaire(String[][] tabCodages, String chaine) {
+		String chaineBinaire;
+
+		if (chaine.isEmpty()) {
+			err.println(ERREUR_FORMAT_PARAMETRE);
+			return "";
+		}
+
+		chaineBinaire = "";
+		for (int index = 0; index < chaine.length(); index++) {
+			for (String[] codage : tabCodages) {
+				if (codage[0].equals(String.valueOf(chaine.charAt(index)))) {
+					 chaineBinaire += codage[1];
+				}
+			}
+		}
+		return chaineBinaire;
+	}
 }
