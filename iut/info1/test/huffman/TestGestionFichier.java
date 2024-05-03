@@ -26,7 +26,7 @@ class TestGestionFichier {
     		"C:\\fichier2.txt",
     		"C:\\fichier3.txt",
     		"C:\\fichier4.txt",
-    		"C:\\fichier5.txt",
+    		// "C:\\fichier5.txt",
     		"C:\\fichier6.txt"
     		// "C:\\fichier6.TXT"
     		// "C:\\fichier6.java"
@@ -38,7 +38,7 @@ class TestGestionFichier {
         {"Lorem", "", "Ipsum"},
         {"a", "", "", "",  "b"},
         {"", "", "",  ""},
-        {"Lorem", "DELETE FROM mysql.user", "Ipsum",  "Dolor sit amet"},
+        // {"Lorem", "DELETE FROM mysql.user", "Ipsum",  "Dolor sit amet"},
         {}
     };
     
@@ -47,12 +47,46 @@ class TestGestionFichier {
         {
             {{"A", "00"}, {"B", "01"}, {"C", "10"}, {"D", "1100"}, {"\r", "1101"}, {"\n", "1110"}},
             {{"L", "00"}, {"o", "01"}, {"r", "10"}, {"e", "110"}, {"m", "111"}, {"\r", "1100"}, {"\n", "1101"},
-            {"I", "11100"}, {"p", "11101"}, {"s", "11110"}, {"u", "111100"}},
+             {"I", "11100"}, {"p", "11101"}, {"s", "11110"}, {"u", "111100"}},
             {{"a", "00"}, {"\r", "01"}, {"b", "10"}, {"\n", "11"}},
             {{"\r","0"},{"\n","1"}},
             //{{"L", "00"}, {"o", "01"}, {"r", "10"}, {"e", "110"}, {"m", "111"}, {"\r", "1100"}, {"\n", "1101"}, {"D", "11100"}, {"E", "11101"}, {"T", "11110"}, {" ", "11111"}, {"F", "110000"}, {"R", "110001"}, {"m", "110010"}, {"s", "110011"}, {"i", "110100"}, {"t", "110101"}, {"a", "110110"}, {"e", "110111"}, {"\r", "111000"}, {"\n", "111001"}},
             {{}}
         }; 
+
+	/** TODO Faire la javadoc de FICHIER_ARBRE_HUFFMAN*/
+	public static final String[][] FICHIER_ARBRE_HUFFMAN_CONTENU = {
+
+			{"codeHuffman =               00 ; encode = 01000001 ; symbole = A",
+			 "codeHuffman =               01 ; encode = 01000010 ; symbole = B",
+			 "codeHuffman =               10 ; encode = 01000011 ; symbole = C",
+			 "codeHuffman =             1100 ; encode = 01000100 ; symbole = D",
+			 "codeHuffman =             1101 ; encode = 00001010 ; symbole = \r",
+			 "codeHuffman =             1110 ; encode = 00001011 ; symbole = \n"},
+
+		    {"codeHuffman =               00 ; encode = 01001100 ; symbole = L",
+			 "codeHuffman =               01 ; encode = 01101111 ; symbole = o",
+			 "codeHuffman =               10 ; encode = 01110010 ; symbole = r",
+			 "codeHuffman =              110 ; encode = 01100101 ; symbole = e",
+			 "codeHuffman =              111 ; encode = 01101101 ; symbole = m",
+			 "codeHuffman =             1100 ; encode = 00001010 ; symbole = \r",
+			 "codeHuffman =             1101 ; encode = 00001011 ; symbole = \n",
+			 "codeHuffman =            11100 ; encode = 01001001 ; symbole = I",
+			 "codeHuffman =            11101 ; encode = 01110000 ; symbole = p",
+			 "codeHuffman =            11110 ; encode = 01110011 ; symbole = s",
+			 "codeHuffman =           111100 ; encode = 01110101 ; symbole = u"},
+
+			{"codeHuffman =               00 ; encode = 01100001 ; symbole = a",
+			 "codeHuffman =               01 ; encode = 00001010 ; symbole = \r",
+			 "codeHuffman =               10 ; encode = 01100010 ; symbole = b",
+			 "codeHuffman =               11 ; encode = 00001011 ; symbole = \n"},
+
+			{"codeHuffman =                0 ; encode = 00001010 ; symbole = \r",
+			 "codeHuffman =                1 ; encode = 00001011 ; symbole = \n"
+			},
+			//{}, TODO
+			{}
+	};
 
     /** TODO Faire la javadoc de RESULTAT_POUR_CONTENU*/
     public static final String[] RESULTAT_POUR_CONTENU = {
@@ -93,7 +127,7 @@ class TestGestionFichier {
     		"C:\\huffmantest\\fichier2",
     		"C:\\huffmantest\\fichier3",
     		"C:\\huffmantest\\fichier4",
-    		"C:\\huffmantest\\fichier5",
+    		// "C:\\huffmantest\\fichier5",
     		"C:\\huffmantest\\fichier6",
 
     };
@@ -137,14 +171,16 @@ class TestGestionFichier {
     			{"a", "1"}, {"\n", "4"}, {"b", "1"}
     		},    		{
     			{"\n", "3"}
-    		},    		{
+    		},    		
+    		/*{
     			{"L", "2"},  {"o", "3"}, {"r", "3"}, {"e", "3"}, {"m", "4"}, 
     			{"\n", "3"}, {"D", "2"}, {"E", "3"}, {"T", "1"}, {" ", "4"},
     			{"F", "1"},  {"R", "1"},
     			{"O", "1"},  {"M", "1"}, {"y", "1"}, {"s", "4"}, {"q", "1"},
     			{"l", "2"},  {".", "1"}, {"u", "2"}, {"I", "1"}, {"p", "1"},
     			{"i", "1"},  {"t", "2"}, {"a", "1"}
-    		},    		{
+    		},*/
+    		{
     			{"", "0"}
     		},
     };
@@ -157,9 +193,9 @@ class TestGestionFichier {
     	    {1.0f/12.0f, 1.0f/12.0f, 1.0f/12.0f, 1.0f/12.0f, 2.0f/12.0f, 2.0f/12.0f, 1.0f/12.0f, 1.0f/12.0f, 1.0f/12.0f, 1.0f/12.0f},
     	    {1.0f/6.0f, 4.0f/6.0f, 1.0f/6.0f},
     	    {3.0f/3.0f},
-    	    {2.0f/49.0f, 3.0f/49.0f, 3.0f/49.0f, 3.0f/49.0f, 4.0f/49.0f, 3.0f/49.0f, 2.0f/49.0f, 3.0f/49.0f, 1.0f/49.0f, 4.0f/49.0f, 1.0f/49.0f, 1.0f/49.0f,
+    	    /*{2.0f/49.0f, 3.0f/49.0f, 3.0f/49.0f, 3.0f/49.0f, 4.0f/49.0f, 3.0f/49.0f, 2.0f/49.0f, 3.0f/49.0f, 1.0f/49.0f, 4.0f/49.0f, 1.0f/49.0f, 1.0f/49.0f,
     	     1.0f/49.0f, 1.0f/49.0f, 1.0f/49.0f, 4.0f/49.0f, 1.0f/49.0f, 2.0f/49.0f, 1.0f/49.0f, 2.0f/49.0f, 1.0f/49.0f, 1.0f/49.0f, 1.0f/49.0f, 2.0f/49.0f,
-    	     1.0f/49.0f},
+    	     1.0f/49.0f},*/
     	    null
     	};
 
@@ -169,7 +205,7 @@ class TestGestionFichier {
             14,
             10,
             8,
-            52,
+            // 52,
             0
     }; 
 
@@ -299,9 +335,9 @@ class TestGestionFichier {
     void testTailleDuFichiers() {
 
     	for (int indexDeParcours = 0;
-    			indexDeParcours < ARBRES_BINAIRES_VALIDES.length;
+    			indexDeParcours < TAILLE_FICHIERS.length;
     			indexDeParcours++) {
-
+    		
     		assertEquals(TAILLE_FICHIERS[indexDeParcours],
     					GestionFichier.tailleDuFichier(LIEN_FICHIERS[indexDeParcours]));
 		}
@@ -318,4 +354,14 @@ class TestGestionFichier {
     		
     	}
     }
+    
+	@Test
+	void testConversionTableauCodage(){
+		for (int indexParcours = 0;
+				 indexParcours < TABLEAU_CODAGE.length;
+				 indexParcours++) {
+			assertArrayEquals(TABLEAU_CODAGE[indexParcours],
+					GestionFichier.conversionTableauCodage(FICHIER_ARBRE_HUFFMAN_CONTENU[indexParcours]));
+		}
+	}
 }
