@@ -41,3 +41,9 @@ Organisation de la roadmap et attribution des tâches pour cette deuxième itér
 #### Séance du 3 mai : 
 
 Bilan de la première itération + Review des dernières taches de la premières itération. https://github.com/CapybaraPin/codage-huffman/pull/23
+
+#### Séance du 6 mai : 
+
+10h15 - 11h45 : Rédaction du Product backlog de la deuxième itération. 
+15h45 - 17h : Pair programming en équipe sur le début de la première. 
+
