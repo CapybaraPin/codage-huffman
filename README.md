@@ -45,5 +45,6 @@ Bilan de la première itération + Review des dernières taches de la premières
 #### Séance du 6 mai : 
 
 10h15 - 11h45 : Rédaction du Product backlog de la deuxième itération. <br>
-15h45 - 17h : Pair programming en équipe sur le début de la première. 
-
+15h45 - 17h : Pair programming en équipe sur le début de la première. <br>
+17h - 18h15 : Résolution de problématiques algorithmique
+ 
