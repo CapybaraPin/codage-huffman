@@ -108,6 +108,15 @@ class TestGestionFichier {
     		// TODO : Lorem\r\nDELETE FROM mysql.user\r\nIpsum\r\nDolor sit amet\r\n
     		 ""
     };
+
+	public static final String[] FICHIER_COMPRESSE = {
+		"00011011001101111000000000000110",
+		"000110110111110011011100110111100111011111011110011111001101000000000100",
+		"00011101110111011110011100000000",
+		"0101010100000000",
+		// TODO : Lorem\r\nDELETE FROM mysql.user\r\nIpsum\r\nDolor sit amet\r\n,
+		""
+	};
     
     
     /** TODO Faire la javadoc de ARBRES_BINAIRES_VALIDES*/
@@ -362,6 +371,16 @@ class TestGestionFichier {
 				 indexParcours++) {
 			assertArrayEquals(TABLEAU_CODAGE[indexParcours],
 					GestionFichier.conversionTableauCodage(FICHIER_ARBRE_HUFFMAN_CONTENU[indexParcours]));
+		}
+	}
+
+	@Test
+	void testEcritureFichierBinaire() {
+		for (int indexParcours = 0;
+				indexParcours < NOMS_DES_FICHIERS_A_COMPRESSE.length;
+				indexParcours++) {
+			GestionFichier.enregistrementFichierBinaire(CHAINES_BINAIRES_VALIDES[indexParcours], NOMS_DES_FICHIERS_A_COMPRESSE[indexParcours]);
+			//TODO lorsque lectureFichierBinaire sera fonctionnel assertArrayEquals
 		}
 	}
 }

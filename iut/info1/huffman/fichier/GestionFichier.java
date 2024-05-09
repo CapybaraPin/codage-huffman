@@ -9,6 +9,7 @@ import static java.lang.System.err;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
@@ -53,6 +54,9 @@ public class GestionFichier {
 	
     /** suffixe des fichiers pris en charge **/
 	private static final String SUFFIXE_FICHIER = ".txt";
+
+    /** suffixe des fichiers compréssés pris en charge **/
+	private static final String SUFFIXE_FICHIER_DECOMPRESSE = ".bin";
 	
 	/** le numerateur indiqué ne respecte pas les critères **/
 	private static final String ERREUR_NUMERATEUR_INVALIDE
@@ -333,7 +337,7 @@ public class GestionFichier {
 	 * L'objectif est d'afficher le contenu d'un tableau de
 	 * chaîne de caractères, pour qui chaque éléments de
 	 * cette chaîne est la ligne d'un fichier.
-	 * \n
+	 * <br>
 	 * Dans le cas où il existe plusieurs saut à la ligne vide, ces
 	 * derniers seront conservés.
 	 * 
@@ -384,10 +388,10 @@ public class GestionFichier {
 	 * Exemple de tableau de codage en paramètre :
 	 * <ul>
 	 * 	<li>
-	 *  {codeHuffman =             0010 ; encode = 01100010 ; symbole = b},<br>
-	 *  {codeHuffman =                0 ; encode = 01100101 ; symbole = e},<br>
-	 *  {codeHuffman =              101 ; encode = 01100001 ; symbole = a} <br>
-	 * 	</li>	
+	 *  {"codeHuffman =             0010 ; encode = 01100010 ; symbole = b",<br>
+	 *   "codeHuffman =                0 ; encode = 01100101 ; symbole = e",<br>
+	 *   "codeHuffman =              101 ; encode = 01100001 ; symbole = a"} <br>
+	 * 	</li>
 	 * return :
 	 * 	<li>
 	 * 	{{"b", "0010"}, {"e", "0"}, {"a", "101"}}
@@ -402,7 +406,6 @@ public class GestionFichier {
 		String ligneActuelle;
 
 		tabCodages = new String[tabFichierCodages.length][2];
-
 		for (int index = 0; index < tabFichierCodages.length; index++) {
 			ligneActuelle = tabFichierCodages[index];
 			if(ligneActuelle.length() < 64) {
@@ -442,5 +445,77 @@ public class GestionFichier {
 			}
 		}
 		return chaineBinaire;
+	}
+
+	/**
+	 * Enregistre un fichier binaire à partir d'une String
+	 * 
+	 * Exemple de chaineBinaire : "011000100"
+	 * 
+	 * Est stocké sous forme d'octet dans le fichier.
+	 * Si le dernier octet de la chaîne est incomplet,
+	 * on ajoute des 0 pour le compléter.
+	 * Le nombre de zero ajouté est stocké dans le dernier
+	 * octet du fichier.
+	 * 
+	 * Exemple de fichier binaire obtenu : 
+	 * 011000100000000000000111
+	 * @param contenuFichier 
+	 */
+	public static void enregistrementFichierBinaire(String chaineBinaire, String nomFichier) {
+		int longueur = chaineBinaire.length();
+        int longueurDonnees = (int) Math.ceil((double) longueur / 8);
+        byte[] donnees = new byte[longueurDonnees+1];
+        int indexDonnees;
+		int nbZeroComplementaire;
+
+		if (chaineBinaire.isEmpty() || nomFichier.isEmpty()) {
+			err.println(ERREUR_FORMAT_PARAMETRE);
+			return;
+		}
+
+		try {
+			File fichierEnregistrement = new File(
+											 	 nomFichier
+											 	 +"_Encode"
+											 	 +SUFFIXE_FICHIER_DECOMPRESSE);
+
+			if (fichierEnregistrement.createNewFile()) {
+				System.out.println("Fichier créé " 
+						+ fichierEnregistrement.getName());
+			} else {
+				System.out.println("Ce fichier existe déjà"); //TODO constante
+				return; // TODO proposer une solution, écraser le fichier ?, renommer le fichier ?
+			}
+
+		} catch (IOException pbLecture) {
+			System.err.println(ERREUR_FICHIER_LECTURE + nomFichier);//TODO ERREUR_FICHIER_CREATION
+			System.exit(CODE_ERREUR_FICHIER_LECTURE);
+		}
+
+		indexDonnees = 0;
+		nbZeroComplementaire = 0;
+        for (int i = 0; i < longueur; i += 8) {
+            String octet = chaineBinaire.substring(i, Math.min(i + 8, longueur));
+
+            while (octet.length() < 8) {
+                octet = "0" + octet;
+				nbZeroComplementaire++;
+            }
+            donnees[indexDonnees++] = (byte) Integer.parseInt(octet, 2);
+    	}
+		donnees[longueurDonnees] = (byte) nbZeroComplementaire;
+
+		try {
+			FileOutputStream fluxEcriture = new FileOutputStream(
+													   nomFichier
+													   +"_Encode"
+													   +SUFFIXE_FICHIER_DECOMPRESSE );
+
+			fluxEcriture.write(donnees);
+			fluxEcriture.close(); // TODO ERREUR FERMETURE
+		} catch (IOException pbEcriture) {
+			// TODO ERREUR ECRITURE
+		}
 	}
 }
