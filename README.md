@@ -51,3 +51,7 @@ Bilan de la première itération + Review des dernières taches de la premières
 #### Séance du 14 mai :
 
 Rédaction du des récits utilisateurs
+
+#### Séance du 15 mai : 
+
+Bilan des avancements du projet
