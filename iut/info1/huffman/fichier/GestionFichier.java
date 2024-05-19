@@ -13,6 +13,8 @@ import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 
 /**
@@ -404,6 +406,10 @@ public class GestionFichier {
 	public static String[][] conversionTableauCodage(String[] tabFichierCodages) {
 		String[][] tabCodages;
 		String ligneActuelle;
+		
+		if(tabFichierCodages.length == 0) {
+			return new String[][]{{}};
+		}
 
 		tabCodages = new String[tabFichierCodages.length][2];
 		for (int index = 0; index < tabFichierCodages.length; index++) {
@@ -420,10 +426,8 @@ public class GestionFichier {
 			// 	err.println(ERREUR_FORMAT_PARAMETRE);
 			// 	return null;
 			// }
-			System.out.println("0 : " + ligneActuelle.substring(52,68));
-			System.out.println("1 : " + ligneActuelle.substring(14,41).trim());
 			tabCodages[index][0] = ligneActuelle.substring(52,68);
-			tabCodages[index][1] = ligneActuelle.substring(14,41).trim();
+			tabCodages[index][1] = ligneActuelle.substring(14,40).trim();
 		}
 
 		return tabCodages;
@@ -542,18 +546,68 @@ public class GestionFichier {
 	 * <br>
 	 * Tiens en compte de si :
 	 * <ul>
-	 *  <li>La taille de la ligne est supérieure à 64</li>
+	 *  <li>La taille de la ligne est entre 82 et 83</li>
 	 *  <li>La ligne contient bien un code huffman</li>
 	 *  <li>La ligne contient bien un encodage</li>
 	 * 	<li>La ligne contient bien un symbole</li>
 	 *  <li>Les ";" sont bien présents</li>
 	 *  <li>La ligne est vide</li>
 	 *  <li>Le symbole correspond bien au caractère encodé</li>
-	 * <ul>
+	 * </ul>
 	 * @param ligne
 	 * @return boolean
 	 */
-	public static boolean verifierFormatTableauCodage(String ligne) {
-		return true; // stub
+	public static boolean verifierFormatTableauCodage(String ligne) { // TODO : à tester avec des Regex
+		String codeHuffman;
+		String patternCodeHuffman;
+		String encode;
+		String patternEncode;
+		char symbole;
+		String patternSymbole;
+		int nbPointVirgule;
+		boolean estLF;
+		
+
+		if (ligne.isEmpty() || !(ligne.length() >= 82 && ligne.length() <= 83)){
+			err.println(ERREUR_FORMAT_PARAMETRE);
+			return false;
+		}
+		
+		nbPointVirgule = ligne.length() - ligne.replace(";", "").length();
+		if (nbPointVirgule != 2) {
+			err.println(ERREUR_FORMAT_PARAMETRE);
+			return false;
+		}
+		codeHuffman = ligne.substring(14, 40);
+		patternCodeHuffman = "^[01\\s]{26}$";
+
+		if (!Pattern.matches(patternCodeHuffman, codeHuffman)) {
+			err.println(ERREUR_FORMAT_PARAMETRE);
+			return false;
+		}
+
+		encode = ligne.substring(52, 68);
+		patternEncode = "^[01]{16}$";
+
+		if (!Pattern.matches(patternEncode, encode)) {
+			err.println(ERREUR_FORMAT_PARAMETRE);
+			return false;
+		}
+		symbole = ligne.charAt(81);
+		patternSymbole = "^.$";
+		
+		
+		if(!Pattern.matches(patternSymbole, String.valueOf(symbole))) {
+			err.println(ERREUR_FORMAT_PARAMETRE);
+			return false;
+		}
+		
+		estLF = symbole == 'L' && ligne.length() == 83 && ligne.charAt(82) == 'F';
+		if(symbole != (char) Integer.parseInt(encode, 2) && !estLF ) {
+			err.println(ERREUR_FORMAT_PARAMETRE);
+			return false;
+		}
+
+		return true;
 	}
 }
