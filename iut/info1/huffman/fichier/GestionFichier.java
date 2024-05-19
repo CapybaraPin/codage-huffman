@@ -271,10 +271,10 @@ public class GestionFichier {
 	 * Le code huffman associé à un encodage Unicode UTF-8, 
 	 * et le caractère associé à son encodage. 
 	 * 
-	 * @param tblArbreHuffman, nomDuFichier un tableau de tableau de chaînes
+	 * @param tblArbreHuffman un tableau de tableau de chaînes
 	 *  de caractères, ayant pour chaque sous-tableau un caractère
-	 *   puis la position de ce dernier dans l'arborescence Huffman. Il est
-  	 *   également demandé le nom du fichier compressé.
+	 *  puis la position de ce dernier dans l'arborescence Huffman
+	 * @param nomDuFichier le nom du fichier à enregistrer
 	 */
 	public static void stockageABHuffman(String[][] tblArbreHuffman, String nomDuFichier) {
 		String encodageDuCaractere;
@@ -313,24 +313,22 @@ public class GestionFichier {
 						feuilleABHuffman[0].charAt(0)
 						));
 				
-				if (encodageDuCaractere.length() != 8) {
-					encodageDuCaractere = "0".repeat(8 - encodageDuCaractere.length()) 
+				if (encodageDuCaractere.length() != 16) {
+					encodageDuCaractere = "0".repeat(16 - encodageDuCaractere.length())
 							+ encodageDuCaractere;
 				}
 
-
 				ecritureFichier.write(
-						String.format("codeHuffman = %16s ; encode = %8s ; "
+						String.format("codeHuffman = %26s ; encode = %16s ; "
 								+ "symbole = %1s\n",
-								feuilleABHuffman[1], encodageDuCaractere,
-								feuilleABHuffman[0]));
+								String.join("", feuilleABHuffman[1].split(", ")), encodageDuCaractere,
+								(feuilleABHuffman[0].equals("\n") ? "LF" : feuilleABHuffman[0])));
 			}
-
+			
 			ecritureFichier.close(); // TODO ERREUR FERMETURE
 		} catch (IOException pbEcriture) {
 			// TODO ERREUR ECRITURE
 		}
-
 	}
 	
 	/**
@@ -352,14 +350,14 @@ public class GestionFichier {
 	/**
 	 * Calcul la fréquence d'apparition de chaque caractère. 
 	 * 
-	 * @param occurrences Tableau contenu le caractère et sont
+	 * @param occurrences Tableau contenant le caractère et sont
 	 * nombre d'occurences. 
 	 * @return frequences d'apparition de chaque caractères. 
 	 */
-	public static float[] calculFrequences(String[][] occurrences){
+	public static double[] calculFrequences(String[][] occurrences){
 		int nbOccurrences;
 		int nbLignes;
-		float[] frequences;
+		double[] frequences;
 		
 		nbOccurrences = 0;
 		for (String[] occurrence : occurrences) {
@@ -372,10 +370,10 @@ public class GestionFichier {
 		}
 		
 		nbLignes = occurrences.length;
-		frequences = new float[nbLignes];
+		frequences = new double[nbLignes];
 		
 		for(int indiceFreq = 0; indiceFreq < nbLignes; indiceFreq++) {
-			frequences[indiceFreq] = Float.valueOf(occurrences[indiceFreq][1]) 
+			frequences[indiceFreq] = Double.valueOf(occurrences[indiceFreq][1]) 
 												/ nbOccurrences;
 		}
 		
@@ -388,15 +386,17 @@ public class GestionFichier {
 	 * Exemple de tableau de codage en paramètre :
 	 * <ul>
 	 * 	<li>
-	 *  {"codeHuffman =             0010 ; encode = 01100010 ; symbole = b",<br>
-	 *   "codeHuffman =                0 ; encode = 01100101 ; symbole = e",<br>
-	 *   "codeHuffman =              101 ; encode = 01100001 ; symbole = a"} <br>
+	 *  {"codeHuffman =             0010 ; encode = 0000000001100010 ; symbole = b",<br>
+	 *   "codeHuffman =                0 ; encode = 0000000001100101 ; symbole = e",<br>
+	 *   "codeHuffman =              101 ; encode = 0000000001100001 ; symbole = a"} <br>
 	 * 	</li>
 	 * return :
 	 * 	<li>
-	 * 	{{"b", "0010"}, {"e", "0"}, {"a", "101"}}
+	 * 	{{"0000000001100010", "0010"}, {"0000000001100101", "0"}, {"0000000001100001", "101"}}
 	 *  </li>
 	 * </ul>
+	 * 
+	 * TODO : Vérifier le format du tableau de codage
 	 * 
 	 * @param tabFichierCodages 
 	 * @return tabCodages
@@ -408,13 +408,22 @@ public class GestionFichier {
 		tabCodages = new String[tabFichierCodages.length][2];
 		for (int index = 0; index < tabFichierCodages.length; index++) {
 			ligneActuelle = tabFichierCodages[index];
-			if(ligneActuelle.length() < 64) {
-				err.println(ERREUR_FORMAT_PARAMETRE);
-				return null;
-			}
 
-			tabCodages[index][0] = ligneActuelle.substring(63,64);
-			tabCodages[index][1] = ligneActuelle.substring(14,31).trim();
+			// TODO : Vérifier le format du tableau de codage
+			// if(verifierFormatTableauCodage(ligneActuelle) == false) {
+			// 	err.println(ERREUR_FORMAT_PARAMETRE);
+			// 	return null;
+			// }
+
+			// A intégrer dans la méthode verifierFormatTableauCodage :
+			// if(ligneActuelle.length() < 64) {
+			// 	err.println(ERREUR_FORMAT_PARAMETRE);
+			// 	return null;
+			// }
+			System.out.println("0 : " + ligneActuelle.substring(52,68));
+			System.out.println("1 : " + ligneActuelle.substring(14,41).trim());
+			tabCodages[index][0] = ligneActuelle.substring(52,68);
+			tabCodages[index][1] = ligneActuelle.substring(14,41).trim();
 		}
 
 		return tabCodages;
@@ -430,7 +439,7 @@ public class GestionFichier {
 	 */
 	public static String conversionBinaire(String[][] tabCodages, String chaine) {
 		String chaineBinaire;
-
+		
 		if (chaine.isEmpty()) {
 			err.println(ERREUR_FORMAT_PARAMETRE);
 			return "";
@@ -439,8 +448,17 @@ public class GestionFichier {
 		chaineBinaire = "";
 		for (int index = 0; index < chaine.length(); index++) {
 			for (String[] codage : tabCodages) {
-				if (codage[0].equals(String.valueOf(chaine.charAt(index)))) {
-					 chaineBinaire += codage[1];
+				String hashCodeCaractere = String.valueOf(Integer.toBinaryString(
+					Character.hashCode(chaine.charAt(index))));
+
+				if (hashCodeCaractere.length() != 16) {
+					hashCodeCaractere = "0".repeat(16 - hashCodeCaractere.length())
+							+ hashCodeCaractere;
+				}
+				if (codage[0].equals(
+					hashCodeCaractere
+					)) {
+					chaineBinaire += codage[1];
 				}
 			}
 		}
@@ -517,5 +535,25 @@ public class GestionFichier {
 		} catch (IOException pbEcriture) {
 			// TODO ERREUR ECRITURE
 		}
+	}
+
+	/**
+	 * Vérifie si le format d'une ligne de codage est correct.
+	 * <br>
+	 * Tiens en compte de si :
+	 * <ul>
+	 *  <li>La taille de la ligne est supérieure à 64</li>
+	 *  <li>La ligne contient bien un code huffman</li>
+	 *  <li>La ligne contient bien un encodage</li>
+	 * 	<li>La ligne contient bien un symbole</li>
+	 *  <li>Les ";" sont bien présents</li>
+	 *  <li>La ligne est vide</li>
+	 *  <li>Le symbole correspond bien au caractère encodé</li>
+	 * <ul>
+	 * @param ligne
+	 * @return boolean
+	 */
+	public static boolean verifierFormatTableauCodage(String ligne) {
+		return true; // stub
 	}
 }
