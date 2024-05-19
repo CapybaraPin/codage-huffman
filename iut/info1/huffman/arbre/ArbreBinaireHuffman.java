@@ -370,6 +370,24 @@ public class ArbreBinaireHuffman {
         
     }
 
+    /**
+     * Affiche l'arbre dans la console
+     */
+    public void afficherArbre() {
+        afficherArbre("", true);
+    }
+
+    private void afficherArbre(String prefix, boolean isTail) {
+        System.out.println(prefix + (isTail ? "└── " : "├── ") + valeurDuNoeud);
+        if (noeudGauche != null) {
+            noeudGauche.afficherArbre(prefix + (isTail ? "    " : "│   "), noeudDroit == null);
+        }
+        if (noeudDroit != null) {
+            noeudDroit.afficherArbre(prefix + (isTail ? "    " : "│   "), true);
+        }
+    }
+
+
     @Override
     public String toString() {
         return this.valeurDuNoeud;

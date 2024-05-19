@@ -58,6 +58,7 @@ public class ApplicationHuffman {
 		
 		Fichier fichier;
 		Fichier fichierTableauCodage;
+		Fichier fichierBinaire;
 		ArbreBinaireHuffman arbre;
 		String[] contenuFichier;
 		String[][] occurrencesFichier;
@@ -90,7 +91,7 @@ public class ApplicationHuffman {
 		out.println("Arbre Huffman créé avec succès.");
 		
 		// Affichage de l'arbre en console
-		//arbre.afficherArbre();
+		arbre.afficherArbre();
 		
 		System.out.println(Arrays.deepToString(arbre.parcoursProfondeur()));
 		
@@ -109,7 +110,10 @@ public class ApplicationHuffman {
 		// Création du fichier binaire
 		GestionFichier.enregistrementFichierBinaire(chaineBinaire, cheminFichier);
 		
-		
+		fichierBinaire = new Fichier(cheminFichier + "_Encode.bin");
+		out.println("Taille du fichier compréssé : " + fichierBinaire.tailleFichier() + " octets");
+		out.println("Taux de compression : " + fichier.rapportEntreDeuxFichiers(fichierBinaire.tailleFichier()));
+
 	}
 	
 
