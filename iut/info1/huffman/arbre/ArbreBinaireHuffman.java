@@ -68,6 +68,137 @@ public class ArbreBinaireHuffman {
                                          ? secondArbre
                                          : premierArbre)); 
     }
+    
+    /**
+	 * Permet de récupérer l'arbre binaire huffman
+	 * provenant d'une compression
+	 * @param tableauCaractereCompresse un tableau contenant un 
+	 * 		  caractère puis son code huffman associé
+	 * @return l'arbre binaire regénéré
+	 * TODO Faire la méthode (TDD)
+	 * @throws IllegalArgumentException si le tableau n'est pas valide
+	 */
+	public static ArbreBinaireHuffman recuperationArbreHuffman(String[][] tableauCaractereCompresse) throws IllegalArgumentException {
+
+		ArbreBinaireHuffman nouvelArbre;
+		String[] tableauCodesHuffman = new String[tableauCaractereCompresse.length];
+		Object[] tableauLiensHuffman = new Object[tableauCaractereCompresse.length];
+		Object[] tableauCheminsSousJacentHuffman 
+					= new String[tableauCaractereCompresse.length*2];
+		
+		Object[] tableauCheminsHuffman 
+				= new Object[tableauCheminsSousJacentHuffman.length 
+				             + tableauLiensHuffman.length];
+
+		
+		int niveauProfondeur;
+		int positionChemin;
+		
+		boolean presenceChemins;
+		boolean estValide;
+		
+		for (int indiceParcours = 0;
+				indiceParcours < tableauCodesHuffman.length;
+				indiceParcours++) {
+			
+			tableauCodesHuffman[indiceParcours] 
+					= tableauCaractereCompresse[indiceParcours][1];
+		}
+		
+		Arrays.sort(tableauCodesHuffman);
+			
+		estValide = true;
+		for (int indiceParcours = 0;
+				indiceParcours < tableauCodesHuffman.length - 1;
+				indiceParcours++) {
+
+			if (tableauCodesHuffman[indiceParcours]
+					.equals(tableauCodesHuffman[indiceParcours + 1])) {
+				
+				estValide = false;
+			}
+		}
+		
+		for (int indiceParcours = 0;
+				indiceParcours < tableauLiensHuffman.length;
+				indiceParcours++) {
+						
+			if (tableauCodesHuffman[indiceParcours].length() > 1) {
+				tableauLiensHuffman[indiceParcours] 
+						= tableauCodesHuffman[indiceParcours].substring(
+								0, tableauCodesHuffman[indiceParcours].length() - 1);
+			}
+		}
+		
+		tableauLiensHuffman = Arrays.stream(tableauLiensHuffman).distinct().toArray();
+
+		positionChemin = 0;
+		niveauProfondeur = 1;
+		presenceChemins= true;
+		while (presenceChemins) {
+			
+			presenceChemins = false;
+			for (int indiceParcours = 0;
+					indiceParcours < tableauLiensHuffman.length;
+					indiceParcours++) {
+				
+				
+				if (tableauLiensHuffman[indiceParcours] instanceof String 
+					&& tableauLiensHuffman[indiceParcours].toString()
+														  .length() >
+														   niveauProfondeur) {
+
+					tableauCheminsSousJacentHuffman[positionChemin] 
+							= tableauLiensHuffman
+									[indiceParcours].toString()
+													.substring(0,
+													 niveauProfondeur + 1);
+					positionChemin += 1;
+					presenceChemins = true;
+				}
+			}
+		
+			niveauProfondeur += 1;
+		}
+
+		tableauCheminsSousJacentHuffman = Arrays.stream(tableauCheminsSousJacentHuffman).distinct().toArray();
+
+	    System.arraycopy(tableauCheminsSousJacentHuffman, 0, tableauCheminsHuffman
+	    				 , 0, tableauCheminsSousJacentHuffman.length);
+	    
+	    System.arraycopy(tableauLiensHuffman, 0, tableauCheminsHuffman
+	    				 , tableauCheminsSousJacentHuffman.length
+	    				 , tableauLiensHuffman.length);
+	    
+		tableauCheminsHuffman = Arrays.stream(tableauCheminsHuffman).distinct().toArray();
+		
+		for (Object lienHuffman : tableauCheminsHuffman) {
+			
+			for (Object codeHuffman : tableauCodesHuffman) {
+			
+				if (lienHuffman != null && lienHuffman.toString().equals(codeHuffman.toString())) {
+					estValide = false;
+				}
+				
+			}
+			
+		}
+		
+		if (!estValide) {
+			System.out.println("REUSSITE");
+			throw new IllegalArgumentException("Le tableau d'encodage est invalide !");
+		}
+		
+		nouvelArbre = new ArbreBinaireHuffman("lien", null, null);
+		for (String[] caractereCompresse : tableauCaractereCompresse) {
+			
+			nouvelArbre.insertionCaractere(caractereCompresse[0], caractereCompresse[1]);
+		}
+		
+		
+		
+		return nouvelArbre;
+	}
 
     /**
      * 
@@ -79,12 +210,13 @@ public class ArbreBinaireHuffman {
      */
     public static ArbreBinaireHuffman insertionHuffman(Object[] caracteres, double[] frequences) {
 
-        double plusPetiteFrequence;
-        double secondePlusPetiteFrequence;
+    	double plusPetiteFrequence;
+    	double secondePlusPetiteFrequence;
+        double sommeFrequences;
         int indexPlusPetiteFrequence;
         int indexSecondePlusPetiteFrequence;
         int indexDeReequilibrage;
-
+        
         Object[] tblDeCaracteres = Arrays.copyOf(caracteres, caracteres.length);
         double[] frequenceDesCaracteres = Arrays.copyOf(frequences, frequences.length);
 
@@ -92,6 +224,21 @@ public class ArbreBinaireHuffman {
         // Initialisation avec des valeures minimales absurdes
         plusPetiteFrequence = secondePlusPetiteFrequence = 2.0f;
         indexPlusPetiteFrequence = indexSecondePlusPetiteFrequence = -1;
+
+        
+        sommeFrequences = 0;
+        for (double frequence : frequenceDesCaracteres) {
+			sommeFrequences += frequence;
+		}
+        
+        if (   0.99 > sommeFrequences 
+        	||        sommeFrequences > 1.01) {
+        	
+        	throw new IllegalArgumentException("Erreur de frequencage");
+        	
+        }
+        
+        
         while (frequenceDesCaracteres.length > 1) {
 
 
@@ -145,8 +292,6 @@ public class ArbreBinaireHuffman {
                     } else if (indexDeParcours == Math.max(indexPlusPetiteFrequence, indexSecondePlusPetiteFrequence)) {
                         indexDeReequilibrage = 1;
                     }else {
-
-
                         nouvelleTblDeCaracteres[indexDeParcours - indexDeReequilibrage] 
                             = tblDeCaracteres[indexDeParcours];
                         nouvellesFrequencesDesCaracteres[indexDeParcours - indexDeReequilibrage] 
@@ -308,20 +453,68 @@ public class ArbreBinaireHuffman {
 
     }
     
+    /**
+     * Insere dans un arbre binaire une valeur donnée grace
+     * au chemin qui lui est propre
+     * @param caractereInsere Caractère à insérer dans l'arboresence
+     * @param cheminInsertion Chemin du caractère
+     */
+    
+    public void insertionCaractere(String caractereInsere, String cheminInsertion) {
+    	
+    	
+    	char cheminActuel;
+    	
+    	cheminActuel = cheminInsertion.charAt(0);
+    	
+    	if (cheminActuel == 'f') {
+    		System.out.println("OUI");
+    	}
+    	
+    	if (cheminInsertion.length() == 1) {
+    		
+    		if (cheminActuel == '0') {
+    			this.noeudGauche = new ArbreBinaireHuffman(caractereInsere, null, null);
+    		} else {
+    			this.noeudDroit =  new ArbreBinaireHuffman(caractereInsere, null, null);
+    		}
+    	} else {
+    		
+    		if (cheminActuel == '0') {
+    			
+    			if (this.noeudGauche == null) {
+    				this.noeudGauche = new ArbreBinaireHuffman("lien", null, null);
+    			}
+    			
+    			this.noeudGauche.insertionCaractere(caractereInsere, cheminInsertion.substring(1, cheminInsertion.length()));
+    			
+    		} else {
+
+        		if (this.noeudDroit == null) {
+        			this.noeudDroit = new ArbreBinaireHuffman("lien", null, null);
+        		}
+        			
+        		this.noeudDroit.insertionCaractere(caractereInsere, cheminInsertion.substring(1, cheminInsertion.length()));  			
+    			
+    		}
+    		    		
+    	}
+    	
+    }
+    
     public ArbreBinaireHuffman getNoeudDroit() {
         if (noeudDroit != null) {
             return noeudDroit;
-        } else {
-            return null;
-        }
+        } 
+        return null;
     }
 
     public ArbreBinaireHuffman getNoeudGauche() {
         if (noeudGauche != null) {
             return noeudGauche;
-        } else {
-            return null;
-        }
+        } 
+        return null;
+
     }
 
     /**
@@ -330,7 +523,7 @@ public class ArbreBinaireHuffman {
      * noeud gauche d'une séquence donnée
      * @param tblDeRecherche un tableau de 0 et de 1 pour retrouver
      * un caractère
-     * @return le caractère cherché stockée dans l'arborescence
+     * @return le caractère cherché stockés dans l'arborescence
      */
     public String valeurDuNoeudCherche(int[] tblDeRecherche) {
 
@@ -366,8 +559,7 @@ public class ArbreBinaireHuffman {
         }
 
         //Sinon (le chemin suivant est 1), on va dans le noeud droit
-        return noeudGauche.valeurDuNoeudCherche(nouveauTblDeRecherche);
-        
+        return noeudGauche.valeurDuNoeudCherche(nouveauTblDeRecherche);        
     }
 
     /**
@@ -386,8 +578,7 @@ public class ArbreBinaireHuffman {
             noeudDroit.afficherArbre(prefix + (isTail ? "    " : "│   "), true);
         }
     }
-
-
+    
     @Override
     public String toString() {
         return this.valeurDuNoeud;
