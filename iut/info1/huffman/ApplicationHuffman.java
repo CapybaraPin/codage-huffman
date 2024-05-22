@@ -1,14 +1,17 @@
 /**
- * ApplicationHuffman			01/05/2024
- * IUT De RODEZ					Pas de copyrights
+ * ApplicationHuffman.java          09/04/2024
+ * IUT DE RODEZ            Pas de copyrights
  */
-
 package iut.info1.huffman;
 
-import iut.info1.huffman.fichier.GestionFichier;
+import static java.lang.System.out;
 
+import java.util.ArrayList;
 import java.util.Arrays;
-
+import java.util.List;
+import java.util.Scanner;
+import iut.info1.huffman.fichier.Fichier;
+import iut.info1.huffman.fichier.GestionFichier;
 import iut.info1.huffman.arbre.ArbreBinaireHuffman;
 
 /**
@@ -17,94 +20,137 @@ import iut.info1.huffman.arbre.ArbreBinaireHuffman;
  * @author Romain Porcer, Hugo Robles, Tom Gutierrez, Erwan Thierry
  */
 public class ApplicationHuffman {
-
+	
+    private static final String FOLDER_URL = "C:/huffmantest/";
+	
 	/**
-	 * Crée une compression des données passés en paramètres
-	 * @param contenuFichier, le contenu à compresser
-	 * @return une chaîne de caractères composé de binaire. 
+	 * Permet de compresser un fichier
+	 * Demande le nom du fichier a compresser
+	 * et effectue la compression
+	 * @param args
 	 */
-	public static String compressionDonnees(String[] contenuFichier) {
-
-		Object[][] occurencesContenu;
-
-		Object[] caracteresContenu;
-		float[] frequenceCaracteres;
-		ArbreBinaireHuffman ArbreHuffmanAssocie;
-		String[][] donneesArbreBinaire;
-		boolean estTrouve;
+	public static void main(String[] args) {
 		
-		String contenuCompresse;
-		String contenuFichierExploitable;
-		String cheminCaractere;
-
-		occurencesContenu = GestionFichier.compterOccurrence(contenuFichier);
-
-		caracteresContenu = new Object[occurencesContenu.length];
-
-
-		for (int indiceParcours = 0;
-				indiceParcours < occurencesContenu.length;
-				indiceParcours++) {
-
-			caracteresContenu[indiceParcours] = occurencesContenu[indiceParcours][0];
-
-		}
-
-
-		frequenceCaracteres = GestionFichier.calculFrequences(GestionFichier.compterOccurrence(contenuFichier));
-
-		ArbreHuffmanAssocie = ArbreBinaireHuffman.insertionHuffman(caracteresContenu, frequenceCaracteres);
-
-		donneesArbreBinaire = ArbreHuffmanAssocie.parcoursProfondeur();	
-
-		System.out.println(Arrays.toString(frequenceCaracteres));
-		System.out.println(Arrays.deepToString(donneesArbreBinaire));
-
-		cheminCaractere = "";
-		contenuCompresse = "";
-		contenuFichierExploitable = "";
-
-		for (int indiceParcours = 0;
-				indiceParcours < contenuFichier.length;
-				indiceParcours++) {
-
-			contenuFichierExploitable += contenuFichier[indiceParcours];
+		String nomFichier;
+		Scanner scanner = new Scanner(System.in);
+		
+		out.print("Entrez le nom de votre fichier : ");
+		
+		if (scanner.hasNext()) {
+			
+			nomFichier = scanner.next();
+			compression(FOLDER_URL + nomFichier);		
+		
+		} else {
+			out.print("USAGE : fichier.txt");
 		}
 		
-
-		for (int indiceParcours = 0;
-				indiceParcours < donneesArbreBinaire.length;
-				indiceParcours++) {
-			
-			cheminCaractere = "";
-
-			for (String binaire : donneesArbreBinaire[indiceParcours][1].split(", ")) {
-				cheminCaractere += binaire;
-			}
-			
-			donneesArbreBinaire[indiceParcours][1] = cheminCaractere;
+	
+	}
+	
+	/**
+	 * Permet de compresser un fichier
+	 * @param cheminFichier
+	 */
+	public static void compression(String cheminFichier) {
+		out.println("------------------------------------------");
+		out.println("Compression de : " + cheminFichier);
+		
+		Fichier fichier;
+		Fichier fichierTableauCodage;
+		Fichier fichierBinaire;
+		ArbreBinaireHuffman arbre;
+		String[] contenuFichier;
+		String[][] occurrencesFichier;
+		double[] frequencesFichier; 
+		String[] contenuTableauCodage;
+		String chaineBinaire;
+		String[][] tableauCodageValide;
+		
+		fichier = new Fichier(cheminFichier);
+		contenuFichier = fichier.contenuFichier();
+		occurrencesFichier = GestionFichier.compterOccurrence(contenuFichier);
+		frequencesFichier = GestionFichier.calculFrequences(occurrencesFichier);
+		
+		out.println("Taille : " + fichier.tailleFichier() + " octets");
+		
+		// Création des tableaux pour les caractères et leurs fréquences
+		Object[] tblCaracteres = new Object[occurrencesFichier.length];
+		double[] tblFrequences = new double[occurrencesFichier.length];
+		
+		// Insertion des caractères et fréquences dans les tableaux
+		for (int i = 0; i < occurrencesFichier.length; i++) {
+			tblCaracteres[i] = occurrencesFichier[i][0];
+			tblFrequences[i] = frequencesFichier[i];
 		}
-
-		for (char caractere : contenuFichierExploitable.toCharArray()) {
-
-			estTrouve = false;
-			
-			for (int indiceParcours = 0;
-					indiceParcours < donneesArbreBinaire.length && !estTrouve;
-					indiceParcours++) {
-
-				if (caractere == donneesArbreBinaire[indiceParcours][0].charAt(0)) {
-					contenuCompresse += donneesArbreBinaire[indiceParcours][1];
-					estTrouve = true;
-				}
-				
-
-			}
-			
-		}
-
-		return contenuCompresse;
+		
+		// Création de l'arbre binaire Huffman avec les caractères et leurs fréquences
+		arbre = ArbreBinaireHuffman.insertionHuffman(tblCaracteres, tblFrequences);
+		
+		// Affichage ou utilisation de l'arbre créé
+		out.println("Arbre Huffman créé avec succès.");
+		
+		// Affichage de l'arbre en console
+		arbre.afficherArbre();
+		
+		System.out.println(Arrays.deepToString(arbre.parcoursProfondeur()));
+		
+		GestionFichier.stockageABHuffman(transformerListe(arbre.parcoursProfondeur()), cheminFichier);
+		
+		// Ouverture du fichier tableaud de codage
+		fichierTableauCodage = new Fichier(cheminFichier + "_EncodeH.txt");
+		contenuTableauCodage = fichierTableauCodage.contenuFichier();
+		
+		tableauCodageValide = GestionFichier.conversionTableauCodage(contenuTableauCodage);
+		
+		// TODO ; changer conversion binaire et supprimer joinStrings
+		chaineBinaire = GestionFichier.conversionBinaire(tableauCodageValide, joinStrings(contenuFichier));
+		System.out.println(chaineBinaire);
+		// TODO : Erreur de compression
+		// Création du fichier binaire
+		GestionFichier.enregistrementFichierBinaire(chaineBinaire, cheminFichier);
+		
+		fichierBinaire = new Fichier(cheminFichier + "_Encode.bin");
+		out.println("Taille du fichier compréssé : " + fichierBinaire.tailleFichier() + " octets");
+		out.println("Taux de compression : " + fichier.rapportEntreDeuxFichiers(fichierBinaire.tailleFichier()));
 
 	}
+	
 
+	/** TODO COMMENTER CETTE METHODE
+	 * 
+	 * @param liste
+	 * @return resultat
+	 */
+	public static String[][] transformerListe(String[][] liste) { // changer le nom de la méthode pour qu'elle soit plus explicite
+        List<String[]> resultat = new ArrayList<>();
+
+        for (String[] entree : liste) {
+            if (entree.length < 2) continue;
+            String caractere = entree[0];
+            StringBuilder code = new StringBuilder();
+
+            for (int i = 1; i < entree.length; i++) {
+                code.append(entree[i]);
+            }
+
+            resultat.add(new String[]{caractere, code.toString()});
+        }
+
+        return resultat.toArray(new String[0][]);
+    }
+	
+	/**
+	 * Convertit un tableau de chaînes en une seule chaîne
+	 * @param strings
+	 */
+	public static String joinStrings(String[] strings) {
+        StringBuilder resultat = new StringBuilder();
+        
+        for (String str : strings) {
+            resultat.append(str).append("\r\n");
+        }
+        
+        return resultat.toString();
+    }
 }

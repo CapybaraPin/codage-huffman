@@ -9,9 +9,12 @@ import static java.lang.System.err;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 
 /**
@@ -53,6 +56,9 @@ public class GestionFichier {
 	
     /** suffixe des fichiers pris en charge **/
 	private static final String SUFFIXE_FICHIER = ".txt";
+
+    /** suffixe des fichiers compréssés pris en charge **/
+	private static final String SUFFIXE_FICHIER_DECOMPRESSE = ".bin";
 	
 	/** le numerateur indiqué ne respecte pas les critères **/
 	private static final String ERREUR_NUMERATEUR_INVALIDE
@@ -267,10 +273,10 @@ public class GestionFichier {
 	 * Le code huffman associé à un encodage Unicode UTF-8, 
 	 * et le caractère associé à son encodage. 
 	 * 
-	 * @param tblArbreHuffman, nomDuFichier un tableau de tableau de chaînes
+	 * @param tblArbreHuffman un tableau de tableau de chaînes
 	 *  de caractères, ayant pour chaque sous-tableau un caractère
-	 *   puis la position de ce dernier dans l'arborescence Huffman. Il est
-  	 *   également demandé le nom du fichier compressé.
+	 *  puis la position de ce dernier dans l'arborescence Huffman
+	 * @param nomDuFichier le nom du fichier à enregistrer
 	 */
 	public static void stockageABHuffman(String[][] tblArbreHuffman, String nomDuFichier) {
 		String encodageDuCaractere;
@@ -309,31 +315,29 @@ public class GestionFichier {
 						feuilleABHuffman[0].charAt(0)
 						));
 				
-				if (encodageDuCaractere.length() != 8) {
-					encodageDuCaractere = "0".repeat(8 - encodageDuCaractere.length()) 
+				if (encodageDuCaractere.length() != 16) {
+					encodageDuCaractere = "0".repeat(16 - encodageDuCaractere.length())
 							+ encodageDuCaractere;
 				}
 
-
 				ecritureFichier.write(
-						String.format("codeHuffman = %16s ; encode = %8s ; "
+						String.format("codeHuffman = %26s ; encode = %16s ; "
 								+ "symbole = %1s\n",
-								feuilleABHuffman[1], encodageDuCaractere,
-								feuilleABHuffman[0]));
+								String.join("", feuilleABHuffman[1].split(", ")), encodageDuCaractere,
+								(feuilleABHuffman[0].equals("\n") ? "LF" : feuilleABHuffman[0])));
 			}
-
+			
 			ecritureFichier.close(); // TODO ERREUR FERMETURE
 		} catch (IOException pbEcriture) {
 			// TODO ERREUR ECRITURE
 		}
-
 	}
 	
 	/**
 	 * L'objectif est d'afficher le contenu d'un tableau de
 	 * chaîne de caractères, pour qui chaque éléments de
 	 * cette chaîne est la ligne d'un fichier.
-	 * \n
+	 * <br>
 	 * Dans le cas où il existe plusieurs saut à la ligne vide, ces
 	 * derniers seront conservés.
 	 * 
@@ -348,14 +352,14 @@ public class GestionFichier {
 	/**
 	 * Calcul la fréquence d'apparition de chaque caractère. 
 	 * 
-	 * @param occurrences Tableau contenu le caractère et sont
+	 * @param occurrences Tableau contenant le caractère et sont
 	 * nombre d'occurences. 
 	 * @return frequences d'apparition de chaque caractères. 
 	 */
-	public static float[] calculFrequences(String[][] occurrences){
+	public static double[] calculFrequences(String[][] occurrences){
 		int nbOccurrences;
 		int nbLignes;
-		float[] frequences;
+		double[] frequences;
 		
 		nbOccurrences = 0;
 		for (String[] occurrence : occurrences) {
@@ -368,10 +372,10 @@ public class GestionFichier {
 		}
 		
 		nbLignes = occurrences.length;
-		frequences = new float[nbLignes];
+		frequences = new double[nbLignes];
 		
 		for(int indiceFreq = 0; indiceFreq < nbLignes; indiceFreq++) {
-			frequences[indiceFreq] = Float.valueOf(occurrences[indiceFreq][1]) 
+			frequences[indiceFreq] = Double.valueOf(occurrences[indiceFreq][1]) 
 												/ nbOccurrences;
 		}
 		
@@ -384,15 +388,17 @@ public class GestionFichier {
 	 * Exemple de tableau de codage en paramètre :
 	 * <ul>
 	 * 	<li>
-	 *  {codeHuffman =             0010 ; encode = 01100010 ; symbole = b},<br>
-	 *  {codeHuffman =                0 ; encode = 01100101 ; symbole = e},<br>
-	 *  {codeHuffman =              101 ; encode = 01100001 ; symbole = a} <br>
-	 * 	</li>	
+	 *  {"codeHuffman =             0010 ; encode = 0000000001100010 ; symbole = b",<br>
+	 *   "codeHuffman =                0 ; encode = 0000000001100101 ; symbole = e",<br>
+	 *   "codeHuffman =              101 ; encode = 0000000001100001 ; symbole = a"} <br>
+	 * 	</li>
 	 * return :
 	 * 	<li>
-	 * 	{{"b", "0010"}, {"e", "0"}, {"a", "101"}}
+	 * 	{{"0000000001100010", "0010"}, {"0000000001100101", "0"}, {"0000000001100001", "101"}}
 	 *  </li>
 	 * </ul>
+	 * 
+	 * TODO : Vérifier le format du tableau de codage
 	 * 
 	 * @param tabFichierCodages 
 	 * @return tabCodages
@@ -400,18 +406,28 @@ public class GestionFichier {
 	public static String[][] conversionTableauCodage(String[] tabFichierCodages) {
 		String[][] tabCodages;
 		String ligneActuelle;
+		
+		if(tabFichierCodages.length == 0) {
+			return new String[][]{{}};
+		}
 
 		tabCodages = new String[tabFichierCodages.length][2];
-
 		for (int index = 0; index < tabFichierCodages.length; index++) {
 			ligneActuelle = tabFichierCodages[index];
-			if(ligneActuelle.length() < 64) {
-				err.println(ERREUR_FORMAT_PARAMETRE);
-				return null;
-			}
 
-			tabCodages[index][0] = ligneActuelle.substring(63,64);
-			tabCodages[index][1] = ligneActuelle.substring(14,31).trim();
+			// TODO : Vérifier le format du tableau de codage
+			// if(verifierFormatTableauCodage(ligneActuelle) == false) {
+			// 	err.println(ERREUR_FORMAT_PARAMETRE);
+			// 	return null;
+			// }
+
+			// A intégrer dans la méthode verifierFormatTableauCodage :
+			// if(ligneActuelle.length() < 64) {
+			// 	err.println(ERREUR_FORMAT_PARAMETRE);
+			// 	return null;
+			// }
+			tabCodages[index][0] = ligneActuelle.substring(52,68);
+			tabCodages[index][1] = ligneActuelle.substring(14,40).trim();
 		}
 
 		return tabCodages;
@@ -427,7 +443,7 @@ public class GestionFichier {
 	 */
 	public static String conversionBinaire(String[][] tabCodages, String chaine) {
 		String chaineBinaire;
-
+		
 		if (chaine.isEmpty()) {
 			err.println(ERREUR_FORMAT_PARAMETRE);
 			return "";
@@ -436,11 +452,162 @@ public class GestionFichier {
 		chaineBinaire = "";
 		for (int index = 0; index < chaine.length(); index++) {
 			for (String[] codage : tabCodages) {
-				if (codage[0].equals(String.valueOf(chaine.charAt(index)))) {
-					 chaineBinaire += codage[1];
+				String hashCodeCaractere = String.valueOf(Integer.toBinaryString(
+					Character.hashCode(chaine.charAt(index))));
+
+				if (hashCodeCaractere.length() != 16) {
+					hashCodeCaractere = "0".repeat(16 - hashCodeCaractere.length())
+							+ hashCodeCaractere;
+				}
+				if (codage[0].equals(
+					hashCodeCaractere
+					)) {
+					chaineBinaire += codage[1];
 				}
 			}
 		}
 		return chaineBinaire;
+	}
+
+	/**
+	 * Enregistre un fichier binaire à partir d'une String
+	 * 
+	 * Exemple de chaineBinaire : "011000100"
+	 * 
+	 * Est stocké sous forme d'octet dans le fichier.
+	 * Si le dernier octet de la chaîne est incomplet,
+	 * on ajoute des 0 pour le compléter.
+	 * Le nombre de zero ajouté est stocké dans le dernier
+	 * octet du fichier.
+	 * 
+	 * Exemple de fichier binaire obtenu : 
+	 * 011000100000000000000111
+	 * @param contenuFichier 
+	 */
+	public static void enregistrementFichierBinaire(String chaineBinaire, String nomFichier) {
+		int longueur = chaineBinaire.length();
+        int longueurDonnees = (int) Math.ceil((double) longueur / 8);
+        byte[] donnees = new byte[longueurDonnees+1];
+        int indexDonnees;
+		int nbZeroComplementaire;
+
+		if (chaineBinaire.isEmpty() || nomFichier.isEmpty()) {
+			err.println(ERREUR_FORMAT_PARAMETRE);
+			return;
+		}
+
+		try {
+			File fichierEnregistrement = new File(
+											 	 nomFichier
+											 	 +"_Encode"
+											 	 +SUFFIXE_FICHIER_DECOMPRESSE);
+
+			if (fichierEnregistrement.createNewFile()) {
+				System.out.println("Fichier créé " 
+						+ fichierEnregistrement.getName());
+			} else {
+				System.out.println("Ce fichier existe déjà"); //TODO constante
+				return; // TODO proposer une solution, écraser le fichier ?, renommer le fichier ?
+			}
+
+		} catch (IOException pbLecture) {
+			System.err.println(ERREUR_FICHIER_LECTURE + nomFichier);//TODO ERREUR_FICHIER_CREATION
+			System.exit(CODE_ERREUR_FICHIER_LECTURE);
+		}
+
+		indexDonnees = 0;
+		nbZeroComplementaire = 0;
+        for (int i = 0; i < longueur; i += 8) {
+            String octet = chaineBinaire.substring(i, Math.min(i + 8, longueur));
+
+            while (octet.length() < 8) {
+                octet = "0" + octet;
+				nbZeroComplementaire++;
+            }
+            donnees[indexDonnees++] = (byte) Integer.parseInt(octet, 2);
+    	}
+		donnees[longueurDonnees] = (byte) nbZeroComplementaire;
+
+		try {
+			FileOutputStream fluxEcriture = new FileOutputStream(
+													   nomFichier
+													   +"_Encode"
+													   +SUFFIXE_FICHIER_DECOMPRESSE );
+
+			fluxEcriture.write(donnees);
+			fluxEcriture.close(); // TODO ERREUR FERMETURE
+		} catch (IOException pbEcriture) {
+			// TODO ERREUR ECRITURE
+		}
+	}
+
+	/**
+	 * Vérifie si le format d'une ligne de codage est correct.
+	 * <br>
+	 * Tiens en compte de si :
+	 * <ul>
+	 *  <li>La taille de la ligne est entre 82 et 83</li>
+	 *  <li>La ligne contient bien un code huffman</li>
+	 *  <li>La ligne contient bien un encodage</li>
+	 * 	<li>La ligne contient bien un symbole</li>
+	 *  <li>Les ";" sont bien présents</li>
+	 *  <li>La ligne est vide</li>
+	 *  <li>Le symbole correspond bien au caractère encodé</li>
+	 * </ul>
+	 * @param ligne
+	 * @return boolean
+	 */
+	public static boolean verifierFormatTableauCodage(String ligne) { // TODO : à tester avec des Regex
+		String codeHuffman;
+		String patternCodeHuffman;
+		String encode;
+		String patternEncode;
+		char symbole;
+		String patternSymbole;
+		int nbPointVirgule;
+		boolean estLF;
+		
+
+		if (ligne.isEmpty() || !(ligne.length() >= 82 && ligne.length() <= 83)){
+			err.println(ERREUR_FORMAT_PARAMETRE);
+			return false;
+		}
+		
+		nbPointVirgule = ligne.length() - ligne.replace(";", "").length();
+		if (nbPointVirgule != 2) {
+			err.println(ERREUR_FORMAT_PARAMETRE);
+			return false;
+		}
+		codeHuffman = ligne.substring(14, 40);
+		patternCodeHuffman = "^[01\\s]{26}$";
+
+		if (!Pattern.matches(patternCodeHuffman, codeHuffman)) {
+			err.println(ERREUR_FORMAT_PARAMETRE);
+			return false;
+		}
+
+		encode = ligne.substring(52, 68);
+		patternEncode = "^[01]{16}$";
+
+		if (!Pattern.matches(patternEncode, encode)) {
+			err.println(ERREUR_FORMAT_PARAMETRE);
+			return false;
+		}
+		symbole = ligne.charAt(81);
+		patternSymbole = "^.$";
+		
+		
+		if(!Pattern.matches(patternSymbole, String.valueOf(symbole))) {
+			err.println(ERREUR_FORMAT_PARAMETRE);
+			return false;
+		}
+		
+		estLF = symbole == 'L' && ligne.length() == 83 && ligne.charAt(82) == 'F';
+		if(symbole != (char) Integer.parseInt(encode, 2) && !estLF ) {
+			err.println(ERREUR_FORMAT_PARAMETRE);
+			return false;
+		}
+
+		return true;
 	}
 }

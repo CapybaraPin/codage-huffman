@@ -2,7 +2,7 @@ package iut.info1.huffman.arbre;
 
 import java.util.Arrays;
 
-import arbre.ArbreBinaireHuffman;
+import iut.info1.huffman.ApplicationHuffman;
 
 public class EssaiArbreBinaireHuffman {
     public static void main(String[] args) {
