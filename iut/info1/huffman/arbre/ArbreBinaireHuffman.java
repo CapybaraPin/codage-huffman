@@ -562,6 +562,62 @@ public class ArbreBinaireHuffman {
         return noeudGauche.valeurDuNoeudCherche(nouveauTblDeRecherche);        
     }
 
+        /**
+     * Transforme une chaine de 0 et de 1 en une chaine de caractères
+     * @param donneesFichierBinaire la chaine de caractères en binaire
+     * composant le fichier.bin visé pour la décompression
+     * @return le texte décompressé
+     */
+    public String restitutionTexteOriginal(String donneesFichierBinaire) {
+    	
+    	// TODO Faire une boucle pour la recherche d'un caractère 
+    	//      dans l'arbre binaire
+    	
+    	int nbZerosEnlevable;
+    	int[] cheminSuivi;
+    	Object valeurNoeud;
+    	String donneesAnalyse;
+    	String chaineDecompresse;
+    	ArrayList<Integer> cheminGenere = new ArrayList<Integer>(); 
+    	
+    	nbZerosEnlevable 
+    		= Integer.parseInt(donneesFichierBinaire
+    			.substring(donneesFichierBinaire.length() - 8,
+    						donneesFichierBinaire.length()), 2);
+    	
+    	donneesAnalyse = donneesFichierBinaire.substring(0, donneesFichierBinaire.length() - 8);
+    	
+    	donneesAnalyse = donneesAnalyse.substring(0, donneesAnalyse.length() - 8)
+    					 + donneesAnalyse.substring(donneesAnalyse.length() - 8 
+    							 	+ nbZerosEnlevable,
+    							 	donneesAnalyse.length());
+    	    	
+    	chaineDecompresse = "";
+    	cheminSuivi = new int[1];
+		for (int indiceParcours = 0;
+				indiceParcours < donneesAnalyse.length();
+				indiceParcours++) {
+			
+			cheminGenere.add(Integer.valueOf(donneesAnalyse.charAt(indiceParcours)) - 48);
+
+			valeurNoeud = donneesAnalyse.charAt(indiceParcours);
+
+			cheminSuivi = cheminGenere.stream().mapToInt(i -> i).toArray();
+			
+			System.out.println(Arrays.toString(cheminSuivi));
+			
+			if (!this.valeurDuNoeudCherche(cheminSuivi).equals("lien")) {
+
+				chaineDecompresse += this.valeurDuNoeudCherche(cheminSuivi);
+				cheminGenere.clear();
+				cheminSuivi = new int[1]; 
+			}
+			
+		}
+    	
+    	return chaineDecompresse; 
+    }
+	
     /**
      * Affiche l'arbre dans la console
      */
