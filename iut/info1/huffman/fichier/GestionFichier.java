@@ -610,4 +610,45 @@ public class GestionFichier {
 
 		return true;
 	}
+		
+	/**
+	 * Permet la récupération des données dans un fichier binaire
+	 * @param cheminFichier le chemin du fichier binaire
+	 * @return le contenu du fichier
+	 *
+	 */
+	public static String recupererDonneesFichierCompresse(String cheminFichier) {
+
+		String contenuBinaireFichier;
+		
+		FileInputStream inputStream = null;
+		try {
+			inputStream = new FileInputStream(cheminFichier);
+		} catch (FileNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		int data;
+		String donneesData;
+		
+		contenuBinaireFichier = "";
+		try {
+			while ((data = inputStream.read()) != -1) {
+				
+				donneesData = String.valueOf(Integer.toBinaryString(data));
+								
+				if (donneesData.length() != 8) { // TODO Faire une méthode pour ce 'if'
+					donneesData = "0".repeat(8 - donneesData.length())
+							+ donneesData;
+				}
+			    contenuBinaireFichier += donneesData;
+			}
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}		
+		
+		return contenuBinaireFichier; //STUB
+	}
 }
