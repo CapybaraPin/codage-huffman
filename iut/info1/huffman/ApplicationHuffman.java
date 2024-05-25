@@ -105,7 +105,6 @@ public class ApplicationHuffman {
 		
 		// TODO ; changer conversion binaire et supprimer joinStrings
 		chaineBinaire = GestionFichier.conversionBinaire(tableauCodageValide, joinStrings(contenuFichier));
-		System.out.println(chaineBinaire);
 		// TODO : Erreur de compression
 		// Création du fichier binaire
 		GestionFichier.enregistrementFichierBinaire(chaineBinaire, cheminFichier);

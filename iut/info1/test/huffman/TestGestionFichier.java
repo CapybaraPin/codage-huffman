@@ -57,27 +57,27 @@ class TestGestionFichier {
 	/** TODO Faire la javadoc de FICHIER_ARBRE_HUFFMAN*/
 	public static final String[][] FICHIER_ARBRE_HUFFMAN_CONTENU = {
 
-			{"codeHuffman =                         00 ; encode = 0000000001000001 ; symbole = A",
-			 "codeHuffman =                         01 ; encode = 0000000001000010 ; symbole = B",
-			 "codeHuffman =                         10 ; encode = 0000000001000011 ; symbole = C",
-			 "codeHuffman =                       1100 ; encode = 0000000001000100 ; symbole = D"},
+			{"codeHuffman = 00 ; encode = 0000000001000001 ; symbole = A",
+			 "codeHuffman = 01 ; encode = 0000000001000010 ; symbole = B",
+			 "codeHuffman = 10 ; encode = 0000000001000011 ; symbole = C",
+			 "codeHuffman = 1100 ; encode = 0000000001000100 ; symbole = D"},
 
-		    {"codeHuffman =                         00 ; encode = 0000000001001100 ; symbole = L",
-			 "codeHuffman =                         01 ; encode = 0000000001101111 ; symbole = o",
-			 "codeHuffman =                         10 ; encode = 0000000001110010 ; symbole = r",
-			 "codeHuffman =                        110 ; encode = 0000000001100101 ; symbole = e",
-			 "codeHuffman =                        111 ; encode = 0000000001101101 ; symbole = m",
-			 "codeHuffman =                       1101 ; encode = 0000000000001010 ; symbole = LF",
-			 "codeHuffman =                      11100 ; encode = 0000000001001001 ; symbole = I",
-			 "codeHuffman =                      11101 ; encode = 0000000001110000 ; symbole = p",
-			 "codeHuffman =                      11110 ; encode = 0000000001110011 ; symbole = s",
-			 "codeHuffman =                     111100 ; encode = 0000000001110101 ; symbole = u"},
+		    {"codeHuffman = 00 ; encode = 0000000001001100 ; symbole = L",
+			 "codeHuffman = 01 ; encode = 0000000001101111 ; symbole = o",
+			 "codeHuffman = 10 ; encode = 0000000001110010 ; symbole = r",
+			 "codeHuffman = 110 ; encode = 0000000001100101 ; symbole = e",
+			 "codeHuffman = 111 ; encode = 0000000001101101 ; symbole = m",
+			 "codeHuffman = 1101 ; encode = 0000000000001010 ; symbole = LF",
+			 "codeHuffman = 11100 ; encode = 0000000001001001 ; symbole = I",
+			 "codeHuffman = 11101 ; encode = 0000000001110000 ; symbole = p",
+			 "codeHuffman = 11110 ; encode = 0000000001110011 ; symbole = s",
+			 "codeHuffman = 111100 ; encode = 0000000001110101 ; symbole = u"},
 
-			{"codeHuffman =                         00 ; encode = 0000000001100001 ; symbole = a",
-			 "codeHuffman =                         10 ; encode = 0000000001100010 ; symbole = b",
-			 "codeHuffman =                         01 ; encode = 0000000000001010 ; symbole = LF"},
+			{"codeHuffman = 00 ; encode = 0000000001100001 ; symbole = a",
+			 "codeHuffman = 10 ; encode = 0000000001100010 ; symbole = b",
+			 "codeHuffman = 01 ; encode = 0000000000001010 ; symbole = LF"},
 
-			{"codeHuffman =                          0 ; encode = 0000000000001010 ; symbole = LF"},
+			{"codeHuffman = 0 ; encode = 0000000000001010 ; symbole = LF"},
 			//{}, TODO
 			{}
 	};
@@ -137,29 +137,29 @@ class TestGestionFichier {
     
     /** TODO Faire la javadoc de FICHIER_AB_HUFFMAN_ATTENDU*/
     public static final String[] FICHIER_AB_HUFFMAN_ATTENDU = {
-    		  "codeHuffman =                        101 ; encode = 0000000001100101 ; symbole = e\r\n"
-    		+ "codeHuffman =                        010 ; encode = 0000000001100010 ; symbole = b\r\n"
-    		+ "codeHuffman =                     110101 ; encode = 0000000001100100 ; symbole = d\r\n"
+    		  "codeHuffman = 101 ; encode = 1100101 ; symbole = e\r\n"
+    		+ "codeHuffman = 010 ; encode = 1100010 ; symbole = b\r\n"
+    		+ "codeHuffman = 110101 ; encode = 1100100 ; symbole = d\r\n"
     		+ "",
-    		  "codeHuffman =                        101 ; encode = 0000000001100001 ; symbole = a\r\n"
-    		+ "codeHuffman =                        010 ; encode = 0000000001110100 ; symbole = t\r\n"
-    		+ "codeHuffman =                      11011 ; encode = 0000000001011000 ; symbole = X\r\n"
+    		  "codeHuffman = 101 ; encode = 1100001 ; symbole = a\r\n"
+    		+ "codeHuffman = 010 ; encode = 1110100 ; symbole = t\r\n"
+    		+ "codeHuffman = 11011 ; encode = 1011000 ; symbole = X\r\n"
     		+ "",
-    		  "codeHuffman =                        101 ; encode = 0000000001111000 ; symbole = x\r\n"
-    		+ "codeHuffman =                        010 ; encode = 0000000000100000 ; symbole =  \r\n"
-    		+ "codeHuffman =                      11001 ; encode = 0000000001101101 ; symbole = m\r\n"
+    		  "codeHuffman = 101 ; encode = 1111000 ; symbole = x\r\n"
+    		+ "codeHuffman = 010 ; encode = 100000 ; symbole =  \r\n"
+    		+ "codeHuffman = 11001 ; encode = 1101101 ; symbole = m\r\n"
     		+ "",
-    		  "codeHuffman =                         11 ; encode = 0000000000100000 ; symbole =  \r\n"
-    		+ "codeHuffman =                         01 ; encode = 0000000001010111 ; symbole = W\r\n"
-    		+ "codeHuffman =                        011 ; encode = 0000000000111000 ; symbole = 8\r\n"
+    		  "codeHuffman = 11 ; encode = 100000 ; symbole =  \r\n"
+    		+ "codeHuffman = 01 ; encode = 1010111 ; symbole = W\r\n"
+    		+ "codeHuffman = 011 ; encode = 111000 ; symbole = 8\r\n"
     		+ "",
-    		  "codeHuffman =                        101 ; encode = 0000000000001001 ; symbole = 	\r\n"
-    		+ "codeHuffman =                        010 ; encode = 0000000001111000 ; symbole = x\r\n"
-    		+ "codeHuffman =                      11101 ; encode = 0000000000101111 ; symbole = /\r\n"
+    		  "codeHuffman = 101 ; encode = 1001 ; symbole = 	\r\n"
+    		+ "codeHuffman = 010 ; encode = 1111000 ; symbole = x\r\n"
+    		+ "codeHuffman = 11101 ; encode = 101111 ; symbole = /\r\n"
     		+ "",
-    		  "codeHuffman =                        101 ; encode = 0000000001010111 ; symbole = W\r\n"
-    		+ "codeHuffman =                        010 ; encode = 0000000001000110 ; symbole = F\r\n"
-    		+ "codeHuffman =                      11111 ; encode = 0000000001000001 ; symbole = A\r\n"
+    		  "codeHuffman = 101 ; encode = 1010111 ; symbole = W\r\n"
+    		+ "codeHuffman = 010 ; encode = 1000110 ; symbole = F\r\n"
+    		+ "codeHuffman = 11111 ; encode = 1000001 ; symbole = A\r\n"
     		+ ""
     };
 	
