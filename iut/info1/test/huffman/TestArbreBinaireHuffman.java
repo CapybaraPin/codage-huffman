@@ -235,7 +235,46 @@ class TestArbreBinaireHuffman {
 
 	@Test
 	void testValeurDuNoeudCherche() {
-		fail("Not implemented yet !");
+
+		String valeurFeuille1 = "bonjour";
+		String valeurFeuille2 = "salut";
+		String valeurFeuille3 = "coucou";
+		String valeurFeuille4 = "dement";
+		String valeurFeuille5 = "\n";
+		
+		int[][] cheminsFeuilles = new int[][] {
+			{1, 0, 1}, {0, 1, 0}, {1, 1, 0}, {0, 1, 1}, {1, 0, 0}
+		};
+		
+		ArbreBinaireHuffman arbreTestRecherche 
+			= new ArbreBinaireHuffman("lien",
+				new ArbreBinaireHuffman("lien",
+						null,
+						new ArbreBinaireHuffman("lien",
+								new ArbreBinaireHuffman("salut", null, null),
+								new ArbreBinaireHuffman("dement", null, null))),
+				new ArbreBinaireHuffman("lien",
+						new ArbreBinaireHuffman("lien",
+								new ArbreBinaireHuffman("\n", null, null) ,
+								new ArbreBinaireHuffman("bonjour", null, null)),
+						new ArbreBinaireHuffman("lien",
+								new ArbreBinaireHuffman("coucou", null, null) ,
+								null)));
+		
+		assertEquals(valeurFeuille1,
+				arbreTestRecherche.valeurDuNoeudCherche(cheminsFeuilles[0]));
+		
+		assertEquals(valeurFeuille2,
+				arbreTestRecherche.valeurDuNoeudCherche(cheminsFeuilles[1]));
+		
+		assertEquals(valeurFeuille3,
+				arbreTestRecherche.valeurDuNoeudCherche(cheminsFeuilles[2]));
+		
+		assertEquals(valeurFeuille4,
+				arbreTestRecherche.valeurDuNoeudCherche(cheminsFeuilles[3]));
+		
+		assertEquals(valeurFeuille5,
+				arbreTestRecherche.valeurDuNoeudCherche(cheminsFeuilles[4]));
 	}
 
 	@Test
@@ -290,6 +329,14 @@ class TestArbreBinaireHuffman {
 		
 		assertThrows(IllegalArgumentException.class,
 				() -> arbreTest1.restitutionTexteOriginal(texteIndecompressable2));
+		
+		assertNotEquals(texteSouhaite2, arbreTest1.restitutionTexteOriginal(texteCompresse2));
+
+		assertNotEquals(texteSouhaite1, arbreTest2.restitutionTexteOriginal(texteCompresse1));
+
+		assertNotEquals(texteSouhaite1, arbreTest3.restitutionTexteOriginal(texteCompresse1));
+		assertNotEquals(texteSouhaite2, arbreTest3.restitutionTexteOriginal(texteCompresse2));
+
 		
 				
 	} 
