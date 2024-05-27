@@ -55,3 +55,20 @@ Rédaction du des récits utilisateurs
 #### Séance du 15 mai : 
 
 Bilan des avancements du projet
+
+#### Séance du 22 mai : 
+
+Review de pré-fin d'itération n°2 : https://github.com/CapybaraPin/codage-huffman/pull/24
+
+#### Séance du 23 mai : 
+
+Programmation en équipe
+
+#### Séance du 24 mai : 
+
+Programmation en équipe
+
+#### Séance du 27 mai : 
+
+Review de fin de deuxième itération : https://github.com/CapybaraPin/codage-huffman/pull/25
++ Programmation en équipe (dev IHM + Refactoring)
