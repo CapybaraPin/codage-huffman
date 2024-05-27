@@ -8,6 +8,7 @@ import static java.lang.System.err;
 
 import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.FileReader;
@@ -314,14 +315,9 @@ public class GestionFichier {
 				encodageDuCaractere = Integer.toBinaryString(Character.hashCode(
 						feuilleABHuffman[0].charAt(0)
 						));
-				
-				if (encodageDuCaractere.length() != 16) {
-					encodageDuCaractere = "0".repeat(16 - encodageDuCaractere.length())
-							+ encodageDuCaractere;
-				}
 
 				ecritureFichier.write(
-						String.format("codeHuffman = %26s ; encode = %16s ; "
+						String.format("codeHuffman = %s ; encode = %s ; "
 								+ "symbole = %1s\n",
 								String.join("", feuilleABHuffman[1].split(", ")), encodageDuCaractere,
 								(feuilleABHuffman[0].equals("\n") ? "LF" : feuilleABHuffman[0])));
@@ -406,6 +402,9 @@ public class GestionFichier {
 	public static String[][] conversionTableauCodage(String[] tabFichierCodages) {
 		String[][] tabCodages;
 		String ligneActuelle;
+		String[] parties;
+		String codeHuffman;
+		String encode;
 		
 		if(tabFichierCodages.length == 0) {
 			return new String[][]{{}};
@@ -414,20 +413,18 @@ public class GestionFichier {
 		tabCodages = new String[tabFichierCodages.length][2];
 		for (int index = 0; index < tabFichierCodages.length; index++) {
 			ligneActuelle = tabFichierCodages[index];
+			if(!verifierFormatTableauCodage(ligneActuelle)) {
+				err.println(ERREUR_FORMAT_PARAMETRE);
+				// TODO : Throw ?
+				return new String[][]{{}};
+			}
 
-			// TODO : Vérifier le format du tableau de codage
-			// if(verifierFormatTableauCodage(ligneActuelle) == false) {
-			// 	err.println(ERREUR_FORMAT_PARAMETRE);
-			// 	return null;
-			// }
+			parties = ligneActuelle.split(";");
+			codeHuffman = parties[0].split("=")[1].trim();
+			encode = parties[1].split("=")[1].trim();
 
-			// A intégrer dans la méthode verifierFormatTableauCodage :
-			// if(ligneActuelle.length() < 64) {
-			// 	err.println(ERREUR_FORMAT_PARAMETRE);
-			// 	return null;
-			// }
-			tabCodages[index][0] = ligneActuelle.substring(52,68);
-			tabCodages[index][1] = ligneActuelle.substring(14,40).trim();
+			tabCodages[index][0] = encode;
+			tabCodages[index][1] = codeHuffman;
 		}
 
 		return tabCodages;
@@ -443,26 +440,25 @@ public class GestionFichier {
 	 */
 	public static String conversionBinaire(String[][] tabCodages, String chaine) {
 		String chaineBinaire;
+		boolean caractereTrouve;
+		int[] hashCodesEncodes;
 		
 		if (chaine.isEmpty()) {
 			err.println(ERREUR_FORMAT_PARAMETRE);
 			return "";
 		}
-
+		hashCodesEncodes = new int[chaine.length()];
+		for (int i = 0; i < tabCodages.length; i++) {
+			hashCodesEncodes[i] = Integer.parseInt(tabCodages[i][0], 2);
+		}
 		chaineBinaire = "";
-		for (int index = 0; index < chaine.length(); index++) {
-			for (String[] codage : tabCodages) {
-				String hashCodeCaractere = String.valueOf(Integer.toBinaryString(
-					Character.hashCode(chaine.charAt(index))));
-
-				if (hashCodeCaractere.length() != 16) {
-					hashCodeCaractere = "0".repeat(16 - hashCodeCaractere.length())
-							+ hashCodeCaractere;
-				}
-				if (codage[0].equals(
-					hashCodeCaractere
-					)) {
-					chaineBinaire += codage[1];
+		for (char caractereChaine : chaine.toCharArray()) {
+			caractereTrouve = false;
+			for (int indexCodage = 0; indexCodage < tabCodages.length && !caractereTrouve; indexCodage++) {
+				int hashCodeCaractere = Character.hashCode(caractereChaine); // <-- Ce qui prend du temps...
+				if (hashCodeCaractere == hashCodesEncodes[indexCodage]) {
+					chaineBinaire += tabCodages[indexCodage][1];
+					caractereTrouve = true;
 				}
 			}
 		}
@@ -546,7 +542,6 @@ public class GestionFichier {
 	 * <br>
 	 * Tiens en compte de si :
 	 * <ul>
-	 *  <li>La taille de la ligne est entre 82 et 83</li>
 	 *  <li>La ligne contient bien un code huffman</li>
 	 *  <li>La ligne contient bien un encodage</li>
 	 * 	<li>La ligne contient bien un symbole</li>
@@ -558,56 +553,93 @@ public class GestionFichier {
 	 * @return boolean
 	 */
 	public static boolean verifierFormatTableauCodage(String ligne) { // TODO : à tester avec des Regex
-		String codeHuffman;
-		String patternCodeHuffman;
-		String encode;
-		String patternEncode;
-		char symbole;
-		String patternSymbole;
-		int nbPointVirgule;
-		boolean estLF;
-		
+        String[] parties;
+        String codeHuffman;
+        String patternCodeHuffman;
+        String encode;
+        String patternEncode;
+        char symbole;
+		char symboleEncode;
+        String patternSymbole;
+        boolean estLF;
+		char avantDernierCaractere;
+        
 
-		if (ligne.isEmpty() || !(ligne.length() >= 82 && ligne.length() <= 83)){
-			err.println(ERREUR_FORMAT_PARAMETRE);
-			return false;
-		}
-		
-		nbPointVirgule = ligne.length() - ligne.replace(";", "").length();
-		if (nbPointVirgule != 2) {
-			err.println(ERREUR_FORMAT_PARAMETRE);
-			return false;
-		}
-		codeHuffman = ligne.substring(14, 40);
-		patternCodeHuffman = "^[01\\s]{26}$";
+        if (ligne.isEmpty()){
+            err.println(ERREUR_FORMAT_PARAMETRE);
+            return false;
+        }
 
-		if (!Pattern.matches(patternCodeHuffman, codeHuffman)) {
+		parties = ligne.split(";");
+		if(parties.length != 3) {
 			err.println(ERREUR_FORMAT_PARAMETRE);
 			return false;
 		}
 
-		encode = ligne.substring(52, 68);
-		patternEncode = "^[01]{16}$";
+        codeHuffman = parties[0].split("=")[1].trim();
+		encode = parties[1].split("=")[1].trim();
+		symbole = ligne.charAt(ligne.length()-1);
 
-		if (!Pattern.matches(patternEncode, encode)) {
-			err.println(ERREUR_FORMAT_PARAMETRE);
-			return false;
-		}
-		symbole = ligne.charAt(81);
+        patternCodeHuffman = "^[01\\s]{"+ codeHuffman.length() +"}$";
+		patternEncode = "^[01]{"+ encode.length() +"}$";
 		patternSymbole = "^.$";
-		
-		
-		if(!Pattern.matches(patternSymbole, String.valueOf(symbole))) {
-			err.println(ERREUR_FORMAT_PARAMETRE);
-			return false;
-		}
-		
-		estLF = symbole == 'L' && ligne.length() == 83 && ligne.charAt(82) == 'F';
-		if(symbole != (char) Integer.parseInt(encode, 2) && !estLF ) {
-			err.println(ERREUR_FORMAT_PARAMETRE);
-			return false;
-		}
+		if (!Pattern.matches(patternCodeHuffman, codeHuffman)
+		|| !Pattern.matches(patternEncode, encode)
+		|| !Pattern.matches(patternSymbole, String.valueOf(symbole))){
+		   err.println(ERREUR_FORMAT_PARAMETRE);
+		   return false;
+	   }
 
-		return true;
+	   avantDernierCaractere = ligne.charAt(ligne.length()-2);
+	   symboleEncode = (char) Integer.parseInt(encode, 2);
+	   estLF = avantDernierCaractere == 'L' && symbole == 'F';
+	   if(symbole != symboleEncode && !estLF ) {
+		   err.println(ERREUR_FORMAT_PARAMETRE);
+		   return false;
+	   }
+	   
+	   return true;
+   }
+
+		
+	/**
+	 * Permet la récupération des données dans un fichier binaire
+	 * @param cheminFichier le chemin du fichier binaire
+	 * @return le contenu du fichier
+	 *
+	 */
+	public static String recupererDonneesFichierCompresse(String cheminFichier) {
+
+		String contenuBinaireFichier;
+		
+		FileInputStream inputStream = null;
+		try {
+			inputStream = new FileInputStream(cheminFichier);
+		} catch (FileNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		int data;
+		String donneesData;
+		
+		contenuBinaireFichier = "";
+		try {
+			while ((data = inputStream.read()) != -1) {
+				
+				donneesData = String.valueOf(Integer.toBinaryString(data));
+								
+				if (donneesData.length() != 8) { // TODO Faire une méthode pour ce 'if'
+					donneesData = "0".repeat(8 - donneesData.length())
+							+ donneesData;
+				}
+			    contenuBinaireFichier += donneesData;
+			}
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}		
+		
+		return contenuBinaireFichier; //STUB
 	}
 }
