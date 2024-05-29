@@ -71,4 +71,14 @@ Programmation en équipe
 #### Séance du 27 mai : 
 
 Review de fin de deuxième itération : https://github.com/CapybaraPin/codage-huffman/pull/25
-+ Programmation en équipe (dev IHM + Refactoring)
+Programmation en équipe (dev IHM + Refactoring)
+
+#### Séance du 28 mai : 
+
+Programmation en équipe (dev IHM + Refactoring)
+
+#### Séance du 29 mai : 
+
+Programmation en équipe (dev IHM + Refactoring)
+Rédaction de l'itération n°3
+
