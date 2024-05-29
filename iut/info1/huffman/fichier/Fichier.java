@@ -1,4 +1,4 @@
-/**
+/*
  * GestionFichier.java          09/04/2024
  * IUT DE RODEZ            Pas de copyrights
  */
@@ -6,16 +6,18 @@ package iut.info1.huffman.fichier;
 
 import static java.lang.System.err;
 
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileReader;
-import java.io.FileWriter;
-import java.io.IOException;
-
+import java.io.*;
 
 /**
- * TODO commenter cette classe
+ * La classe Fichier gère les opérations de lecture 
+ * sur des fichiers texte. Elle permet de lire le contenu 
+ * d'un fichier ligne par ligne, de calculer la taille d'un fichier, 
+ * d'afficher le contenu du fichier et de comparer la taille de deux
+ * fichiers pour déterminer l'efficacité de la compression.
+ * <br>
+ * Les fichiers pris en charge doivent avoir une extension .txt ou .TXT.
+ * La classe gère également les erreurs courantes liées à l'ouverture,
+ * la lecture et la fermeture des fichiers.
  */
 public class Fichier {
 
@@ -37,53 +39,65 @@ public class Fichier {
 	private static final String ERREUR_CONTENU_FICHIER =
 			"erreur : Impossible d'accéder au contenu du fichier.";
 
+	/** le format du fichier n'est pas .txt ou .TXT **/
+	private static final String ERREUR_EXTENSION_FICHIER =
+			"erreur : Le format du fichier doit être .txt ou .bin";
+	
 	/** le format du paramètre est invalide **/
 	private static final String ERREUR_FORMAT_PARAMETRE =
 			"erreur : Le format du paramètre renseigné invalide.";
+	
+	/** problème de lecture du fichier **/
+    private static final String ERREUR_FICHIER_LECTURE = 
+    		"erreur : Il y a eu un problème lors de l'ouverture du fichier : ";
+    
+	/** le numerateur indiqué ne respecte pas les critères **/
+	private static final String ERREUR_NUMERATEUR_INVALIDE = 
+			"erreur : Impossible d'effectuer la division, numérateur invalide.";
 
-	/** le format du fichier n'est pas .txt ou .TXT **/
-	private static final String ERREUR_EXTENSION_FICHIER =
-			"erreur : Le format du fichier doit être .txt ou .TXT";
-
-	/** indication du paramètre à renseigner pour l'utilisateur **/
-	private static final String AIDE_USAGE = 
-			"usage : data:\\\\MonSource.txt";
+	/** impossible d'écrire dans le fichier spécifié */
+	private static final String ERREUR_ECRITURE_FICHIER =
+			"Erreur: Impossible d'écrire dans le fichier.";
 	
     /** code d'erreur lors d'un soucis de lecture fichier */
     public static final int CODE_ERREUR_FICHIER_LECTURE = 10;
 
-    /** problème de lecture du fichier **/
-    private static final String ERREUR_FICHIER_LECTURE
-    = "Il y a eu un problème lors de l'ovuerture du fichier : ";
+    /** indication du paramètre à renseigner pour l'utilisateur **/
+	private static final String AIDE_USAGE = 
+			"usage : data:\\\\MonSource.txt";
 	
     /** suffixe des fichiers pris en charge **/
-	private static final String SUFFIXE_FICHIER = ".txt";
-	
-	/** le numerateur indiqué ne respecte pas les critères **/
-	private static final String ERREUR_NUMERATEUR_INVALIDE
-	= "erreur : Impossible d'effectuer la division, numérateur invalide.";
+	private static final String[] SUFFIXE_FICHIERS = {".txt", ".bin"};
 	
 	/**
+	 * Constructeur de la classe Fichier.
+	 * <br>
+	 * Initialise les objets nécessaires pour lire le fichier 
+	 * spécifié par le chemin fourni.
+	 * <p>
+	 * Vérifie si le chemin du fichier est valide et si le 
+	 * fichier a une extension correcte (.txt ou .bin).
 	 * 
-	 * @param cheminFichier
-	 * @throws FileNotFoundException 
+	 * @param cheminFichier : Le chemin du fichier à lire.
 	 */
-	public Fichier(String cheminFichier) throws FileNotFoundException {
-
+	public Fichier(String cheminFichier) {
 		if (!cheminFichier.isEmpty()) {
 			try {
 				fichierExploite = new File(cheminFichier);
 
-				if (!fichierExploite.getName()
-									.toLowerCase()
-									.endsWith(SUFFIXE_FICHIER)){
-					
-					err.println(ERREUR_EXTENSION_FICHIER); 
+				if (!extensionValide()){
+					err.println(ERREUR_EXTENSION_FICHIER);
 				}
-				
-				lecteurFichier = new FileReader(cheminFichier); //TODO Faire des T.E.S.T.S
 
-			} catch (NullPointerException pbOuverture) {
+				if (fichierExploite.createNewFile()) {
+					System.out.println("Fichier créé "
+							+ fichierExploite.getName());
+				}
+
+				lecteurFichier = new FileReader(cheminFichier);
+				tamponFichier = new BufferedReader(lecteurFichier);
+
+			} catch (IOException pbOuverture) {
 				err.println(ERREUR_OUVERTURE_FICHIER + cheminFichier);
 				err.println(AIDE_USAGE);
 			}
@@ -91,53 +105,62 @@ public class Fichier {
 			err.println(ERREUR_FORMAT_PARAMETRE);
 			err.println(AIDE_USAGE);
 		}
-
-
-	} 
-	
-	/**
-	 * Lit le contenu d'un fichier texte ligne par ligne 
-	 * et retourne un tableau de chaînes de caractères
-	 * contenant chaque ligne du fichier.
-	 *
-	 * @param cheminFichier Le chemin du fichier à lire.
-	 * @return contenu Un tableau de chaînes de caractères 
-	 * contenant les lignes du fichier, null si une erreur survient.
-	 */
-	public void lectureFichier() {
-		BufferedReader lecteur;
-		String[] contenu;
-		int nbLignes;
-
-		try {
-			tamponFichier = new BufferedReader(lecteurFichier);
-		} catch (FileNotFoundException pbLecture) {
-			tamponFichier = null;
-			err.println(ERREUR_OUVERTURE_FICHIER + fichierExploite.getAbsolutePath()); //TODO Changer nom constante
-			err.println(AIDE_USAGE);
-		}
 	}
-	
+
 	/**
+	 * Vérifie si le fichier a une extension valide.
+	 *
+	 * @return true si l'extension du fichier est valide,
+	 * 		   false si l'extension du fichier n'est pas valide.
+	 * // TODO : Faire les tests
+	 */
+	private boolean extensionValide(){
+
+		for (String suffixe : SUFFIXE_FICHIERS) {
+			if (fichierExploite.getName()
+					           .toLowerCase()
+					           .endsWith(suffixe)) {
+				return true;
+			}
+		}
+		return false;
+	}
+
+	/**
+	 * Lit le contenu d'un fichier texte ligne par ligne et retourne un tableau 
+	 * de chaînes de caractères contenant chaque ligne du fichier.
+	 * <br>
+	 * La méthode commence par compter le nombre de lignes dans le fichier 
+	 * afin de créer un tableau de la taille appropriée. 
+	 * Ensuite, elle relit le fichier pour remplir ce tableau avec les lignes lues.
+	 * <br>
+	 * Si une erreur survient pendant la lecture du fichier, 
+	 * un message d'erreur est affiché et la méthode retourne null.
 	 * 
+	 * @return Un tableau de chaînes de caractères contenant les lignes du fichier, 
+	 *         ou null si une erreur survient.
 	 */
 	public String[] contenuFichier() {
-		
-		int nbLignes;
-		String[] contenu;
-		
-		nbLignes = 0;
+		String[] contenu = null;
+		int nbLignes = 0;
+		String ligneAct;
+
 		try {
-			while (tamponFichier.readLine() != null) {
+			while ((ligneAct = tamponFichier.readLine()) != null) {
 				nbLignes++;
 			}
 
-			tamponFichier.close(); // TODO autres solutions ?
+			try {
+				tamponFichier.close();
+			} catch (IOException pbFermeture) {
+				err.println(ERREUR_FERMETURE_FICHIER);
+			}
+
+			// Réinitialiser le BufferedReader pour relire le fichier
+			lecteurFichier = new FileReader(fichierExploite);
 			tamponFichier = new BufferedReader(lecteurFichier);
 
 			contenu = new String[nbLignes]; 
-
-			String ligneAct;
 			int index = 0;
 
 			while ((ligneAct = tamponFichier.readLine()) != null) {
@@ -145,23 +168,22 @@ public class Fichier {
 				index++;
 			}
 
+
 		} catch (IOException pbContenu) {
 			err.println(ERREUR_CONTENU_FICHIER);
-			tamponFichier = null;
 			contenu = null;
-
-		} 
+		}
 
 		return contenu;
-		
 	}
 	
 	/**
-	 * Permet d'obtenir la taille d'un fichier
-	 * @param cheminFichier le chemin du fichier analysé
-	 * @return la taille du fichier
+	 * Retourne la taille du fichier en octets.
+	 * 
+	 * @return La taille du fichier en octets. 
+	 * Si le fichier n'existe pas ou ne peut pas être lu, retourne -1.
 	 */
-	public double tailleDuFichier() {
+	public double tailleFichier() {
 		double tailleFichier;
 		
 		tailleFichier = -1.0;
@@ -169,250 +191,103 @@ public class Fichier {
 		if (fichierExploite.length() > 1) {
 			return fichierExploite.length();
 		}
+		
 		return tailleFichier; //STUB
 		
 	}
 	
-// ========================= GESTIONFICHIER NON ORIENTE OBJET ==========================
-
-
-
 	/**
-	 * Permet de comparer la taille de deux fichiers
-	 * pour en extraire un taux. Le but est de comparer
-	 * le taux de compression d'un fichier
-	 * Si le taux est supérieur à 1, alors la compression est efficace
-	 * Si il est de 1, la compression est nulle
-	 * Sinon, la compression est inefficace 
-	 * @param tailleFichierInitiale la taille du fichier à compresser
-	 * @param tailleFichierCompresse la taille du fichier compressé
-	 * @return le rapport entre le fichier initial et le fichier compressé
+	 * Affiche le contenu d'un tableau de chaînes de caractères, 
+	 * où chaque élément du tableau représente une ligne d'un fichier.
+	 * <br>
+	 * Les sauts de ligne vides sont conservés dans l'affichage.
 	 */
-	public static double rapportEntreDeuxFichiers(double tailleFichierInitiale
-						      , double tailleFichierCompresse) {
+	public void affichageFichier() {
+	    String[] contenu = contenuFichier();
 
-		return tailleFichierInitiale/tailleFichierCompresse;
+        for (String ligne : contenu) {
+            System.out.println(ligne);
+        }
+	    
 	}
 	
 	/**
-	 * rechercher tous les caractères stockés dans 
-	 * un tableau de chaîne de caractères, et d'en extraire 
-	 * le nombre de fois qu'ils apparaissent dans le tableau 
-	 * de chaîne entier.
-	 * @param lignesFichier, un tableau pour qui chacune des
-	 * chaînes de caractères est la ligne d'un fichier
+	 * Compare la taille du fichier actuel avec la taille d'un autre fichier 
+	 * pour déterminer le taux de compression. 
+	 * <br>
+	 * Le taux de compression est calculé comme le rapport de la taille 
+	 * du fichier actuel sur la taille du fichier à comparer.
+	 * <ul>
+	 *   <li>Si le taux est supérieur à 1, alors la compression est efficace.</li>
+	 *   <li>Si le taux est égal à 1, alors la compression est nulle.</li>
+	 *   <li>Si le taux est inférieur à 1, alors la compression est inefficace.</li>
+	 * </ul>
 	 * 
-	 * @return un tableau de chaîne de caractères, avec l'occurence
-	 * de chaque caractère
-	 * 
+	 * @param tailleFichierCompare La taille du fichier à comparer. 
+	 * Doit être supérieure à 0.
+	 * @return Le rapport entre la taille du fichier actuel et celle du fichier à comparer.
+	 * @throws IllegalArgumentException Si la taille du fichier à comparer est inférieure ou égale à 0.
 	 */
-	public static String[][] compterOccurrence(String[] lignesFichier) {
-		
-		if (lignesFichier.length == 0) {
-			return  new String[][]{{"", "0"}};
-		}
-		
-		String[][] occurrencesDesCaracteres;
-		String contenuFichier = String.join("\n", lignesFichier);
-		boolean estDejaApparue;
-		
-		occurrencesDesCaracteres = new String[][]{
-			{String.valueOf(contenuFichier.charAt(0)), "0"}		
-		};
-		
-		for (int indexRecherche = 0;
-				indexRecherche < contenuFichier.length();
-				indexRecherche++) {
-		
-			estDejaApparue = false;
-			for (String[] caractereCompte : occurrencesDesCaracteres) {
-							
-				if (caractereCompte[0].toCharArray()[0] 
-						== (contenuFichier.charAt(indexRecherche))) {
-					estDejaApparue = true;
-					
-					caractereCompte[1] =  String.valueOf(
-							Integer.parseInt(caractereCompte[1]) + 1);
-				}
-			}
-			
-			if (!estDejaApparue) {
-				
-				String[][] nouvelleTableDesOccurences 
-							= new String[occurrencesDesCaracteres.length+1][2];
-				
-				for (int indexActuel = 0;
-						indexActuel < occurrencesDesCaracteres.length;
-						indexActuel++) {
-					
-					nouvelleTableDesOccurences[indexActuel] 
-							= occurrencesDesCaracteres[indexActuel];
-				}
-				
-				nouvelleTableDesOccurences[occurrencesDesCaracteres.length][0]
-						= String.valueOf(contenuFichier.charAt(indexRecherche));
-				
-				nouvelleTableDesOccurences[occurrencesDesCaracteres.length][1] 
-						= "1";
-				
-				
-				occurrencesDesCaracteres = nouvelleTableDesOccurences;
-	
-			}
-		
-		}
-				
-		return occurrencesDesCaracteres;
+	public double rapportEntreDeuxFichiers(double tailleFichierCompare) {
+	    double tailleFichierActuel = tailleFichier();
+
+	    if (tailleFichierCompare <= 0) {
+	        throw new IllegalArgumentException(ERREUR_NUMERATEUR_INVALIDE);
+	    }
+
+	    return tailleFichierActuel / tailleFichierCompare;
 	}
 
 	/**
-	 * Enregistre une arborescence de Huffman
-	 * générée par la classe GestionFichier. 
-	 * Il mettra dans un fichier 3 éléments en évidence. 
-	 * Le code huffman associé à un encodage Unicode UTF-8, 
-	 * et le caractère associé à son encodage. 
-	 * 
-	 * @param tblArbreHuffman, nomDuFichier un tableau de tableau de chaînes
-	 *  de caractères, ayant pour chaque sous-tableau un caractère
-	 *   puis la position de ce dernier dans l'arborescence Huffman. Il est
-  	 *   également demandé le nom du fichier compressé.
+	 * Recupère le nom du fichier sans sont extention
+	 * @return nom du fichier
 	 */
-	public static void stockageABHuffman(String[][] tblArbreHuffman, String nomDuFichier) {
-		String encodageDuCaractere;
+	public String nomFichier(){
+		String nomFichier = fichierExploite.getName();
+		int pointIndex = nomFichier.lastIndexOf(".");
 
-		// System.out.printf("codeHuffman = %s ; encode = %s ; symbole = %s\n",
-		// 				   feuilleABHuffman[1], encodageDuCaractere
-		// 				   , feuilleABHuffman[0]);
+		if (pointIndex == -1) {
+			return nomFichier;
+		}
+
+		return nomFichier.substring(0, pointIndex);
+	}
+
+	/**
+	 * Écrit dans un fichier
+	 * @param contenuFichier : contenu qui sera écrit dans le fichier
+	 *                         chaque élement de la liste représente une ligne
+	 *                         du fichier qui va être généré.
+	 */
+	public void ecritureFichier(String[] contenuFichier){
 
 		try {
-			File fichierEnregistrement = new File(
-											 	 nomDuFichier
-											 	 +"_EncodeH"
-											 	 +SUFFIXE_FICHIER);
+			FileWriter ecritureFichier;
+			BufferedWriter tamponEcritureFichier;
 
-			if (fichierEnregistrement.createNewFile()) {
-				System.out.println("Fichier créé " 
-						+ fichierEnregistrement.getName());
-			} else {
-				System.out.println("Ce fichier existe déjà"); //TODO constante
+			ecritureFichier = new FileWriter(fichierExploite);
+			tamponEcritureFichier = new BufferedWriter(ecritureFichier);
+
+			for (String ligne : contenuFichier) {
+				System.out.println(ligne);
+				tamponEcritureFichier.write(ligne);
+				tamponEcritureFichier.newLine();
 			}
 
-		} catch (IOException pbLecture) {
-			System.err.println(ERREUR_FICHIER_LECTURE + nomDuFichier);//TODO ERREUR_FICHIER_CREATION
-			System.exit(CODE_ERREUR_FICHIER_LECTURE);
+			tamponEcritureFichier.close();
+			ecritureFichier.close();
+		} catch (IOException e) {
+			err.println(ERREUR_ECRITURE_FICHIER);
 		}
-
-		try {
-			FileWriter ecritureFichier = new FileWriter(
-													   nomDuFichier
-													   +"_EncodeH"
-													   +SUFFIXE_FICHIER);
-
-			for (String[] feuilleABHuffman : tblArbreHuffman) {
-				
-				encodageDuCaractere = Integer.toBinaryString(Character.hashCode(
-						feuilleABHuffman[0].charAt(0)
-						));
-				
-				if (encodageDuCaractere.length() != 8) {
-					encodageDuCaractere = "0".repeat(8 - encodageDuCaractere.length()) 
-							+ encodageDuCaractere;
-				}
-
-
-				ecritureFichier.write(
-						String.format("codeHuffman = %16s ; encode = %8s ; "
-								+ "symbole = %1s\n",
-								feuilleABHuffman[1], encodageDuCaractere,
-								feuilleABHuffman[0]));
-			}
-
-			ecritureFichier.close(); // TODO ERREUR FERMETURE
-		} catch (IOException pbEcriture) {
-			// TODO ERREUR ECRITURE
-		}
-
 	}
-	
+
 	/**
-	 * L'objectif est d'afficher le contenu d'un tableau de
-	 * chaîne de caractères, pour qui chaque éléments de
-	 * cette chaîne est la ligne d'un fichier.
-	 * \n
-	 * Dans le cas où il existe plusieurs saut à la ligne vide, ces
-	 * derniers seront conservés.
+	 * Retourne l'objet File représentant le fichier exploité.
 	 * 
-	 * @param contenuFichier Tableau de chaîne de caractère
+	 * @return fichier exploité.
 	 */
-	public static void affichageFichier(String[] contenuFichier){
-		for (String ligne : contenuFichier) {
-			System.out.println(ligne);
-		}
-	}
-	
-	/**
-	 * Calcul la fréquence d'apparition de chaque caractère. 
-	 * 
-	 * @param occurrences Tableau contenu le caractère et sont
-	 * nombre d'occurences. 
-	 * @return frequences d'apparition de chaque caractères. 
-	 */
-	public static float[] calculFrequences(String[][] occurrences){
-		int nbOccurrences;
-		int nbLignes;
-		float[] frequences;
-		
-		nbOccurrences = 0;
-		for (String[] occurrence : occurrences) {
-			nbOccurrences += Integer.valueOf(occurrence[1]);
-		}
-		
-		if (nbOccurrences <= 0 || nbOccurrences >= Integer.MAX_VALUE) {
-			err.println(ERREUR_NUMERATEUR_INVALIDE);
-			return null;
-		}
-		
-		nbLignes = occurrences.length;
-		frequences = new float[nbLignes];
-		
-		for(int indiceFreq = 0; indiceFreq < nbLignes; indiceFreq++) {
-			frequences[indiceFreq] = Float.valueOf(occurrences[indiceFreq][1]) 
-												/ nbOccurrences;
-		}
-		
-		return frequences;		
-		
-	}
-
-	/**
-	 * Converti une chaîne de caractères en binaire à
-	 * l'aide d'un tableau de codage.
-	 * Ne vérifie pas le tableau de codages.
-	 * @param tabCodages
-	 * @param chaine
-	 * @return chaineBinaire
-	 */
-	public static String conversionBinaire(String[][] tabCodages, String chaine) {
-		String chaineBinaire;
-
-		if (chaine.isEmpty()) {
-			err.println(ERREUR_FORMAT_PARAMETRE);
-			return "";
-		}
-
-		chaineBinaire = "";
-		for (int index = 0; index < chaine.length(); index++) {
-			for (String[] codage : tabCodages) {
-				if (codage[0].equals(String.valueOf(chaine.charAt(index)))) {
-					chaineBinaire += codage[1];
-				}
-			}
-		}
-		return chaineBinaire;
-	}
-	
 	public File getFichierExploite() {
 		return fichierExploite;
 	}
-
+	
 }

@@ -2,7 +2,7 @@ package iut.info1.huffman.arbre;
 
 import java.util.Arrays;
 
-import arbre.ArbreBinaireHuffman;
+import iut.info1.huffman.ApplicationHuffman;
 
 public class EssaiArbreBinaireHuffman {
     public static void main(String[] args) {
@@ -25,21 +25,21 @@ public class EssaiArbreBinaireHuffman {
                                                                0.1, 0.05, 0.05,
                                                              0.02});
 
-        System.out.println(arbreA.valeurDuNoeudCherche(new int[]{1}));
-        System.out.println(arbreA.valeurDuNoeudCherche(new int[]{0, 0}));
-        System.out.println(arbreA.valeurDuNoeudCherche(new int[]{0, 1, 0, 1}));
-        System.out.println(arbreA.valeurDuNoeudCherche(new int[]{0, 1, 0, 0}));
-        System.out.println(arbreA.valeurDuNoeudCherche(new int[]{0, 1, 1, 1}));
-        System.out.println(arbreA.valeurDuNoeudCherche(new int[]{0, 1, 1, 0, 0}));
-        System.out.println(arbreA.valeurDuNoeudCherche(new int[]{0, 1, 1, 0, 1}));
+        System.out.println(arbreA.valeurNoeudCherche(new int[]{1}));
+        System.out.println(arbreA.valeurNoeudCherche(new int[]{0, 0}));
+        System.out.println(arbreA.valeurNoeudCherche(new int[]{0, 1, 0, 1}));
+        System.out.println(arbreA.valeurNoeudCherche(new int[]{0, 1, 0, 0}));
+        System.out.println(arbreA.valeurNoeudCherche(new int[]{0, 1, 1, 1}));
+        System.out.println(arbreA.valeurNoeudCherche(new int[]{0, 1, 1, 0, 0}));
+        System.out.println(arbreA.valeurNoeudCherche(new int[]{0, 1, 1, 0, 1}));
     
         secondArbreA = ArbreBinaireHuffman.insertionHuffman(new Object[]{'a', 'b', 'c', 'd'}
                                                       , new double[]{0.3, 0.25, 0.1, 0.35});    
 
-        System.out.println(secondArbreA.valeurDuNoeudCherche(new int[]{0, 0}));
-        System.out.println(secondArbreA.valeurDuNoeudCherche(new int[]{0, 1}));
-        System.out.println(secondArbreA.valeurDuNoeudCherche(new int[]{1, 0}));
-        System.out.println(secondArbreA.valeurDuNoeudCherche(new int[]{1, 1}));
+        System.out.println(secondArbreA.valeurNoeudCherche(new int[]{0, 0}));
+        System.out.println(secondArbreA.valeurNoeudCherche(new int[]{0, 1}));
+        System.out.println(secondArbreA.valeurNoeudCherche(new int[]{1, 0}));
+        System.out.println(secondArbreA.valeurNoeudCherche(new int[]{1, 1}));
 
         System.out.println(Arrays.deepToString(arbreA.parcoursProfondeur()));
         // System.out.println("---------------------------------------------------");
