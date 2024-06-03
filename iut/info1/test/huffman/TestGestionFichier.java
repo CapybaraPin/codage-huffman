@@ -45,11 +45,11 @@ class TestGestionFichier {
     /** TODO Faire la javadoc de TABLEAU_CODAGE*/
     public static final String[][][] TABLEAU_CODAGE = 
         {
-            {{"A", "00"}, {"B", "01"}, {"C", "10"}, {"D", "1100"}, {"\r", "1101"}, {"\n", "1110"}},
-            {{"L", "00"}, {"o", "01"}, {"r", "10"}, {"e", "110"}, {"m", "111"}, {"\r", "1100"}, {"\n", "1101"},
-             {"I", "11100"}, {"p", "11101"}, {"s", "11110"}, {"u", "111100"}},
-            {{"a", "00"}, {"\r", "01"}, {"b", "10"}, {"\n", "11"}},
-            {{"\r","0"},{"\n","1"}},
+            {{"0000000001000001", "00"}, {"0000000001000010", "01"}, {"0000000001000011", "10"}, {"0000000001000100", "1100"}},
+            {{"0000000001001100", "00"}, {"0000000001101111", "01"}, {"0000000001110010", "10"}, {"0000000001100101", "110"}, {"0000000001101101", "111"}, {"0000000000001010", "1101"},
+             {"0000000001001001", "11100"}, {"0000000001110000", "11101"}, {"0000000001110011", "11110"}, {"0000000001110101", "111100"}},
+            {{"0000000001100001", "00"}, {"0000000001100010", "10"}, {"0000000000001010", "01"}},
+            {{"0000000000001010", "0"}},
             //{{"L", "00"}, {"o", "01"}, {"r", "10"}, {"e", "110"}, {"m", "111"}, {"\r", "1100"}, {"\n", "1101"}, {"D", "11100"}, {"E", "11101"}, {"T", "11110"}, {" ", "11111"}, {"F", "110000"}, {"R", "110001"}, {"m", "110010"}, {"s", "110011"}, {"i", "110100"}, {"t", "110101"}, {"a", "110110"}, {"e", "110111"}, {"\r", "111000"}, {"\n", "111001"}},
             {{}}
         }; 
@@ -57,33 +57,27 @@ class TestGestionFichier {
 	/** TODO Faire la javadoc de FICHIER_ARBRE_HUFFMAN*/
 	public static final String[][] FICHIER_ARBRE_HUFFMAN_CONTENU = {
 
-			{"codeHuffman =               00 ; encode = 01000001 ; symbole = A",
-			 "codeHuffman =               01 ; encode = 01000010 ; symbole = B",
-			 "codeHuffman =               10 ; encode = 01000011 ; symbole = C",
-			 "codeHuffman =             1100 ; encode = 01000100 ; symbole = D",
-			 "codeHuffman =             1101 ; encode = 00001010 ; symbole = \r",
-			 "codeHuffman =             1110 ; encode = 00001011 ; symbole = \n"},
+			{"codeHuffman = 00 ; encode = 0000000001000001 ; symbole = A",
+			 "codeHuffman = 01 ; encode = 0000000001000010 ; symbole = B",
+			 "codeHuffman = 10 ; encode = 0000000001000011 ; symbole = C",
+			 "codeHuffman = 1100 ; encode = 0000000001000100 ; symbole = D"},
 
-		    {"codeHuffman =               00 ; encode = 01001100 ; symbole = L",
-			 "codeHuffman =               01 ; encode = 01101111 ; symbole = o",
-			 "codeHuffman =               10 ; encode = 01110010 ; symbole = r",
-			 "codeHuffman =              110 ; encode = 01100101 ; symbole = e",
-			 "codeHuffman =              111 ; encode = 01101101 ; symbole = m",
-			 "codeHuffman =             1100 ; encode = 00001010 ; symbole = \r",
-			 "codeHuffman =             1101 ; encode = 00001011 ; symbole = \n",
-			 "codeHuffman =            11100 ; encode = 01001001 ; symbole = I",
-			 "codeHuffman =            11101 ; encode = 01110000 ; symbole = p",
-			 "codeHuffman =            11110 ; encode = 01110011 ; symbole = s",
-			 "codeHuffman =           111100 ; encode = 01110101 ; symbole = u"},
+		    {"codeHuffman = 00 ; encode = 0000000001001100 ; symbole = L",
+			 "codeHuffman = 01 ; encode = 0000000001101111 ; symbole = o",
+			 "codeHuffman = 10 ; encode = 0000000001110010 ; symbole = r",
+			 "codeHuffman = 110 ; encode = 0000000001100101 ; symbole = e",
+			 "codeHuffman = 111 ; encode = 0000000001101101 ; symbole = m",
+			 "codeHuffman = 1101 ; encode = 0000000000001010 ; symbole = LF",
+			 "codeHuffman = 11100 ; encode = 0000000001001001 ; symbole = I",
+			 "codeHuffman = 11101 ; encode = 0000000001110000 ; symbole = p",
+			 "codeHuffman = 11110 ; encode = 0000000001110011 ; symbole = s",
+			 "codeHuffman = 111100 ; encode = 0000000001110101 ; symbole = u"},
 
-			{"codeHuffman =               00 ; encode = 01100001 ; symbole = a",
-			 "codeHuffman =               01 ; encode = 00001010 ; symbole = \r",
-			 "codeHuffman =               10 ; encode = 01100010 ; symbole = b",
-			 "codeHuffman =               11 ; encode = 00001011 ; symbole = \n"},
+			{"codeHuffman = 00 ; encode = 0000000001100001 ; symbole = a",
+			 "codeHuffman = 10 ; encode = 0000000001100010 ; symbole = b",
+			 "codeHuffman = 01 ; encode = 0000000000001010 ; symbole = LF"},
 
-			{"codeHuffman =                0 ; encode = 00001010 ; symbole = \r",
-			 "codeHuffman =                1 ; encode = 00001011 ; symbole = \n"
-			},
+			{"codeHuffman = 0 ; encode = 0000000000001010 ; symbole = LF"},
 			//{}, TODO
 			{}
 	};
@@ -101,10 +95,10 @@ class TestGestionFichier {
     
     /** TODO Faire la javadoc de CHAINES_BINAIRES_VALIDES*/
     public static final String[] CHAINES_BINAIRES_VALIDES = {
-    		 "000110110011011110",
-    		 "000110110111110011011100110111100111011111011110011111001101",
-    		 "000111011101110111100111",
-    		 "01010101",
+    		 "0001101100",
+    		 "000110110111110111011110011101111101111001111101",
+    		 "00010101011001",
+    		 "0000",
     		// TODO : Lorem\r\nDELETE FROM mysql.user\r\nIpsum\r\nDolor sit amet\r\n
     		 ""
     };
@@ -143,29 +137,29 @@ class TestGestionFichier {
     
     /** TODO Faire la javadoc de FICHIER_AB_HUFFMAN_ATTENDU*/
     public static final String[] FICHIER_AB_HUFFMAN_ATTENDU = {
-    		"codeHuffman =              101 ; encode = 01100101 ; symbole = e\r\n"
-    		+ "codeHuffman =              010 ; encode = 01100010 ; symbole = b\r\n"
-    		+ "codeHuffman =           110101 ; encode = 01100100 ; symbole = d\r\n"
+    		  "codeHuffman = 101 ; encode = 1100101 ; symbole = e\r\n"
+    		+ "codeHuffman = 010 ; encode = 1100010 ; symbole = b\r\n"
+    		+ "codeHuffman = 110101 ; encode = 1100100 ; symbole = d\r\n"
     		+ "",
-    		"codeHuffman =              101 ; encode = 01100001 ; symbole = a\r\n"
-    		+ "codeHuffman =              010 ; encode = 01110100 ; symbole = t\r\n"
-    		+ "codeHuffman =            11011 ; encode = 01011000 ; symbole = X\r\n"
+    		  "codeHuffman = 101 ; encode = 1100001 ; symbole = a\r\n"
+    		+ "codeHuffman = 010 ; encode = 1110100 ; symbole = t\r\n"
+    		+ "codeHuffman = 11011 ; encode = 1011000 ; symbole = X\r\n"
     		+ "",
-    		"codeHuffman =              101 ; encode = 01111000 ; symbole = x\r\n"
-    		+ "codeHuffman =              010 ; encode = 00100000 ; symbole =  \r\n"
-    		+ "codeHuffman =            11001 ; encode = 01101101 ; symbole = m\r\n"
+    		  "codeHuffman = 101 ; encode = 1111000 ; symbole = x\r\n"
+    		+ "codeHuffman = 010 ; encode = 100000 ; symbole =  \r\n"
+    		+ "codeHuffman = 11001 ; encode = 1101101 ; symbole = m\r\n"
     		+ "",
-    		"codeHuffman =               11 ; encode = 00100000 ; symbole =  \r\n"
-    		+ "codeHuffman =               01 ; encode = 01010111 ; symbole = W\r\n"
-    		+ "codeHuffman =              011 ; encode = 00111000 ; symbole = 8\r\n"
+    		  "codeHuffman = 11 ; encode = 100000 ; symbole =  \r\n"
+    		+ "codeHuffman = 01 ; encode = 1010111 ; symbole = W\r\n"
+    		+ "codeHuffman = 011 ; encode = 111000 ; symbole = 8\r\n"
     		+ "",
-    		"codeHuffman =              101 ; encode = 00001001 ; symbole = 	\r\n"
-    		+ "codeHuffman =              010 ; encode = 01111000 ; symbole = x\r\n"
-    		+ "codeHuffman =            11101 ; encode = 00101111 ; symbole = /\r\n"
+    		  "codeHuffman = 101 ; encode = 1001 ; symbole = 	\r\n"
+    		+ "codeHuffman = 010 ; encode = 1111000 ; symbole = x\r\n"
+    		+ "codeHuffman = 11101 ; encode = 101111 ; symbole = /\r\n"
     		+ "",
-    		"codeHuffman =              101 ; encode = 01010111 ; symbole = W\r\n"
-    		+ "codeHuffman =              010 ; encode = 01000110 ; symbole = F\r\n"
-    		+ "codeHuffman =            11111 ; encode = 01000001 ; symbole = A\r\n"
+    		  "codeHuffman = 101 ; encode = 1010111 ; symbole = W\r\n"
+    		+ "codeHuffman = 010 ; encode = 1000110 ; symbole = F\r\n"
+    		+ "codeHuffman = 11111 ; encode = 1000001 ; symbole = A\r\n"
     		+ ""
     };
 	
@@ -197,14 +191,14 @@ class TestGestionFichier {
 
     
     /** TODO Faire la javadoc de FREQUENCE_DES_OCCURENCES*/
-    public static final float[][] FREQUENCE_DES_OCCURENCES = {
-    	    {1.0f/4.0f, 1.0f/4.0f, 1.0f/4.0f, 1.0f/4.0f},
-    	    {1.0f/12.0f, 1.0f/12.0f, 1.0f/12.0f, 1.0f/12.0f, 2.0f/12.0f, 2.0f/12.0f, 1.0f/12.0f, 1.0f/12.0f, 1.0f/12.0f, 1.0f/12.0f},
-    	    {1.0f/6.0f, 4.0f/6.0f, 1.0f/6.0f},
-    	    {3.0f/3.0f},
-    	    /*{2.0f/49.0f, 3.0f/49.0f, 3.0f/49.0f, 3.0f/49.0f, 4.0f/49.0f, 3.0f/49.0f, 2.0f/49.0f, 3.0f/49.0f, 1.0f/49.0f, 4.0f/49.0f, 1.0f/49.0f, 1.0f/49.0f,
-    	     1.0f/49.0f, 1.0f/49.0f, 1.0f/49.0f, 4.0f/49.0f, 1.0f/49.0f, 2.0f/49.0f, 1.0f/49.0f, 2.0f/49.0f, 1.0f/49.0f, 1.0f/49.0f, 1.0f/49.0f, 2.0f/49.0f,
-    	     1.0f/49.0f},*/
+    public static final double[][] FREQUENCE_DES_OCCURENCES = {
+    	    {1.0/4.0, 1.0/4.0, 1.0/4.0, 1.0/4.0},
+    	    {1.0/12.0, 1.0/12.0, 1.0/12.0, 1.0/12.0, 2.0/12.0, 2.0/12.0, 1.0/12.0, 1.0/12.0, 1.0/12.0, 1.0/12.0},
+    	    {1.0/6.0, 4.0/6.0, 1.0/6.0},
+    	    {3.0/3.0},
+    	    /*{2.0/49.0, 3.0/49.0, 3.0/49.0, 3.0/49.0, 4.0/49.0, 3.0/49.0, 2.0/49.0, 3.0/49.0, 1.0/49.0, 4.0/49.0, 1.0/49.0, 1.0/49.0,
+    	     1.0/49.0, 1.0/49.0, 1.0/49.0, 4.0/49.0, 1.0/49.0, 2.0/49.0, 1.0/49.0, 2.0/49.0, 1.0/49.0, 1.0/49.0, 1.0/49.0, 2.0/49.0,
+    	     1.0/49.0},*/
     	    null
     	};
 
@@ -369,7 +363,9 @@ class TestGestionFichier {
 		for (int indexParcours = 0;
 				 indexParcours < TABLEAU_CODAGE.length;
 				 indexParcours++) {
+			System.out.println(indexParcours);
 			assertArrayEquals(TABLEAU_CODAGE[indexParcours],
+					
 					GestionFichier.conversionTableauCodage(FICHIER_ARBRE_HUFFMAN_CONTENU[indexParcours]));
 		}
 	}
@@ -381,6 +377,15 @@ class TestGestionFichier {
 				indexParcours++) {
 			GestionFichier.enregistrementFichierBinaire(CHAINES_BINAIRES_VALIDES[indexParcours], NOMS_DES_FICHIERS_A_COMPRESSE[indexParcours]);
 			//TODO lorsque lectureFichierBinaire sera fonctionnel assertArrayEquals
+		}
+	}
+
+	@Test
+	void testVerifierFormatTableauCodage(){
+		for (String[] tabCodages : FICHIER_ARBRE_HUFFMAN_CONTENU) {
+			for (String ligne : tabCodages) {
+				assertTrue(GestionFichier.verifierFormatTableauCodage(ligne));
+			}
 		}
 	}
 }
