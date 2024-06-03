@@ -38,7 +38,6 @@ public class Decompression {
         fichierCle = new Fichier(cheminFichierCle);
         fichierCompresse = new FichierBinaire(cheminFichierCompresse);
         fichierRetour = new Fichier(cheminRetour + fichierCompresse.nomFichier() + ".txt");
-        out.println("Fichier décompressé : " + cheminRetour + fichierCompresse.nomFichier() + ".txt");
 
         contenuFichierCle = fichierCle.contenuFichier();
         contenuFichierCompresse = fichierCompresse.contenuFichierBinaire();
@@ -50,5 +49,8 @@ public class Decompression {
         contenuFichierRetour = arbreBinaireHuffman.restitutionTexteOriginal(contenuFichierCompresse);
 
         fichierRetour.ecritureFichier(contenuFichierRetour);
+        
+        out.println("Fichier décompressé : " + cheminRetour + fichierCompresse.nomFichier() + ".txt");
+
     }
 }

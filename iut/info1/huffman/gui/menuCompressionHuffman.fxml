@@ -78,7 +78,7 @@
                   <Insets />
                </HBox.margin>
             </Button>
-            <Button fx:id="ABHAffichage" disable="true" mnemonicParsing="false" text="Arbre binaire Huffman">
+            <Button fx:id="ABHAffichage" disable="true" mnemonicParsing="false" text="Arbre binaire Huffman" onAction="#afficherArbreBinaire">
                <HBox.margin>
                   <Insets left="65.0" />
                </HBox.margin>

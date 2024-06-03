@@ -23,7 +23,7 @@ public class Compression {
         this.cheminRetour = cheminRetour;
     }
 
-    public void execute(){
+    public Object execute(){
         out.println("------------------------------------------");
         out.println("Compression de : " + cheminFichier);
 
@@ -99,6 +99,8 @@ public class Compression {
         out.println("Fichier compréssé : " + cheminRetour + nomFichier + ".bin");
         out.println("Taille du fichier compréssé : " + fichierBinaire.tailleFichier() + " octets");
         out.println("Taux de compression : " + fichier.rapportEntreDeuxFichiers(fichierBinaire.tailleFichier()));
+        
+        return new Object[] {frequences.getOccurrences(), arbre};
     }
 
     /**

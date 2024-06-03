@@ -7,6 +7,7 @@ package iut.info1.huffman.gui;
 import java.io.File;
 import java.util.Arrays;
 
+import iut.info1.huffman.Decompression;
 import iut.info1.huffman.arbre.ArbreBinaireHuffman;
 import iut.info1.huffman.fichier.GestionFichier;
 import javafx.concurrent.Task;
@@ -133,25 +134,12 @@ public class ControleurDecompression {
 	
 	@FXML
 	private void lancerDecompression() {
+			
 		
-		try {
-	        ArbreBinaireHuffman leviathan = ArbreBinaireHuffman.recuperationArbreHuffman(
-	        		GestionFichier.conversionTableauCodage(
-	        				GestionFichier.lectureFichier(cheminFichierCleChoisi)
-	        		)
-	        );
-
-	        
-
-	        //TODO Enregistrer le fichier
-	        System.out.println(leviathan.restitutionTexteOriginal(
-	        		GestionFichier.recupererDonneesFichierCompresse(cheminFichierBinChoisi)
-	        		));
-	        
-		} catch (Exception e) {
-			// TODO: handle exception
-		}
-
+		Decompression decompression;
+		
+		decompression = new Decompression(cheminFichierBinChoisi, cheminFichierCleChoisi, cheminDossierDecompressionChoisi);
+		decompression.execute();
    
 	}
 		
