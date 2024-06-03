@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.Separator?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+<?import javafx.scene.text.Text?>
+
+<VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="314.0" prefWidth="536.0" spacing="5.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="iut.info1.huffman.gui.ControleurCompression">
+   <children>
+      <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Compression">
+         <font>
+            <Font size="30.0" />
+         </font>
+      </Text>
+      <Separator prefHeight="1.0" prefWidth="597.0" />
+      <HBox alignment="CENTER_LEFT" prefHeight="50.0" prefWidth="560.0" spacing="69.0">
+         <children>
+            <Label prefHeight="21.0" prefWidth="321.0" text="Sélectionnez le fichier .txt à compresser : " />
+            <Button fx:id="browse" mnemonicParsing="false" onAction="#choisirFichier" text="Choisir un fichier" />
+         </children>
+      </HBox>
+      <HBox alignment="CENTER_LEFT" prefHeight="100.0" prefWidth="200.0">
+         <children>
+            <Text fx:id="textCheminFichier" disable="true" fill="#9d9d9d" strokeType="OUTSIDE" strokeWidth="0.0" text="Chemin du fichier choisi :" />
+            <Label fx:id="cheminFichierChoisi" text="...">
+               <HBox.margin>
+                  <Insets left="5.0" />
+               </HBox.margin>
+            </Label>
+         </children>
+      </HBox>
+      <HBox alignment="CENTER_LEFT" prefHeight="100.0" prefWidth="200.0">
+         <children>
+            <Text fx:id="TextNomFichier" fill="#9d9d9d" strokeType="OUTSIDE" strokeWidth="0.0" text="Nom du fichier :" />
+            <Label fx:id="nomFichier" text="...">
+               <HBox.margin>
+                  <Insets left="5.0" />
+               </HBox.margin>
+            </Label>
+         </children>
+      </HBox>
+      <HBox alignment="CENTER_LEFT" prefHeight="100.0" prefWidth="200.0">
+         <children>
+            <Label fx:id="textTailleFichier" text="Taille du fichier :" textFill="#9d9d9d" />
+            <Label fx:id="tailleFichier" text="...">
+               <HBox.margin>
+                  <Insets left="5.0" />
+               </HBox.margin>
+            </Label>
+         </children>
+      </HBox>
+      <Separator prefHeight="1.0" prefWidth="597.0" />
+      <HBox alignment="CENTER_LEFT" prefHeight="50.0" prefWidth="560.0" spacing="60.0">
+         <children>
+            <Label prefHeight="22.0" prefWidth="327.0" text="Sélectionnez le chemin de la compression  :" textAlignment="CENTER" />
+            <Button fx:id="cheminChoisi" mnemonicParsing="false" onAction="#saisirCheminCompression" prefHeight="26.0" prefWidth="109.0" text="Choisir le chemin" />
+         </children>
+      </HBox>
+      <HBox alignment="CENTER_LEFT" prefHeight="100.0" prefWidth="200.0">
+         <children>
+            <Text fx:id="textCheminSelectionner" fill="#9d9d9d" strokeType="OUTSIDE" strokeWidth="0.0" text="Chemin du dossier sélectionné :" />
+            <Label fx:id="cheminDossier" text="...">
+               <HBox.margin>
+                  <Insets left="5.0" />
+               </HBox.margin>
+            </Label>
+         </children>
+      </HBox>
+      <Separator prefHeight="1.0" prefWidth="597.0" />
+      <HBox alignment="CENTER_LEFT" prefHeight="41.0" prefWidth="568.0">
+         <children>
+            <Button fx:id="retour" mnemonicParsing="false" onAction="#annuler" text="Retour">
+               <HBox.margin>
+                  <Insets />
+               </HBox.margin>
+            </Button>
+            <Button fx:id="ABHAffichage" disable="true" mnemonicParsing="false" text="Arbre binaire Huffman">
+               <HBox.margin>
+                  <Insets left="65.0" />
+               </HBox.margin>
+            </Button>
+            <Button fx:id="tabFrequence" disable="true" mnemonicParsing="false" prefHeight="26.0" prefWidth="145.0" text="Tableau des fréquences">
+               <HBox.margin>
+                  <Insets left="5.0" />
+               </HBox.margin>
+            </Button>
+            <Button fx:id="compresser" disable="true" mnemonicParsing="false" onAction="#compresser" prefHeight="26.0" prefWidth="84.0" text="Compresser">
+               <HBox.margin>
+                  <Insets left="5.0" />
+               </HBox.margin>
+            </Button>
+         </children>
+      </HBox>
+   </children>
+   <opaqueInsets>
+      <Insets />
+   </opaqueInsets>
+   <padding>
+      <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+   </padding>
+</VBox>
