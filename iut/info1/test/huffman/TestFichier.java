@@ -21,7 +21,15 @@ class TestFichier {
 	private final ByteArrayOutputStream capteurDeSortie = new ByteArrayOutputStream();
 
 	/** Lien vers les fichiers */
-	public static final String[] LIEN_FICHIERS = {	
+	public static final String[] LIEN_FICHIERS = {
+			/** VERSION MAC & LINUX */
+			/*"/Users/hugorobles/Desktop/SAEBarrios/codage-huffman/tests/fichier1.txt",
+			"/Users/hugorobles/Desktop/SAEBarrios/codage-huffman/tests/fichier2.txt",
+			"/Users/hugorobles/Desktop/SAEBarrios/codage-huffman/tests/fichier3.txt",
+			"/Users/hugorobles/Desktop/SAEBarrios/codage-huffman/tests/fichier4.txt",
+			"/Users/hugorobles/Desktop/SAEBarrios/codage-huffman/tests/fichier5.txt",
+			"/Users/hugorobles/Desktop/SAEBarrios/codage-huffman/tests/fichier6.txt"*/
+
 			"C:\\fichier1.txt",
     		"C:\\fichier2.txt",
     		"C:\\fichier3.txt",

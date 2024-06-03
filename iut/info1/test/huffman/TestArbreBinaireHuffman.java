@@ -151,7 +151,9 @@ class TestArbreBinaireHuffman {
 		 
 
 		 ArbreBinaireHuffman arbreSouhaite2 
-		 	= new ArbreBinaireHuffman("a", null, null);
+		 	= new ArbreBinaireHuffman("lien",
+				 new ArbreBinaireHuffman("a", null, null),
+				 null);
 		 
 		 ArbreBinaireHuffman arbreTest2
 		 	= ArbreBinaireHuffman.insertionHuffman(
@@ -161,16 +163,13 @@ class TestArbreBinaireHuffman {
 		 
 		 ArbreBinaireHuffman arbreSouhaite3 
 		 	= new ArbreBinaireHuffman(null, null, null);
-		 
-		 ArbreBinaireHuffman arbreTest3
-		 	= ArbreBinaireHuffman.insertionHuffman(
-		 			new Object[] {},
-		 			new double[] {1.0});
+
+		 ArbreBinaireHuffman arbreTest3;
+		 assertThrows(IllegalArgumentException.class, () -> ArbreBinaireHuffman.insertionHuffman(new Object[] {}, new double[] {1.0}));
 		
 		 assertEquals(Arrays.deepToString(arbreSouhaite1.parcoursProfondeur()), Arrays.deepToString(arbreTest1.parcoursProfondeur()));
 		 assertEquals(Arrays.deepToString(arbreSouhaite2.parcoursProfondeur()), Arrays.deepToString(arbreTest2.parcoursProfondeur()));
-		 assertEquals(Arrays.deepToString(arbreSouhaite3.parcoursProfondeur()), Arrays.deepToString(arbreTest3.parcoursProfondeur()));
-		 
+
 		 assertThrows(IllegalArgumentException.class, () -> ArbreBinaireHuffman.insertionHuffman(new Object[] {}, new double[] {}));
 	}
 
@@ -291,8 +290,9 @@ class TestArbreBinaireHuffman {
 							    + "00111110"
 							    + "00000001"; // zero supplémentaires dans l'octet précédent
 
-		String[] texteSouhaite3 = {""};
-		String texteCompresse3 =  "";
+		String[] texteSouhaite3 = {"ab"};
+		String texteCompresse3 =  "00000001"
+			    				+ "00000110"; // zero supplémentaires dans l'octet précédent
 		
 		String texteIndecompressable1 = "11111001" 
 			     					  + "10001100"
@@ -307,17 +307,17 @@ class TestArbreBinaireHuffman {
 
 		ArbreBinaireHuffman arbreTest1 
 			= ArbreBinaireHuffman.recuperationArbreHuffman(new String[][] {
-				{"b", "00"}, {"f", "01"}, {"e", "10"}, {"a", "110"}, {"c", "111"}
+				{"1100010", "00"}, {"1100110", "01"}, {"1100101", "10"}, {"1100001", "110"}, {"1100011", "111"}
 					});
 		ArbreBinaireHuffman arbreTest2
 			= ArbreBinaireHuffman.recuperationArbreHuffman(new String[][] {
-			    {"\n", "000"}, {"o", "001"}, {"b", "010"}, {"n", "011"}, {"r", "10"},
-			    {"s", "110"}, {"i", "111"}
+			    {"1010", "000"}, {"1101111", "001"}, {"1100010", "010"}, {"1101110", "011"}, {"01110010", "10"},
+			    {"1110011", "110"}, {"1101001", "111"}
 				    });
 		
 		ArbreBinaireHuffman arbreTest3
 			= ArbreBinaireHuffman.recuperationArbreHuffman(new String[][] {
-				{"a", "0"}, {"b", "1"}
+				{"1100001", "0"}, {"1100010", "1"}
 			});
 		
 		assertArrayEquals(texteSouhaite1, arbreTest1.restitutionTexteOriginal(texteCompresse1));

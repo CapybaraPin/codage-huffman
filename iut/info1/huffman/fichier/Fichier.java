@@ -42,21 +42,28 @@ public class Fichier {
     private static final String ERREUR_CONTENU_FICHIER =
 	    "erreur : Impossible d'accéder au contenu du fichier.";
 
-    /** le format du fichier n'est pas .txt ou .TXT **/
-    private static final String ERREUR_EXTENSION_FICHIER =
-	    "erreur : Le format du fichier doit être .txt ou .bin";
-
-    /** le format du paramètre est invalide **/
-    private static final String ERREUR_FORMAT_PARAMETRE =
-	    "erreur : Le format du paramètre renseigné invalide.";
-
-    /** le numerateur indiqué ne respecte pas les critères **/
-    private static final String ERREUR_NUMERATEUR_INVALIDE = 
-	    "erreur : Impossible d'effectuer la division, numérateur invalide.";
-
     /** impossible d'écrire dans le fichier spécifié */
     private static final String ERREUR_ECRITURE_FICHIER =
 	    "Erreur: Impossible d'écrire dans le fichier.";
+	/** impossible de créer le fichier, droits insuffisants **/
+	private static final String ERREUR_CREATION_FICHIER =
+			"erreur : Impossible de créer le fichier, droits insuffisants. ";
+
+	/** le format du fichier n'est pas .txt ou .TXT **/
+	private static final String ERREUR_EXTENSION_FICHIER =
+			"erreur : Le format du fichier doit être .txt ou .bin";
+	
+	/** le format du paramètre est invalide **/
+	private static final String ERREUR_FORMAT_PARAMETRE =
+			"erreur : Le format du paramètre renseigné invalide.";
+	
+	/** problème de lecture du fichier **/
+    private static final String ERREUR_FICHIER_LECTURE = 
+    		"erreur : Il y a eu un problème lors de l'ouverture du fichier : ";
+    
+	/** le numerateur indiqué ne respecte pas les critères **/
+	private static final String ERREUR_NUMERATEUR_INVALIDE = 
+			"erreur : Impossible d'effectuer la division, numérateur invalide.";
 
     /** code d'erreur lors d'un soucis de lecture fichier */
     public static final int CODE_ERREUR_FICHIER_LECTURE = 10;
@@ -80,33 +87,35 @@ public class Fichier {
      * @param cheminFichier : Le chemin du fichier à lire.
      */
     public Fichier(String cheminFichier) {
-	if (!cheminFichier.isEmpty()) {
-	    try {
-		fichierExploite = new File(cheminFichier);
+		if (!cheminFichier.isEmpty()) {
+			try {
+				fichierExploite = new File(cheminFichier);
 
-		if (!extensionValide()){
-		    err.println(ERREUR_EXTENSION_FICHIER);
+				if (!extensionValide()){
+					err.println(ERREUR_EXTENSION_FICHIER);
+				}
+				if (!fichierExploite.exists()) {
+					if (fichierExploite.createNewFile()) {
+						System.out.println("Fichier créé " + fichierExploite.getName());
+					}
+				}
+				if (!fichierExploite.canWrite()){
+					err.println(ERREUR_CREATION_FICHIER +cheminFichier);
+				}
+
+				lecteurFichier = new FileReader(cheminFichier);
+				tamponFichier = new BufferedReader(lecteurFichier);
+
+			} catch (IOException pbOuverture) {
+				err.println(ERREUR_OUVERTURE_FICHIER + cheminFichier);
+				err.println(AIDE_USAGE);
+			}
+		} else {
+			err.println(ERREUR_FORMAT_PARAMETRE);
+			err.println(AIDE_USAGE);
 		}
-
-		if (!fichierExploite.exists()) {
-		    if (fichierExploite.createNewFile()) {
-			System.out.println("Fichier créé "
-		                          + fichierExploite.getName());
-		    }
-		}
-
-		lecteurFichier = new FileReader(cheminFichier);
-		tamponFichier = new BufferedReader(lecteurFichier);
-
-	    } catch (IOException pbOuverture) {
-		err.println(ERREUR_OUVERTURE_FICHIER + cheminFichier);
-		err.println(AIDE_USAGE);
-	    }
-	} else {
-	    err.println(ERREUR_FORMAT_PARAMETRE);
-	    err.println(AIDE_USAGE);
 	}
-    }
+
 
     /**
      * Vérifie si le fichier a une extension valide.
@@ -114,7 +123,7 @@ public class Fichier {
      * @return true si l'extension du fichier est valide,
      * 	       false si l'extension du fichier n'est pas valide.
      */
-    private boolean extensionValide(){
+    public boolean extensionValide(){
 	for (String suffixe : SUFFIXE_FICHIERS) {
 	    if (fichierExploite.getName()
 		               .toLowerCase()

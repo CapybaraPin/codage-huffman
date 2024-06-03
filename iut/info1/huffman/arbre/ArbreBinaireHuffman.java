@@ -244,18 +244,26 @@ public class ArbreBinaireHuffman {
 	    throw new IllegalArgumentException("Erreur de frequencage");
 	}
 
+	if (caracteres.length == 0 || frequences.length == 0) {
+		throw new IllegalArgumentException("Erreur de paramètres");
+	}
+
+	if (caracteres.length == 1) {
+		return new ArbreBinaireHuffman("lien", new ArbreBinaireHuffman(caracteres[0].toString(), null, null), null);
+	}
+
 	while (frequenceCaracteres.length > 1) {
 
-	    for (int indexParcours = 0;
-		     indexParcours < frequenceCaracteres.length;
-		     indexParcours++) {
+	    for (int indexDeParcours = 0;
+                indexDeParcours < frequenceCaracteres.length;
+                indexDeParcours++) {
 
-		if (frequenceCaracteres[indexParcours] < plusPetiteFrequence) {
-		    plusPetiteFrequence = frequenceCaracteres[indexParcours];
+            if (frequenceCaracteres[indexDeParcours] < plusPetiteFrequence) {
+                plusPetiteFrequence = frequenceCaracteres[indexDeParcours];
 
-		    indexPlusPetiteFrequence = indexParcours;
-		}
-	    }
+                indexPlusPetiteFrequence = indexDeParcours;
+            }
+        }
 
 	    for (int indexParcours = 0;
 		     indexParcours < frequenceCaracteres.length;
@@ -553,20 +561,19 @@ public class ArbreBinaireHuffman {
      * @return le texte décompressé
      */
     public String[] restitutionTexteOriginal(String donneesFichierBinaire) {
-
 	int nbZerosEnlevable;
 	int ligne;
-
 	int[] cheminSuivi;
-
 	String donneesAnalyse;
-
 	char symboleEncode;
-
 	String[] tabContenuDecompresse;
 
-	ArrayList<String> chaineDecompresse = new ArrayList<String>();
-	ArrayList<Integer> cheminGenere = new ArrayList<Integer>();
+	ArrayList<String> chaineDecompresse = new ArrayList<>();
+	ArrayList<Integer> cheminGenere = new ArrayList<>();
+
+	if (donneesFichierBinaire.length() % 8 != 0) {
+	    throw new IllegalArgumentException("Contenu binaire incorrect");
+	}
 
 	nbZerosEnlevable 
 	= Integer.parseInt(donneesFichierBinaire
@@ -582,7 +589,6 @@ public class ArbreBinaireHuffman {
 			 donneesAnalyse.length());
 
 	ligne = 0;
-	cheminSuivi = new int[1];
 	chaineDecompresse.add("");
 	for (int indiceParcours = 0;
 		 indiceParcours < donneesAnalyse.length();
@@ -593,16 +599,15 @@ public class ArbreBinaireHuffman {
 	    cheminSuivi = cheminGenere.stream().mapToInt(i -> i).toArray();
 
 	    if (!this.valeurNoeudCherche(cheminSuivi).equals("lien")) {
-		if (this.valeurNoeudCherche(cheminSuivi).equals("\n")) {
-		    ligne++;
-		    chaineDecompresse.add("");
-		} else {
-		    symboleEncode = (char) Integer.parseInt(this.valeurNoeudCherche(cheminSuivi), 2);
-		    chaineDecompresse.set(ligne, chaineDecompresse.get(ligne) + symboleEncode);
+            if (this.valeurNoeudCherche(cheminSuivi).equals("\n")) {
+                ligne++;
+                chaineDecompresse.add("");
+            } else {
+                symboleEncode = (char) Integer.parseInt(this.valeurNoeudCherche(cheminSuivi), 2);
+                chaineDecompresse.set(ligne, chaineDecompresse.get(ligne) + symboleEncode);
 
-		    cheminGenere.clear();
-		    cheminSuivi = new int[1];
-		}
+                cheminGenere.clear();
+            }
 	    }
 	}
 	tabContenuDecompresse = new String[chaineDecompresse.size()];

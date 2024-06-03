@@ -100,4 +100,13 @@ class TestGestionTableauCodage {
             }
         }
     }
+
+    @Test
+    void testGetTabCodages(){
+        GestionTableauCodage tabCodage;
+        for (int indiceTest = 0; indiceTest < TABLEAU_CODAGE_VALIDE.length; indiceTest++) {
+            tabCodage = new GestionTableauCodage(TABLEAU_CODAGE_VALIDE[indiceTest]);
+            assertArrayEquals(TABLEAU_CODAGE_VALIDE[indiceTest], tabCodage.getTabCodages());
+        }
+    }
 }

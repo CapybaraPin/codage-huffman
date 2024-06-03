@@ -18,8 +18,7 @@ class TestGestionFrequence {
         {"Lorem", "", "Ipsum"},
         {"a", "", "", "",  "b"},
         {"", "", "",  ""},
-		{"Lorem", "DELETE FROM mysql.user", "Ipsum",  "Dolor sit amet"},
-        {}
+		{"Lorem", "DELETE FROM mysql.user", "Ipsum",  "Dolor sit amet"}
     };
 	
     /** TODO Faire la javadoc de OCCURRENCE_DES_CARACTERES*/
@@ -41,10 +40,7 @@ class TestGestionFrequence {
     			{"O", "1"},  {"M", "1"}, {"y", "1"}, {"s", "4"}, {"q", "1"},
     			{"l", "2"},  {".", "1"}, {"u", "2"}, {"I", "1"}, {"p", "1"},
     			{"i", "1"},  {"t", "2"}, {"a", "1"}
-    		},
-    		{
-    			{"", "0"}
-    		},
+    		}
     };
 
     /** TODO Faire la javadoc de FREQUENCE_DES_OCCURENCES*/
@@ -55,8 +51,7 @@ class TestGestionFrequence {
     	    {3.0/3.0},
     	    {2.0/49.0, 3.0/49.0, 3.0/49.0, 3.0/49.0, 4.0/49.0, 3.0/49.0, 2.0/49.0, 3.0/49.0, 1.0/49.0, 4.0/49.0, 1.0/49.0, 1.0/49.0,
     	     1.0/49.0, 1.0/49.0, 1.0/49.0, 4.0/49.0, 1.0/49.0, 2.0/49.0, 1.0/49.0, 2.0/49.0, 1.0/49.0, 1.0/49.0, 1.0/49.0, 2.0/49.0,
-    	     1.0/49.0},
-    	    null
+    	     1.0/49.0}
     	};
 
     @BeforeAll
@@ -99,12 +94,54 @@ class TestGestionFrequence {
 		GestionFrequence frequences;
 
 		for (int indiceTest = 0; indiceTest < CONTENU_DE_FICHIERS.length; indiceTest++) {
-
 			frequences = new GestionFrequence(CONTENU_DE_FICHIERS[indiceTest]);
 			frequences.calculFrequences();
 
 			assertArrayEquals(FREQUENCE_DES_OCCURENCES[indiceTest],
 					frequences.getFrequences());
+		}
+	}
+
+	@Test
+	void testGetContenuFichier() {
+		GestionFrequence occurrences;
+		String[] contenuFichierAttendu;
+
+        for (String[] contenuFichier : CONTENU_DE_FICHIERS) {
+            occurrences = new GestionFrequence(contenuFichier);
+            contenuFichierAttendu = contenuFichier;
+
+            assertArrayEquals(contenuFichierAttendu, occurrences.getContenuFichier());
+        }
+	}
+
+	@Test
+	void testGetOccurrences() {
+		GestionFrequence occurrences;
+		String[][] occurrencesAttendu;
+
+		for (int indiceTest = 0; indiceTest < CONTENU_DE_FICHIERS.length; indiceTest++) {
+			occurrences = new GestionFrequence(CONTENU_DE_FICHIERS[indiceTest]);
+			occurrences.compterOccurrence();
+
+			occurrencesAttendu = OCCURRENCE_DES_CARACTERES[indiceTest];
+
+			assertArrayEquals(occurrencesAttendu, occurrences.getOccurrences());
+		}
+	}
+
+	@Test
+	void testGetFrequences() {
+		GestionFrequence occurrences;
+		double[] frequencesAttendu;
+
+		for (int indiceTest = 0; indiceTest < CONTENU_DE_FICHIERS.length; indiceTest++) {
+			occurrences = new GestionFrequence(CONTENU_DE_FICHIERS[indiceTest]);
+			occurrences.calculFrequences();
+
+			frequencesAttendu = FREQUENCE_DES_OCCURENCES[indiceTest];
+
+			assertArrayEquals(frequencesAttendu, occurrences.getFrequences());
 		}
 	}
 }
