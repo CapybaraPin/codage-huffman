@@ -2,8 +2,6 @@ package iut.info1.huffman.arbre;
 
 import java.util.Arrays;
 
-import iut.info1.huffman.ApplicationHuffman;
-
 public class EssaiArbreBinaireHuffman {
     public static void main(String[] args) {
         ArbreBinaireHuffman arbreA;
@@ -35,7 +33,6 @@ public class EssaiArbreBinaireHuffman {
     
         secondArbreA = ArbreBinaireHuffman.insertionHuffman(new Object[]{'a', 'b', 'c', 'd'}
                                                       , new double[]{0.3, 0.25, 0.1, 0.35});    
-
         System.out.println(secondArbreA.valeurNoeudCherche(new int[]{0, 0}));
         System.out.println(secondArbreA.valeurNoeudCherche(new int[]{0, 1}));
         System.out.println(secondArbreA.valeurNoeudCherche(new int[]{1, 0}));
