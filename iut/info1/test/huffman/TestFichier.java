@@ -21,21 +21,13 @@ class TestFichier {
 	private final ByteArrayOutputStream capteurDeSortie = new ByteArrayOutputStream();
 
 	/** Lien vers les fichiers */
-	public static final String[] LIEN_FICHIERS = {
-			/** VERSION MAC & LINUX */
-			"/Users/hugorobles/Desktop/SAEBarrios/codage-huffman/tests/fichier1.txt",
-			"/Users/hugorobles/Desktop/SAEBarrios/codage-huffman/tests/fichier2.txt",
-			"/Users/hugorobles/Desktop/SAEBarrios/codage-huffman/tests/fichier3.txt",
-			"/Users/hugorobles/Desktop/SAEBarrios/codage-huffman/tests/fichier4.txt",
-			"/Users/hugorobles/Desktop/SAEBarrios/codage-huffman/tests/fichier5.txt",
-			"/Users/hugorobles/Desktop/SAEBarrios/codage-huffman/tests/fichier6.txt"
-
-			/* "C:\\fichier1.txt",
+	public static final String[] LIEN_FICHIERS = {	
+			"C:\\fichier1.txt",
     		"C:\\fichier2.txt",
     		"C:\\fichier3.txt",
     		"C:\\fichier4.txt",
     		"C:\\fichier5.txt",
-    		"C:\\fichier6.txt" */
+    		"C:\\fichier6.txt"
 	};
 
 	/** Nom des fichiers sans leurs extentions */
@@ -50,20 +42,12 @@ class TestFichier {
 
 	/** Objets fichiers */
 	public static final Fichier[] OBJET_FICHIER = new Fichier[] {
-			/** VERSION MAC
-			new Fichier("/Users/hugorobles/Desktop/SAEBarrios/codage-huffman/tests/fichier1.txt"),
-			new Fichier("/Users/hugorobles/Desktop/SAEBarrios/codage-huffman/tests/fichier2.txt"),
-			new Fichier("/Users/hugorobles/Desktop/SAEBarrios/codage-huffman/tests/fichier3.txt"),
-			new Fichier("/Users/hugorobles/Desktop/SAEBarrios/codage-huffman/tests/fichier4.txt"),
-			new Fichier("/Users/hugorobles/Desktop/SAEBarrios/codage-huffman/tests/fichier5.txt"),
-			new Fichier("/Users/hugorobles/Desktop/SAEBarrios/codage-huffman/tests/fichier6.txt") */
-
 			new Fichier("C:\\fichier1.txt"),
-			new Fichier("C:\\fichier1.txt"),
-			new Fichier("C:\\fichier1.txt"),
-			new Fichier("C:\\fichier1.txt"),
-			new Fichier("C:\\fichier1.txt"),
-			new Fichier("C:\\fichier1.txt")
+			new Fichier("C:\\fichier2.txt"),
+			new Fichier("C:\\fichier3.txt"),
+			new Fichier("C:\\fichier4.txt"),
+			new Fichier("C:\\fichier5.txt"),
+			new Fichier("C:\\fichier6.txt")
 	};
 
 	/** Contenu des fichiers */
@@ -78,17 +62,9 @@ class TestFichier {
 
 	/** Résultats des contenus des fichiers */
 	public static final String[] RESULTAT_POUR_CONTENU = {
-			/** VERSION MAC
-
-			"ABCD\n",
-			"Lorem\n\nIpsum\n",
-			"a\n\n\n\nb\n",
-			"\n\n\n\n",
-			"Lorem\nDELETE FROM mysql.user\nIpsum\nDolor sit amet\n",
-			""*/
 
 			"ABCD\r\n",
-            "Lorem\r\n\r\nIpsum\r\n",
+            "Lorem\r\n\r\nIpsum\r\n\r\n",
             "a\r\n\r\n\r\n\r\nb\r\n",
             "\r\n\r\n\r\n\r\n",
             "Lorem\r\nDELETE FROM mysql.user\r\nIpsum\r\nDolor sit amet\r\n",
@@ -103,6 +79,16 @@ class TestFichier {
 			8,
 			52,
 			-1
+	};
+
+	/** Validité du statut des fichiers */
+	public static final boolean[] EXTENSIONS_VALIDES = {
+			true,
+			true,
+			true,
+			true,
+			true,
+			true
 	};
 
 	/** Taille factisse d'un fichier comparé et le rapport entre les deux fichiers */
@@ -128,7 +114,36 @@ class TestFichier {
     }
 
 	@Test
-	void nomFichier() {
+	void testEcritureFichier() {
+		Fichier fichier;
+
+		for (int indiceTest = 0;
+			 indiceTest < CONTENU_DE_FICHIERS.length;
+			 indiceTest++) {
+
+			fichier = OBJET_FICHIER[indiceTest];
+
+			fichier.ecritureFichier(CONTENU_DE_FICHIERS[indiceTest]);
+
+			assertArrayEquals(fichier.contenuFichier(), CONTENU_DE_FICHIERS[indiceTest]);
+		}
+	}
+
+	@Test
+	void testExtensionValide(){
+		Fichier fichier;
+
+		for (int indiceTest = 0;
+			 indiceTest < EXTENSIONS_VALIDES.length; indiceTest++) {
+
+			fichier = OBJET_FICHIER[indiceTest];
+
+			assertEquals(fichier.extensionValide(), EXTENSIONS_VALIDES[indiceTest]);
+		}
+	}
+
+	@Test
+	void TestNomFichier() {
 		Fichier fichier;
 
 		for (int indiceTest = 0;
@@ -145,9 +160,9 @@ class TestFichier {
 		Fichier fichier;
 		
 		for (int indiceTest = 0; 
-    			indiceTest < LIEN_FICHIERS.length; indiceTest++) {
+    			indiceTest < OBJET_FICHIER.length; indiceTest++) {
 			
-			fichier = new Fichier(LIEN_FICHIERS[indiceTest]);
+			fichier = OBJET_FICHIER[indiceTest];
     		
     		assertArrayEquals(CONTENU_DE_FICHIERS[indiceTest], fichier.contenuFichier());
     		
@@ -174,10 +189,10 @@ class TestFichier {
 		Fichier fichier;
 		
 		 for (int indiceTest = 0;
-	                indiceTest < LIEN_FICHIERS.length;
+	                indiceTest < OBJET_FICHIER.length;
 	                indiceTest++) {
 			 
-			 	fichier = new Fichier(LIEN_FICHIERS[indiceTest]);
+			 	fichier = OBJET_FICHIER[indiceTest];
 
 	            System.setOut(new PrintStream(capteurDeSortie));
 	            
