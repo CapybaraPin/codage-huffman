@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.Separator?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+<?import javafx.scene.text.Text?>
+
+<VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="403.0" prefWidth="600.0" spacing="5.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="iut.info1.huffman.gui.ControleurDecompression">
+   <children>
+      <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Décompression">
+         <font>
+            <Font size="30.0" />
+         </font>
+      </Text>
+      <Separator prefHeight="1.0" prefWidth="597.0" />
+      <HBox alignment="CENTER_LEFT" prefHeight="47.0" prefWidth="560.0" spacing="120.0">
+         <children>
+            <Label prefHeight="21.0" prefWidth="321.0" text="Sélectionnez le fichier .bin à décompresser : " />
+            <Button mnemonicParsing="false" onAction="#saisirCheminBin" text="Choisir un fichier" />
+         </children>
+      </HBox>
+      <HBox fillHeight="false" prefHeight="100.0" prefWidth="200.0" spacing="15.0">
+         <children>
+            <Text fill="#9d9d9d" strokeType="OUTSIDE" strokeWidth="0.0" text="Chemin du fichier choisi :" />
+            <Label fx:id="cheminFichierBin" text="..." />
+         </children>
+      </HBox>
+      <HBox fillHeight="false" prefHeight="100.0" prefWidth="200.0" spacing="10.0">
+         <children>
+            <Label text="Nom du fichier :" textFill="#9d9d9d" />
+            <Label fx:id="nomFichierBin" text="..." />
+         </children>
+      </HBox>
+      <HBox fillHeight="false" prefHeight="100.0" prefWidth="200.0" spacing="10.0">
+         <children>
+            <Label text="Taille du fichier :" textFill="#9d9d9d" />
+            <Label fx:id="tailleFichierBin" text="..." />
+         </children>
+      </HBox>
+      <Separator prefHeight="1.0" prefWidth="597.0" />
+      <HBox alignment="CENTER_LEFT" fillHeight="false" maxHeight="47.0" maxWidth="572.0" minHeight="34.0" minWidth="560.0" prefHeight="34.0" prefWidth="572.0" spacing="120.0">
+         <children>
+            <Label prefHeight="21.0" prefWidth="334.0" text="Sélectionnez le fichier clé du fichier compressé : ">
+               <HBox.margin>
+                  <Insets />
+               </HBox.margin>
+            </Label>
+            <Button maxHeight="31.0" maxWidth="149.0" minHeight="31.0" minWidth="149.0" mnemonicParsing="false" onAction="#saisirCheminFichierCle" prefHeight="31.0" prefWidth="149.0" text="Choisir un fichier" />
+         </children>
+      </HBox>
+      <HBox prefHeight="100.0" prefWidth="200.0" spacing="15.0">
+         <children>
+            <Text fill="#9d9d9d" strokeType="OUTSIDE" strokeWidth="0.0" text="Chemin du fichier choisi :" />
+            <Label fx:id="cheminFichierCle" text="..." />
+         </children>
+      </HBox>
+      <Separator prefHeight="1.0" prefWidth="597.0" />
+      <HBox alignment="CENTER_LEFT" prefHeight="17.0" prefWidth="580.0" spacing="100.0">
+         <children>
+            <Label prefHeight="21.0" prefWidth="332.0" text="Sélectionnez le chemin pour la décompression  :" textAlignment="CENTER" />
+            <Button mnemonicParsing="false" onAction="#saisirCheminDecompression" prefWidth="138.0" text="choisir le chemin" />
+         </children>
+      </HBox>
+      <HBox prefHeight="100.0" prefWidth="200.0" spacing="15.0">
+         <children>
+            <Text fill="#9d9d9d" strokeType="OUTSIDE" strokeWidth="0.0" text="Chemin du dossier sélectionné :" />
+            <Label fx:id="cheminDossierResultat" text="..." />
+         </children>
+      </HBox>
+      <Separator prefHeight="1.0" prefWidth="597.0" />
+      <HBox alignment="CENTER" prefHeight="41.0" prefWidth="568.0" spacing="400.0">
+         <children>
+            <Button fx:id="retour" mnemonicParsing="false" onAction="#annuler" prefWidth="63.0" text="Retour" />
+            <Button fx:id="boutonDecompression" disable="true" mnemonicParsing="false" text="Décompresser" onAction="#lancerDecompression" />
+         </children>
+      </HBox>
+   </children>
+   <opaqueInsets>
+      <Insets />
+   </opaqueInsets>
+   <padding>
+      <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+   </padding>
+</VBox>

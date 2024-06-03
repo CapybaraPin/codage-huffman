@@ -107,7 +107,7 @@ public class GestionTableauCodage {
             if (symbole.equals("\n")){
                 symbole = "LF";
             }
-            System.out.println(symbole);
+
             contenuFichier[indiceLigne] =  String.format(
                     "codeHuffman = %s ; encode = %s ; symbole = %s",
                     codeHuffman, encodageCaractere, symbole

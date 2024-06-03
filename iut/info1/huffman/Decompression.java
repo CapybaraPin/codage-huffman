@@ -4,12 +4,27 @@ import iut.info1.huffman.arbre.ArbreBinaireHuffman;
 import iut.info1.huffman.fichier.Fichier;
 import iut.info1.huffman.fichier.FichierBinaire;
 
-import static iut.info1.huffman.ApplicationHuffman.FOLDER_URL;
 import static java.lang.System.out;
 
 public class Decompression {
 
-    public static void main(String cheminFichierCompresse, String cheminFichierCle, String cheminRetour) {
+    private String cheminFichierCompresse;
+    private String cheminFichierCle;
+    private String cheminRetour;
+
+    public Decompression(String cheminFichierCompresse,
+                         String cheminFichierCle,
+                         String cheminRetour) {
+
+        this.cheminFichierCompresse = cheminFichierCompresse;
+        this.cheminFichierCle = cheminFichierCle;
+        this.cheminRetour = cheminRetour;
+    }
+
+    public void execute(){
+        out.println("------------------------------------------");
+        out.println("Décompression de : " + cheminFichierCompresse);
+
         Fichier fichierCle;
         Fichier fichierRetour;
         FichierBinaire fichierCompresse;
@@ -20,11 +35,10 @@ public class Decompression {
         String contenuFichierCompresse;
         String[] contenuFichierRetour;
 
-        fichierCle = new Fichier(FOLDER_URL + cheminFichierCle); // TODO TRY
-        fichierCompresse = new FichierBinaire(FOLDER_URL + cheminFichierCompresse);
-        fichierRetour = new Fichier(FOLDER_URL + cheminRetour + fichierCompresse.nomFichier() + ".txt");
-        out.println(FOLDER_URL + cheminRetour + fichierCompresse.nomFichier() + ".txt");
-
+        fichierCle = new Fichier(cheminFichierCle);
+        fichierCompresse = new FichierBinaire(cheminFichierCompresse);
+        fichierRetour = new Fichier(cheminRetour + fichierCompresse.nomFichier() + ".txt");
+        out.println("Fichier décompressé : " + cheminRetour + fichierCompresse.nomFichier() + ".txt");
 
         contenuFichierCle = fichierCle.contenuFichier();
         contenuFichierCompresse = fichierCompresse.contenuFichierBinaire();

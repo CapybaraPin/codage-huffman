@@ -576,6 +576,7 @@ public class ArbreBinaireHuffman {
     	int[] cheminSuivi;
     	Object valeurNoeud;
     	String donneesAnalyse;
+        char symboleEncode;
         String[] tabContenuDecompresse;
         ArrayList<String> chaineDecompresse = new ArrayList<String>();
     	ArrayList<Integer> cheminGenere = new ArrayList<Integer>();
@@ -605,15 +606,15 @@ public class ArbreBinaireHuffman {
 			valeurNoeud = donneesAnalyse.charAt(indiceParcours);
 
 			cheminSuivi = cheminGenere.stream().mapToInt(i -> i).toArray();
-			
-			System.out.println(Arrays.toString(cheminSuivi));
-			
+
 			if (!this.valeurNoeudCherche(cheminSuivi).equals("lien")) {
                 if (this.valeurNoeudCherche(cheminSuivi).equals("\n")) {
                     ligne++;
                     chaineDecompresse.add("");
                 } else {
-                    chaineDecompresse.set(ligne, chaineDecompresse.get(ligne) + this.valeurNoeudCherche(cheminSuivi));
+                    symboleEncode = (char) Integer.parseInt(this.valeurNoeudCherche(cheminSuivi), 2);
+                    chaineDecompresse.set(ligne, chaineDecompresse.get(ligne) + symboleEncode);
+
                     cheminGenere.clear();
                     cheminSuivi = new int[1];
                 }

@@ -4,6 +4,7 @@
  */
 package iut.info1.huffman;
 
+
 /**
  * Permet d'effectuer des operations de compression et
  * de decompression de fichiers
@@ -14,19 +15,64 @@ public class ApplicationHuffman {
 	public static final String ERREUR_FORMAT_PARAMETRE =
 			"erreur : Le format du paramètre renseigné invalide.";
 
-	public static final String FOLDER_URL = "/Users/hugorobles/Desktop/codage-huffman/tests/";
-
-	/** suffixe des fichiers compréssés pris en charge **/
-	private static final String SUFFIXE_FICHIER_DECOMPRESSE = ".bin";
+	private static final String AIDE =
+			"""
+            Usage: programme.jar [options] [arguments]
+    
+            Options:
+              -c               Compression
+              -d               Décompression
+              -h               Affiche l'aide
+            
+            Exemples:
+              programme.java -c [Chemin_du_fichier] [Répertoire_de_sortie]
+              programme.java -d [Chemin_du_fichier_binaire] [Chemin_du_fichier_clé] [Répertoire_de_sortie]
+              programme.java -h
+            
+            Si aucun argument n'est fourni, la méthode IHM est appelée.
+            """;
 
 	public static void main(String[] args) {
+			Compression compression;
+			Decompression decompression;
+			String action;
+			String cheminFichier;
+			String cheminFichierBin;
+			String cheminFichierCle;
+			String dossierRetour;
 
-			Compression.main("fichier2.txt", "resultats/");
+			if (args.length == 0) {
+				// TODO : Appel de l'IHM
 
-			//Decompression.main("resultats/fichier2.bin", "resultats/fichier2_EncodeH.txt", "compt/");
+				return;
+			}
+
+			action = args[0];
+
+			switch (action){
+				case "-h":
+					System.out.println(AIDE);
+					break;
+				case "-c":
+					cheminFichier = args[1];
+					dossierRetour = args[2];
+
+					compression = new Compression(cheminFichier, dossierRetour);
+					compression.execute();
+					break;
+				case "-d":
+					cheminFichierBin = args[1];
+					cheminFichierCle = args[2];
+					dossierRetour = args[3];
+
+					decompression = new Decompression(cheminFichierBin, cheminFichierCle, dossierRetour);
+					decompression.execute();
+
+					break;
+				default:
+					System.out.println(AIDE);
+					break;
+
+			}
 	}
-
-	
-
-
 }

@@ -89,9 +89,10 @@ public class Fichier {
 					err.println(ERREUR_EXTENSION_FICHIER);
 				}
 
-				if (fichierExploite.createNewFile()) {
-					System.out.println("Fichier créé "
-							+ fichierExploite.getName());
+				if (!fichierExploite.exists()) {
+					if (fichierExploite.createNewFile()) {
+						System.out.println("Fichier créé " + fichierExploite.getName());
+					}
 				}
 
 				lecteurFichier = new FileReader(cheminFichier);
@@ -106,6 +107,7 @@ public class Fichier {
 			err.println(AIDE_USAGE);
 		}
 	}
+
 
 	/**
 	 * Vérifie si le fichier a une extension valide.
@@ -269,7 +271,6 @@ public class Fichier {
 			tamponEcritureFichier = new BufferedWriter(ecritureFichier);
 
 			for (String ligne : contenuFichier) {
-				System.out.println(ligne);
 				tamponEcritureFichier.write(ligne);
 				tamponEcritureFichier.newLine();
 			}
