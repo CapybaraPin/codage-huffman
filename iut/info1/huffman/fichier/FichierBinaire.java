@@ -1,47 +1,53 @@
+/* 
+ * FichierBinaire.java        30/05/2024  
+ * IUT De Rodez             Pas de copyrights
+ */
+
 package iut.info1.huffman.fichier;
 
 import java.io.*;
 
 import static java.lang.System.err;
-import static java.lang.System.out;
 
+/**
+ * Gère la création des fichiers binaires
+ */
 public class FichierBinaire extends Fichier {
-
-    /** suffixe des fichiers compréssés pris en charge **/
-    private static final String SUFFIXE_FICHIER_DECOMPRESSE = ".bin";
 
     /** le format du paramètre est invalide **/
     private static final String ERREUR_FORMAT_PARAMETRE =
             "erreur : Le format du paramètre renseigné invalide.";
 
-    /** impossible d'acceder au contenu du fichier **/
-    private static final String ERREUR_CONTENU_FICHIER =
-            "erreur : Impossible d'accéder au contenu du fichier.";
-
+    /** chemin du fichier exploité */
     private static String cheminFichier;
 
+    /** Constructeur de FichierBinaire */
     public FichierBinaire(String cheminFichier) {
         super(cheminFichier);
-
         FichierBinaire.cheminFichier = cheminFichier;
     }
 
     /**
      * Permet la récupération des données dans un fichier binaire
+     * 
      * @return le contenu du fichier
-     *
      */
     public String contenuFichierBinaire() {
+	
         String contenuBinaireFichier;
 
         FileInputStream inputStream = null;
+        
         try {
-            inputStream = new FileInputStream(getFichierExploite().getAbsolutePath());
+            inputStream = new FileInputStream(
+        	              getFichierExploite()
+        	             .getAbsolutePath());
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         }
 
         int data;
+        
         String donneesData;
 
         contenuBinaireFichier = "";
@@ -50,18 +56,16 @@ public class FichierBinaire extends Fichier {
 
                 donneesData = String.valueOf(Integer.toBinaryString(data));
 
-                if (donneesData.length() != 8) { // TODO Faire une méthode pour ce 'if'
+                if (donneesData.length() != 8) {
                     donneesData = "0".repeat(8 - donneesData.length())
                             + donneesData;
                 }
                 contenuBinaireFichier += donneesData;
             }
         } catch (IOException e) {
-            // TODO Auto-generated catch block
             e.printStackTrace();
         }
-
-        return contenuBinaireFichier; //STUB
+        return contenuBinaireFichier;
     }
 
     /**
@@ -80,11 +84,13 @@ public class FichierBinaire extends Fichier {
      * @param chaineBinaire
      */
     public void enregistrementFichierBinaire(String chaineBinaire) {
+	
         int longueur = chaineBinaire.length();
         int longueurDonnees = (int) Math.ceil((double) longueur / 8);
-        byte[] donnees = new byte[longueurDonnees+1];
         int indexDonnees;
         int nbZeroComplementaire;
+        
+        byte[] donnees = new byte[longueurDonnees+1];
 
         if (chaineBinaire.isEmpty() || cheminFichier.isEmpty()) {
             err.println(ERREUR_FORMAT_PARAMETRE);
