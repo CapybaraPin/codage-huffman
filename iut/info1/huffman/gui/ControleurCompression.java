@@ -138,11 +138,12 @@ public class ControleurCompression {
 
 		cheminDossierCompressionChoisi = null;
 		if (dossierChoisi != null) {
-			cheminDossierCompressionChoisi = dossierChoisi.getPath();
-			cheminDossier.setText(dossierChoisi.getPath());
+			cheminDossierCompressionChoisi = dossierChoisi.getPath() + "\\";
+			cheminDossier.setText(dossierChoisi.getPath() + "\\");
 		} else {
 			cheminDossier.setText("...");
 		}
+
 
 		actualisationUtilisabiliteOutilsCompression();
 		actualisationValiditeCompression();
