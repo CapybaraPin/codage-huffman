@@ -4,6 +4,7 @@ import iut.info1.huffman.arbre.ArbreBinaireHuffman;
 import iut.info1.huffman.fichier.Fichier;
 import iut.info1.huffman.fichier.FichierBinaire;
 
+
 import static java.lang.System.out;
 
 public class Decompression {

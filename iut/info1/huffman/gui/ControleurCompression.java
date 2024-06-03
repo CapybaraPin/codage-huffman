@@ -1,4 +1,3 @@
-
 /**
  * ConroleurCompression.java		28/05/2024
  * IUT DE RODEZ						Pas de copyrights
@@ -6,6 +5,8 @@
 package iut.info1.huffman.gui;
 
 import java.io.File;
+import java.util.Arrays;
+import java.util.Iterator;
 import java.util.Optional;
 
 import javafx.fxml.FXML;
@@ -19,6 +20,9 @@ import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
+import javafx.scene.shape.Circle;
+import javafx.scene.shape.Line;
+import javafx.scene.text.Text;
 import javafx.scene.transform.Scale;
 import javafx.scene.transform.Translate;
 import javafx.stage.DirectoryChooser;
@@ -29,6 +33,9 @@ import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
+import javafx.scene.text.Font;
+import javafx.scene.paint.Color;
+
 import iut.info1.huffman.Compression;
 import iut.info1.huffman.arbre.ArbreBinaireHuffman;
 
@@ -37,302 +44,326 @@ import iut.info1.huffman.arbre.ArbreBinaireHuffman;
  * la page de décompression
  */
 public class ControleurCompression {
-
+	
     private double mouseX;
-
+    
     public Pane zoneAffichage;
-
+    
     private double mouseY;
-
+	
     private double initialVGap;
-
+    
     private double vGap;
-
+    
     private double scaleFactor;    
-
+    
     private double niveauZoom;
-
+	
     private String cheminFichierTxtChoisi;
 
-    private String cheminDossierCompressionChoisi;
+	private String cheminDossierCompressionChoisi;
+	
+	private double nombreCaracteres;
+	
+	private String[][] donneesFrequencesCaracteres;
 
-    private double nombreCaracteres;
+	@FXML
+	private Button ABHAffichage;
 
-    private String[][] donneesFrequencesCaracteres;
+	@FXML
+	private Button cheminChoisi;
 
-    @FXML
-    private Button ABHAffichage;
+	@FXML
+	private Label cheminDossier;
 
-    @FXML
-    private Button cheminChoisi;
+	@FXML
+	private Label cheminFichierChoisi;
 
-    @FXML
-    private Label cheminDossier;
+	@FXML
+	private Button compresser;
 
-    @FXML
-    private Label cheminFichierChoisi;
+	@FXML
+	private Label nomFichier;
 
-    @FXML
-    private Button compresser;
+	@FXML
+	private Button retour;
 
-    @FXML
-    private Label nomFichier;
+	@FXML
+	private Button tabFrequence;
 
-    @FXML
-    private Button retour;
+	@FXML
+	private Label tailleFichier;
 
-    @FXML
-    private Button tabFrequence;
+	private Object[] elementsDeCompression;
+	
+	private String[][] occurencesFichierCompresse;
+	
+	@FXML
+	private void initialize() {
 
-    @FXML
-    private Label tailleFichier;
+		cheminFichierTxtChoisi = null;
+		cheminDossierCompressionChoisi = null;
+	}
+	
+	@FXML
+	void choisirFichier(ActionEvent event) {
+		FileChooser choixFichier = new FileChooser();
 
-    private Object[] elementsDeCompression;
+		FileChooser.ExtensionFilter extFilter = new FileChooser.ExtensionFilter("TXT files (*.txt)", "*.txt");
+		choixFichier.getExtensionFilters().add(extFilter);
 
-    private String[][] occurencesFichierCompresse;
+		File fichierChoisi = choixFichier.showOpenDialog(null);
 
-    @FXML
-    private void initialize() {
+		cheminFichierTxtChoisi = null;
+		if (fichierChoisi != null) {
+			cheminFichierTxtChoisi = fichierChoisi.getAbsolutePath();
+			cheminFichierChoisi.setText(cheminFichierTxtChoisi);
+			nomFichier.setText(fichierChoisi.getName());
+			tailleFichier.setText(String.valueOf(fichierChoisi.length()) + " octet(s)");
 
-	cheminFichierTxtChoisi = null;
-	cheminDossierCompressionChoisi = null;
-    }
+		} else {
+			cheminFichierChoisi.setText("...");
+			nomFichier.setText("...");
+			tailleFichier.setText("...");
+		}
 
-    @FXML
-    void choisirFichier(ActionEvent event) {
-	FileChooser choixFichier = new FileChooser();
-
-	FileChooser.ExtensionFilter extFilter = new FileChooser.ExtensionFilter("TXT files (*.txt)", "*.txt");
-	choixFichier.getExtensionFilters().add(extFilter);
-
-	File fichierChoisi = choixFichier.showOpenDialog(null);
-
-	cheminFichierTxtChoisi = null;
-	if (fichierChoisi != null) {
-	    cheminFichierTxtChoisi = fichierChoisi.getAbsolutePath();
-	    cheminFichierChoisi.setText(cheminFichierTxtChoisi);
-	    nomFichier.setText(fichierChoisi.getName());
-	    tailleFichier.setText(String.valueOf(fichierChoisi.length()) + " octet(s)");
-
-	} else {
-	    cheminFichierChoisi.setText("...");
-	    nomFichier.setText("...");
-	    tailleFichier.setText("...");
+		actualisationUtilisabiliteOutilsCompression();
+		actualisationValiditeCompression();
 	}
 
-	actualisationUtilisabiliteOutilsCompression();
-	actualisationValiditeCompression();
-    }
+	@FXML
+	private void saisirCheminCompression() {
 
-    @FXML
-    private void saisirCheminCompression() {
+		DirectoryChooser parcoursDossier = new DirectoryChooser();
 
-	DirectoryChooser parcoursDossier = new DirectoryChooser();
+		File dossierChoisi = parcoursDossier.showDialog(null);
 
-	File dossierChoisi = parcoursDossier.showDialog(null);
+		cheminDossierCompressionChoisi = null;
+		if (dossierChoisi != null) {
+			cheminDossierCompressionChoisi = dossierChoisi.getPath();
+			cheminDossier.setText(dossierChoisi.getPath());
+		} else {
+			cheminDossier.setText("...");
+		}
 
-	cheminDossierCompressionChoisi = null;
-	if (dossierChoisi != null) {
-	    cheminDossierCompressionChoisi = dossierChoisi.getPath() + "\\";
-	    cheminDossier.setText(dossierChoisi.getPath() + "\\");
-	} else {
-	    cheminDossier.setText("...");
+		actualisationUtilisabiliteOutilsCompression();
+		actualisationValiditeCompression();
 	}
 
+	/**
+	 * Permet de réactiver ou de désactiver le bouton de décompression
+	 * si les paramètres mis en place sont vérifiées
+	 */
+	private void actualisationValiditeCompression() {
 
-	actualisationUtilisabiliteOutilsCompression();
-	actualisationValiditeCompression();
-    }
+		compresser.setDisable(true);
 
-    /**
-     * Permet de réactiver ou de désactiver le bouton de décompression
-     * si les paramètres mis en place sont vérifiées
-     */
-    private void actualisationValiditeCompression() {
+		if (   cheminFichierTxtChoisi         != null
+				&& cheminDossierCompressionChoisi != null) {
 
-	compresser.setDisable(true);
-
-	if (   cheminFichierTxtChoisi         != null
-		&& cheminDossierCompressionChoisi != null) {
-
-	    compresser.setDisable(false);
+			compresser.setDisable(false);
+		}
 	}
-    }
+	
+	/**
+	 * Permet de réactiver ou de désactiver le bouton de décompression
+	 * si les paramètres mis en place sont vérifiées
+	 */
+	private void actualisationUtilisabiliteOutilsCompression() {
 
-    /**
-     * Permet de réactiver ou de désactiver le bouton de décompression
-     * si les paramètres mis en place sont vérifiées
-     */
-    private void actualisationUtilisabiliteOutilsCompression() {
+		ABHAffichage.setDisable(true);
+		tabFrequence.setDisable(true);
 
-	ABHAffichage.setDisable(true);
-	tabFrequence.setDisable(true);
+		if (   cheminFichierTxtChoisi         != null
+				&& cheminDossierCompressionChoisi != null
+				&& !compresser.isDisable()) {
 
-	if (   cheminFichierTxtChoisi         != null
-		&& cheminDossierCompressionChoisi != null
-		&& !compresser.isDisable()) {
-
-	    ABHAffichage.setDisable(false);
-	    tabFrequence.setDisable(false);
+			ABHAffichage.setDisable(false);
+			tabFrequence.setDisable(false);
+		}
 	}
-    }
 
-    @FXML
-    void compresser(ActionEvent event) {
-	Compression compression;
+	@FXML
+	void compresser(ActionEvent event) {
+		Compression compression;
+		
+		Alert boiteAlerte = new Alert(Alert.AlertType.CONFIRMATION,
+				"Êtes-vous sûr de vouloir compresser ce fichier ?",
+				ButtonType.YES, ButtonType.NO);
 
-	Alert boiteAlerte = new Alert(Alert.AlertType.CONFIRMATION,
-		"Êtes-vous sûr de vouloir compresser ce fichier ?",
-		ButtonType.YES, ButtonType.NO);
-
-	Optional<ButtonType> option = boiteAlerte.showAndWait();
-	if (option.get() == ButtonType.YES) {
-
-	    compression = new Compression(cheminFichierTxtChoisi, cheminDossierCompressionChoisi);
-	    elementsDeCompression = (Object[]) compression.execute();
-
-	    actualisationValiditeCompression();
-	    actualisationUtilisabiliteOutilsCompression();
-	} // else
-    }
-
-    @FXML
+		Optional<ButtonType> option = boiteAlerte.showAndWait();
+		if (option.get() == ButtonType.YES) {
+			
+			compression = new Compression(cheminFichierTxtChoisi, cheminDossierCompressionChoisi);
+			elementsDeCompression = (Object[]) compression.execute();
+			
+			actualisationValiditeCompression();
+			actualisationUtilisabiliteOutilsCompression();
+		} // else
+	}
+	
+	@FXML
     private void afficherTableauFrequences() {
-	Stage popupStage = new Stage();
-	popupStage.setResizable(false);
-	popupStage.initModality(Modality.APPLICATION_MODAL);
-	popupStage.setTitle(String.format("Table des fréquences pour %s :", "NOM FICHIER")); //TODO
-	TableView<String[]> tableauFrequences = new TableView<>();
+        Stage popupStage = new Stage();
+        popupStage.setResizable(false);
+        popupStage.initModality(Modality.APPLICATION_MODAL);
+        popupStage.setTitle(String.format("Table des fréquences pour %s :", "NOM FICHIER")); //TODO
+        TableView<String[]> tableauFrequences = new TableView<>();
+        
+        TableColumn<String[], String> colonneCaracteres = new TableColumn<>("Caracteres");
+        colonneCaracteres.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue()[0]));
+        
+        TableColumn<String[], String> colonneOccurences = new TableColumn<>("Occurences");
+        colonneOccurences.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue()[1]));
+        
+        TableColumn<String[], String> colonneFrequences = new TableColumn<>("Frequences");
+        colonneFrequences.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue()[2]));
+        
+        tableauFrequences.getColumns().add(colonneCaracteres);
+        tableauFrequences.getColumns().add(colonneOccurences);
+        tableauFrequences.getColumns().add(colonneFrequences);
+        tableauFrequences.getColumns().get(0).setPrefWidth(100);
+        tableauFrequences.getColumns().get(1).setPrefWidth(100);
+        tableauFrequences.getColumns().get(2).setPrefWidth(100);
+        
+        // Ajouter des données
+        ObservableList<String[]> donneesTableauFrequences = FXCollections.observableArrayList();
+        occurencesFichierCompresse = (String[][]) elementsDeCompression[0];
 
-	TableColumn<String[], String> colonneCaracteres = new TableColumn<>("Caracteres");
-	colonneCaracteres.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue()[0]));
+        nombreCaracteres = 0;
+		for (String[] occurenceCaractere : occurencesFichierCompresse) {
+			nombreCaracteres += Integer.parseInt(occurenceCaractere[1]);
+		}
 
-	TableColumn<String[], String> colonneOccurences = new TableColumn<>("Occurences");
-	colonneOccurences.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue()[1]));
+        donneesFrequencesCaracteres = new String[occurencesFichierCompresse.length][3];
+        // TODO initialiser les variables (si besoin)
+		for (int indiceParcours = 0;
+			 indiceParcours < donneesFrequencesCaracteres.length;
+			 indiceParcours++) {
+			
+			donneesFrequencesCaracteres[indiceParcours][0] 
+					= occurencesFichierCompresse[indiceParcours][0];
+		    
+			donneesFrequencesCaracteres[indiceParcours][1] 
+		    		= occurencesFichierCompresse[indiceParcours][1];
+		    
+			donneesFrequencesCaracteres[indiceParcours][2] 
+		    	= String.valueOf(
+		    		Math.round(
+		    			Double.valueOf(occurencesFichierCompresse[indiceParcours][1])
+		    			/nombreCaracteres * 1e8)/1e8);
+						
+		}
 
-	TableColumn<String[], String> colonneFrequences = new TableColumn<>("Frequences");
-	colonneFrequences.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue()[2]));
-
-	tableauFrequences.getColumns().add(colonneCaracteres);
-	tableauFrequences.getColumns().add(colonneOccurences);
-	tableauFrequences.getColumns().add(colonneFrequences);
-	tableauFrequences.getColumns().get(0).setPrefWidth(100);
-	tableauFrequences.getColumns().get(1).setPrefWidth(100);
-	tableauFrequences.getColumns().get(2).setPrefWidth(100);
-
-	// Ajouter des données
-	ObservableList<String[]> donneesTableauFrequences = FXCollections.observableArrayList();
-	occurencesFichierCompresse = (String[][]) elementsDeCompression[0];
-
-	nombreCaracteres = 0;
-	for (String[] occurenceCaractere : occurencesFichierCompresse) {
-	    nombreCaracteres += Integer.parseInt(occurenceCaractere[1]);
-	}
-
-	donneesFrequencesCaracteres = new String[occurencesFichierCompresse.length][3];
-	// TODO initialiser les variables (si besoin)
-	for (int indiceParcours = 0;
-		indiceParcours < donneesFrequencesCaracteres.length;
-		indiceParcours++) {
-
-	    donneesFrequencesCaracteres[indiceParcours][0] 
-		    = occurencesFichierCompresse[indiceParcours][0];
-
-	    donneesFrequencesCaracteres[indiceParcours][1] 
-		    = occurencesFichierCompresse[indiceParcours][1];
-
-	    donneesFrequencesCaracteres[indiceParcours][2] 
-		    = String.valueOf(
-			    Math.round(
-				    Double.valueOf(occurencesFichierCompresse[indiceParcours][1])
-				    /nombreCaracteres * 1e8)/1e8);
-
-	}
-
-	for (String[] FrequencesCaractere : donneesFrequencesCaracteres) {
-
-	    donneesTableauFrequences.add(FrequencesCaractere);
-	}
-
-	tableauFrequences.setItems(donneesTableauFrequences);
-	VBox vbox = new VBox(tableauFrequences);
-	Scene scene = new Scene(vbox);
-	popupStage.setScene(scene);
-	popupStage.setWidth(320);
-	popupStage.showAndWait();
+		for (String[] FrequencesCaractere : donneesFrequencesCaracteres) {
+			
+			donneesTableauFrequences.add(FrequencesCaractere);
+		}
+        
+        tableauFrequences.setItems(donneesTableauFrequences);
+        VBox vbox = new VBox(tableauFrequences);
+        Scene scene = new Scene(vbox);
+        popupStage.setScene(scene);
+        popupStage.setWidth(320);
+        popupStage.showAndWait();
 
     }
+	
+	@FXML
+	private void afficherArbreBinaire() {
+		
+	    initialVGap = 50;
+	    vGap = 100;
+	    scaleFactor = 1.0;
+		niveauZoom = 1.0;
+		
+        zoneAffichage = new Pane();
+        
+        Stage popupStage = new Stage();
+        popupStage.setResizable(true);
+        popupStage.initModality(Modality.APPLICATION_MODAL);
+        popupStage.setTitle(String.format("Arbre binaire du fichier  %s :", "NOM FICHIER")); //TODO
+        
+        drawTree(zoneAffichage, (ArbreBinaireHuffman)elementsDeCompression[1], 540, 100, 800, initialVGap);
 
-    @FXML
-    private void afficherArbreBinaire() {
+        ScrollPane scrollPane = new ScrollPane(zoneAffichage);
+        scrollPane.setPannable(true); // Permettre le déplacement avec la souris
 
-	initialVGap = 50;
-	vGap = 100;
-	scaleFactor = 1.0;
-	niveauZoom = 1.0;
+        // Ajout de l'échelle pour le zoom
+        Scale scale = new Scale(1, 1, 0, 0);
+        zoneAffichage.getTransforms().add(scale);
 
-	zoneAffichage = new Pane();
-
-	Stage popupStage = new Stage();
-	popupStage.setResizable(true);
-	popupStage.initModality(Modality.APPLICATION_MODAL);
-	popupStage.setTitle(String.format("Arbre binaire du fichier  %s :", "NOM FICHIER")); //TODO
-
-	ArbreBinaireHuffman.drawTree(zoneAffichage, (ArbreBinaireHuffman)elementsDeCompression[1], 540, 100, 800, initialVGap);
-
-	ScrollPane scrollPane = new ScrollPane(zoneAffichage);
-	scrollPane.setPannable(true); // Permettre le déplacement avec la souris
-
-	// Ajout de l'échelle pour le zoom
-	Scale scale = new Scale(1, 1, 0, 0);
-	zoneAffichage.getTransforms().add(scale);
-
-	// Ajout d'un événement de scroll pour le zoom
-	zoneAffichage.setOnScroll(event -> {
-	    scaleFactor = event.getDeltaY() > 0 ? 1.1 : 0.9;
-	    scale.setX(scale.getX() / scaleFactor);
-	    scale.setY(scale.getY() / scaleFactor);
-
-
-
-	    zoomTree(scaleFactor * (scaleFactor > 1 ? 4 : 0.25));
-
-	});
-
-	zoneAffichage.setOnMousePressed(event -> {
-	    mouseX = event.getSceneX();
-	    mouseY = event.getSceneY();
-	});
-
-	// Ajout d'événements de souris pour le déplacement
-	Translate mouvementSouris = new Translate();
-	zoneAffichage.getTransforms().add(mouvementSouris);
-
-	zoneAffichage.setOnMouseDragged(event -> {
-	    double deltaX = event.getSceneX() - mouseX;
-	    double deltaY = event.getSceneY() - mouseY;
-	    mouvementSouris.setX(mouvementSouris.getX() + deltaX);
-	    mouvementSouris.setY(mouvementSouris.getY() + deltaY);
-	    mouseX = event.getSceneX();
-	    mouseY = event.getSceneY();
-	});
+        // Ajout d'un événement de scroll pour le zoom
+        zoneAffichage.setOnScroll(event -> {
+            scaleFactor = event.getDeltaY() > 0 ? 1.1 : 0.9;
+            scale.setX(scale.getX() / scaleFactor);
+            scale.setY(scale.getY() / scaleFactor);
 
 
-	Scene scene = new Scene(zoneAffichage, 1080, 720);
-	popupStage.setTitle("Arbre Binaire de Huffman Visualization");
-	popupStage.setScene(scene);
-	popupStage.show();
-    }
+            
+            zoomTree(scaleFactor * (scaleFactor > 1 ? 4 : 0.25));
 
+        });
+        
+        zoneAffichage.setOnMousePressed(event -> {
+            mouseX = event.getSceneX();
+            mouseY = event.getSceneY();
+        });
+        
+        // Ajout d'événements de souris pour le déplacement
+        Translate mouvementSouris = new Translate();
+        zoneAffichage.getTransforms().add(mouvementSouris);
+
+        zoneAffichage.setOnMouseDragged(event -> {
+            double deltaX = event.getSceneX() - mouseX;
+            double deltaY = event.getSceneY() - mouseY;
+            mouvementSouris.setX(mouvementSouris.getX() + deltaX);
+            mouvementSouris.setY(mouvementSouris.getY() + deltaY);
+            mouseX = event.getSceneX();
+            mouseY = event.getSceneY();
+        });
+
+        
+        Scene scene = new Scene(zoneAffichage, 1080, 720);
+        popupStage.setTitle("Arbre Binaire de Huffman Visualization");
+        popupStage.setScene(scene);
+        popupStage.show();
+	}
+	
     public void zoomTree(double newScaleFactor) {
-	niveauZoom *= newScaleFactor;
-	zoneAffichage.getChildren().clear();
-	ArbreBinaireHuffman.drawTree(zoneAffichage, (ArbreBinaireHuffman)elementsDeCompression[1], 540, 100, initialVGap * niveauZoom, 100);
+    	niveauZoom *= newScaleFactor;
+        zoneAffichage.getChildren().clear();
+        drawTree(zoneAffichage, (ArbreBinaireHuffman)elementsDeCompression[1], 540, 100, initialVGap * niveauZoom, 100);
+    }
+    
+    /**
+     * Crée une fenêtre dans laquelle l'arbre binaire du fichier compressé
+     * sera visualisable
+     */
+    public static void drawTree(Pane pane, ArbreBinaireHuffman node, double x, double y, double hGap, double vGap) {
+        if (node != null) {
+            if (node.getNoeudGauche() != null) {
+                pane.getChildren().add(new Line(x, y, x - hGap, y + vGap));
+                drawTree(pane, node.getNoeudGauche(), x - hGap, y + vGap, hGap / 2, vGap);
+            }
+
+            if (node.getNoeudDroit() != null) {
+                pane.getChildren().add(new Line(x, y, x + hGap, y + vGap));
+                drawTree(pane, node.getNoeudDroit(), x + hGap, y + vGap, hGap / 2, vGap);
+            }
+
+            Text text = new Text(x - 5, y, node.getValeurNoeud());
+            text.setFont(new Font(15));
+            Circle circle = new Circle(x, y, 15);
+            circle.setFill(Color.WHITE);
+            circle.setStroke(Color.BLACK);
+            pane.getChildren().addAll(circle, text);
+        }
     }
 
     @FXML
     void annuler(ActionEvent event) {
-	Main.activerMenu();
+    	Main.activerMenu();
     }
 
 }

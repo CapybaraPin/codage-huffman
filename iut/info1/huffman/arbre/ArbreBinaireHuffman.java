@@ -4,17 +4,8 @@
 
 package iut.info1.huffman.arbre;
 
-import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Arrays;
-import javafx.scene.paint.Paint;
-import javafx.scene.shape.Circle;
-import javafx.scene.shape.Line;
-import javafx.scene.text.Font;
-import javafx.scene.text.Text;
-import javafx.scene.paint.Color;
-
-import javafx.scene.layout.Pane;
 
 /**
  * AB de test
@@ -93,7 +84,7 @@ public class ArbreBinaireHuffman {
 		ArbreBinaireHuffman nouvelArbre;
 		String[] tableauCodesHuffman = new String[tableauCaractereCompresse.length];
 		Object[] tableauLiensHuffman = new Object[tableauCaractereCompresse.length];
-
+		
         // tableau contenant les chemins possibles. La taille est le carré de la taille du tableau de caractères compressés
 		Object[] tableauCheminsSousJacentHuffman 
 					= new String[tableauCaractereCompresse.length*tableauCaractereCompresse.length];
@@ -102,6 +93,7 @@ public class ArbreBinaireHuffman {
 				= new Object[tableauCheminsSousJacentHuffman.length 
 				             + tableauLiensHuffman.length];
 
+		
 		int niveauProfondeur;
 		int positionChemin;
 		
@@ -135,7 +127,9 @@ public class ArbreBinaireHuffman {
 				indiceParcours++) {
 						
 			if (tableauCodesHuffman[indiceParcours].length() > 1) {
-				tableauLiensHuffman[indiceParcours] 
+                System.out.println("tableau liens huffman" + tableauLiensHuffman[indiceParcours]);
+                System.out.println("tableau codes huffman" + tableauCodesHuffman[indiceParcours]);
+				tableauLiensHuffman[indiceParcours]
 						= tableauCodesHuffman[indiceParcours].substring(
 								0, tableauCodesHuffman[indiceParcours].length() - 1);
 			}
@@ -184,11 +178,15 @@ public class ArbreBinaireHuffman {
 		tableauCheminsHuffman = Arrays.stream(tableauCheminsHuffman).distinct().toArray();
 		
 		for (Object lienHuffman : tableauCheminsHuffman) {
+			
 			for (Object codeHuffman : tableauCodesHuffman) {
+			
 				if (lienHuffman != null && lienHuffman.toString().equals(codeHuffman.toString())) {
 					estValide = false;
 				}
+				
 			}
+			
 		}
 		
 		if (!estValide) {
@@ -201,6 +199,8 @@ public class ArbreBinaireHuffman {
 			
 			nouvelArbre.insertionCaractere(caractereCompresse[0], caractereCompresse[1]);
 		}
+		
+		
 		
 		return nouvelArbre;
 	}
@@ -647,31 +647,7 @@ public class ArbreBinaireHuffman {
         return null;
     }
     
-    /**
-     * Crée une fenêtre dans laquelle l'arbre binaire du fichier compressé
-     * sera visualisable
-     */
     
-    public static void drawTree(Pane pane, ArbreBinaireHuffman node, double x, double y, double hGap, double vGap) {
-        if (node != null) {
-            if (node.getNoeudGauche() != null) {
-                pane.getChildren().add(new Line(x, y, x - hGap, y + vGap));
-                drawTree(pane, node.getNoeudGauche(), x - hGap, y + vGap, hGap / 2, vGap);
-            }
-
-            if (node.getNoeudDroit() != null) {
-                pane.getChildren().add(new Line(x, y, x + hGap, y + vGap));
-                drawTree(pane, node.getNoeudDroit(), x + hGap, y + vGap, hGap / 2, vGap);
-            }
-
-            Text text = new Text(x - 5, y, node.getValeurNoeud());
-            text.setFont(new Font(15));
-            Circle circle = new Circle(x, y, 15);
-            circle.setFill(Color.WHITE);
-            circle.setStroke(Color.BLACK);
-            pane.getChildren().addAll(circle, text);
-        }
-    }
 	
     /**
      * Affiche l'arbre dans la console

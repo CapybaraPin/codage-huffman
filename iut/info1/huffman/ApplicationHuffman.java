@@ -4,7 +4,6 @@
  */
 package iut.info1.huffman;
 
-
 /**
  * Permet d'effectuer des operations de compression et
  * de decompression de fichiers
