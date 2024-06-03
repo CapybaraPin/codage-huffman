@@ -93,14 +93,15 @@ public class ArbreBinaireHuffman {
 		ArbreBinaireHuffman nouvelArbre;
 		String[] tableauCodesHuffman = new String[tableauCaractereCompresse.length];
 		Object[] tableauLiensHuffman = new Object[tableauCaractereCompresse.length];
+
+        // tableau contenant les chemins possibles. La taille est le carré de la taille du tableau de caractères compressés
 		Object[] tableauCheminsSousJacentHuffman 
-					= new String[tableauCaractereCompresse.length*2];
+					= new String[tableauCaractereCompresse.length*tableauCaractereCompresse.length];
 		
 		Object[] tableauCheminsHuffman 
 				= new Object[tableauCheminsSousJacentHuffman.length 
 				             + tableauLiensHuffman.length];
 
-		
 		int niveauProfondeur;
 		int positionChemin;
 		
@@ -183,15 +184,11 @@ public class ArbreBinaireHuffman {
 		tableauCheminsHuffman = Arrays.stream(tableauCheminsHuffman).distinct().toArray();
 		
 		for (Object lienHuffman : tableauCheminsHuffman) {
-			
 			for (Object codeHuffman : tableauCodesHuffman) {
-			
 				if (lienHuffman != null && lienHuffman.toString().equals(codeHuffman.toString())) {
 					estValide = false;
 				}
-				
 			}
-			
 		}
 		
 		if (!estValide) {
@@ -204,8 +201,6 @@ public class ArbreBinaireHuffman {
 			
 			nouvelArbre.insertionCaractere(caractereCompresse[0], caractereCompresse[1]);
 		}
-		
-		
 		
 		return nouvelArbre;
 	}
