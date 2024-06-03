@@ -121,9 +121,9 @@ public class ControleurDecompression {
 		cheminDossierDecompressionChoisi = null;
 		if (dossierChoisi != null) {
 
-			cheminDossierDecompressionChoisi = dossierChoisi.getPath();
+			cheminDossierDecompressionChoisi = dossierChoisi.getPath() + "\\";
 
-			cheminDossierResultat.setText(dossierChoisi.getPath());
+			cheminDossierResultat.setText(dossierChoisi.getPath() + "\\");
 		} else {
 			cheminDossierResultat.setText("...");
 	
