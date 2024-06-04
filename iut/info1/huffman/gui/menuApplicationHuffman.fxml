@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Separator?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+<?import javafx.scene.text.Text?>
+
+<VBox alignment="CENTER_LEFT" prefHeight="188.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="iut.info1.huffman.gui.ControleurMenuApp">
+   <children>
+      <Text strokeType="OUTSIDE" strokeWidth="0.0" text="LOGICIEL DE COMPRESSION/DECOMPRESSION" textAlignment="CENTER" wrappingWidth="434.601806640625">
+         <font>
+            <Font size="20.0" />
+         </font>
+      </Text>
+      <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Utilisant l'algorithme de Huffman" textAlignment="CENTER" wrappingWidth="222.65893244743347">
+         <font>
+            <Font size="14.0" />
+         </font>
+         <VBox.margin>
+            <Insets />
+         </VBox.margin>
+      </Text>
+      <HBox alignment="CENTER_LEFT" prefHeight="100.0" prefWidth="200.0" spacing="30.0">
+         <children>
+            <Button fx:id="compresser" mnemonicParsing="false" onAction="#activerCompresser" text="Compresser" />
+            <Button fx:id="decompresser" alignment="CENTER" mnemonicParsing="false" onAction="#activerDecompresser" text="Décompresser" />
+         </children>
+         <padding>
+            <Insets left="10.0" />
+         </padding>
+      </HBox>
+      <Separator prefHeight="1.0" prefWidth="597.0" />
+      <HBox alignment="CENTER_LEFT" prefHeight="0.0" prefWidth="600.0">
+         <children>
+            <VBox prefHeight="200.0" prefWidth="100.0">
+               <children>
+                  <ImageView fitHeight="60.0" fitWidth="115.0">
+                     <image>
+                        <Image url="@logo_IUT.jpg" />
+                     </image>
+                  </ImageView>
+                  <Text strokeType="OUTSIDE" strokeWidth="0.0" text="\@ Copyright IUT RODEZ" textAlignment="CENTER" wrappingWidth="113.0018173456192">
+                     <font>
+                        <Font size="10.0" />
+                     </font>
+                  </Text>
+               </children>
+               <HBox.margin>
+                  <Insets right="350.0" />
+               </HBox.margin>
+            </VBox>
+            <Separator orientation="VERTICAL" prefHeight="200.0" />
+            <VBox alignment="CENTER_LEFT" prefHeight="131.0" prefWidth="155.0">
+               <children>
+                  <Text strokeType="OUTSIDE" strokeWidth="0.0" text="GUTIERREZ Tom" textAlignment="CENTER" wrappingWidth="100.0">
+                     <font>
+                        <Font size="13.0" />
+                     </font>
+                  </Text>
+                  <Text strokeType="OUTSIDE" strokeWidth="0.0" text="ROBLES Hugo" textAlignment="CENTER" wrappingWidth="100.0">
+                     <font>
+                        <Font size="13.0" />
+                     </font>
+                  </Text>
+                  <Text strokeType="OUTSIDE" strokeWidth="0.0" text="PORCER Romain" textAlignment="CENTER" wrappingWidth="100.0">
+                     <font>
+                        <Font size="13.0" />
+                     </font>
+                  </Text>
+                  <Text strokeType="OUTSIDE" strokeWidth="0.0" text="THIERRY Erwan" textAlignment="CENTER" wrappingWidth="100.0">
+                     <font>
+                        <Font size="13.0" />
+                     </font>
+                  </Text>
+               </children>
+            </VBox>
+         </children>
+      </HBox>
+   </children>
+</VBox>
