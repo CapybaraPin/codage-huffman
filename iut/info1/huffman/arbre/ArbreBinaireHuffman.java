@@ -25,13 +25,14 @@ public class ArbreBinaireHuffman {
      * @param noeudDroit le noeud fils droite du noeud actuel
      * @param noeudGauche le noeud fils gauche du noeud actuel
      */
-    public ArbreBinaireHuffman(String valeurNoeud
-	    , ArbreBinaireHuffman noeudGauche
-	    , ArbreBinaireHuffman noeudDroit) {
+    public ArbreBinaireHuffman(
+			String valeurNoeud,
+			ArbreBinaireHuffman noeudGauche,
+			ArbreBinaireHuffman noeudDroit) {
 
-	this.valeurNoeud = valeurNoeud;
-	this.noeudGauche = noeudGauche;
-	this.noeudDroit = noeudDroit;
+		this.valeurNoeud = valeurNoeud;
+		this.noeudGauche = noeudGauche;
+		this.noeudDroit = noeudDroit;
     }
 
     /**
@@ -45,31 +46,30 @@ public class ArbreBinaireHuffman {
      * @return l'arbre binaire ayant pour fils les 2 éléments 
      *         (dans l'ordre des fréquences)
      */
-    public static ArbreBinaireHuffman lienEntreDeuxObjets(Object premierObject
-	    , Object secondObject
-	    , double frequencePremierObjet
-	    , double frequenceSecondObjet) {
+    public static ArbreBinaireHuffman lienEntreDeuxObjets(
+			Object premierObject,
+	    	Object secondObject,
+	    	double frequencePremierObjet,
+	    	double frequenceSecondObjet) {
 
-	ArbreBinaireHuffman premierArbre;
-	ArbreBinaireHuffman secondArbre;
+		ArbreBinaireHuffman premierArbre;
+		ArbreBinaireHuffman secondArbre;
 
-	if (premierObject instanceof ArbreBinaireHuffman) {
-	    premierArbre = (ArbreBinaireHuffman)premierObject;
-	} else {
-	    premierArbre = new ArbreBinaireHuffman(premierObject.toString(), null, null);
-	}
+		if (premierObject instanceof ArbreBinaireHuffman) {
+			premierArbre = (ArbreBinaireHuffman)premierObject;
+		} else {
+			premierArbre = new ArbreBinaireHuffman(premierObject.toString(), null, null);
+		}
 
-	if (secondObject instanceof ArbreBinaireHuffman) {
-	    secondArbre = (ArbreBinaireHuffman)secondObject;
-	} else {
-	    secondArbre = new ArbreBinaireHuffman(secondObject.toString(), null, null);
-	}
+		if (secondObject instanceof ArbreBinaireHuffman) {
+			secondArbre = (ArbreBinaireHuffman)secondObject;
+		} else {
+			secondArbre = new ArbreBinaireHuffman(secondObject.toString(), null, null);
+		}
 
-	return new ArbreBinaireHuffman("lien",
-		                  (frequencePremierObjet > frequenceSecondObjet
-		                   ? premierArbre : secondArbre), 
-		                  (frequencePremierObjet > frequenceSecondObjet
-			           ? secondArbre  : premierArbre)); 
+		return new ArbreBinaireHuffman("lien",
+			(frequencePremierObjet > frequenceSecondObjet ? premierArbre : secondArbre),
+			(frequencePremierObjet > frequenceSecondObjet ? secondArbre : premierArbre));
     }
 
     /**
@@ -83,125 +83,117 @@ public class ArbreBinaireHuffman {
     public static ArbreBinaireHuffman recuperationArbreHuffman(
 	                                  String[][] tableauCaractereCompresse
 	                              ) throws IllegalArgumentException {
-	int niveauProfondeur;
-	int positionChemin;
+		int niveauProfondeur;
+		int positionChemin;
 
-	boolean presenceChemins;
-	boolean estValide;
-	
-	ArbreBinaireHuffman nouvelArbre;
-	String[] tableauCodesHuffman = new String[tableauCaractereCompresse.length];
-	Object[] tableauLiensHuffman = new Object[tableauCaractereCompresse.length];
+		boolean presenceChemins;
+		boolean estValide;
+		
+		ArbreBinaireHuffman nouvelArbre;
+		String[] tableauCodesHuffman = new String[tableauCaractereCompresse.length];
+		Object[] tableauLiensHuffman = new Object[tableauCaractereCompresse.length];
 
-	/* Tableau contenant les chemins possibles. La taille est le carré de la taille du tableau de caractères compressés */
-	Object[] tableauCheminsSousJacentHuffman =
-		new String[ tableauCaractereCompresse.length
-		          * tableauCaractereCompresse.length];
+		/* Tableau contenant les chemins possibles. La taille est le carré de la taille du tableau de caractères compressés */
+		Object[] tableauCheminsSousJacentHuffman =
+			new String[tableauCaractereCompresse.length
+					 * tableauCaractereCompresse.length];
 
-	Object[] tableauCheminsHuffman =
-		new Object[ tableauCheminsSousJacentHuffman.length 
-	                  + tableauLiensHuffman.length];
+		Object[] tableauCheminsHuffman =
+			new Object[tableauCheminsSousJacentHuffman.length 
+					 + tableauLiensHuffman.length];
 
-	for (int indiceParcours = 0;
-		 indiceParcours < tableauCodesHuffman.length;
-		 indiceParcours++) {
+		for (int indiceParcours = 0;
+			indiceParcours < tableauCodesHuffman.length;
+			indiceParcours++) {
 
-	    tableauCodesHuffman[indiceParcours] 
-		    = tableauCaractereCompresse[indiceParcours][1];
-	}
-
-	Arrays.sort(tableauCodesHuffman);
-
-	estValide = true;
-	for (int indiceParcours = 0;
-		 indiceParcours < tableauCodesHuffman.length - 1;
-		 indiceParcours++) {
-
-	    if (tableauCodesHuffman[indiceParcours]
-		       .equals(tableauCodesHuffman[indiceParcours + 1])) {
-
-		estValide = false;
-	    }
-	}
-
-	for (int indiceParcours = 0;
-		 indiceParcours < tableauLiensHuffman.length;
-		 indiceParcours++) {
-
-	    if (tableauCodesHuffman[indiceParcours].length() > 1) {
-		System.out.println("tableau liens huffman" 
-	                          + tableauLiensHuffman[indiceParcours]);
-		System.out.println("tableau codes huffman"
-	                          + tableauCodesHuffman[indiceParcours]);
-		tableauLiensHuffman[indiceParcours] =
-			tableauCodesHuffman[indiceParcours]
-			.substring(0, tableauCodesHuffman[indiceParcours].length() - 1);
-	    }
-	}
-
-	tableauLiensHuffman = Arrays.stream(tableauLiensHuffman).distinct().toArray();
-
-	positionChemin = 0;
-	niveauProfondeur = 1;
-	presenceChemins= true;
-	while (presenceChemins) {
-
-	    presenceChemins = false;
-	    for (int indiceParcours = 0;
-		     indiceParcours < tableauLiensHuffman.length;
-		     indiceParcours++) {
-
-
-		if (   tableauLiensHuffman[indiceParcours] instanceof String 
-		    && tableauLiensHuffman[indiceParcours].toString().length()
-		       > niveauProfondeur) {
-
-		    tableauCheminsSousJacentHuffman[positionChemin] =
-			    tableauLiensHuffman[indiceParcours].toString()
-			    .substring(0, niveauProfondeur + 1);
-		    positionChemin += 1;
-		    presenceChemins = true;
+			tableauCodesHuffman[indiceParcours] 
+				= tableauCaractereCompresse[indiceParcours][1];
 		}
-	    }
-	    niveauProfondeur += 1;
-	}
 
-	tableauCheminsSousJacentHuffman = Arrays.stream(tableauCheminsSousJacentHuffman)
-		                                .distinct()
-		                                .toArray();
+		Arrays.sort(tableauCodesHuffman);
 
-	System.arraycopy(tableauCheminsSousJacentHuffman, 0, tableauCheminsHuffman
-		       , 0, tableauCheminsSousJacentHuffman.length);
+		estValide = true;
+		for (int indiceParcours = 0;
+			indiceParcours < tableauCodesHuffman.length - 1;
+			indiceParcours++) {
 
-	System.arraycopy(tableauLiensHuffman, 0, tableauCheminsHuffman
-		       , tableauCheminsSousJacentHuffman.length
-		       , tableauLiensHuffman.length);
+			if (tableauCodesHuffman[indiceParcours]
+				.equals(tableauCodesHuffman[indiceParcours + 1])) {
 
-	tableauCheminsHuffman = Arrays.stream(tableauCheminsHuffman)
-		                      .distinct()
-		                      .toArray();
-
-	for (Object lienHuffman : tableauCheminsHuffman) {
-
-	    for (Object codeHuffman : tableauCodesHuffman) {
-
-		if (   lienHuffman != null 
-		    && lienHuffman.toString().equals(codeHuffman.toString())) {
-		       estValide = false;
+				estValide = false;
+			}
 		}
-	    }
-	}
 
-	if (!estValide) {
-	    throw new IllegalArgumentException("Le tableau d'encodage est invalide !");
-	}
+		for (int indiceParcours = 0;
+			indiceParcours < tableauLiensHuffman.length;
+			indiceParcours++) {
 
-	nouvelArbre = new ArbreBinaireHuffman("lien", null, null);
-	for (String[] caractereCompresse : tableauCaractereCompresse) {
+			if (tableauCodesHuffman[indiceParcours].length() > 1) {
+				tableauLiensHuffman[indiceParcours] =
+					tableauCodesHuffman[indiceParcours]
+					.substring(0, tableauCodesHuffman[indiceParcours].length() - 1);
+			}
+		}
 
-	    nouvelArbre.insertionCaractere(caractereCompresse[0], caractereCompresse[1]);
-	}
-	return nouvelArbre;
+		tableauLiensHuffman = Arrays.stream(tableauLiensHuffman).distinct().toArray();
+
+		positionChemin = 0;
+		niveauProfondeur = 1;
+		presenceChemins= true;
+		while (presenceChemins) {
+
+			presenceChemins = false;
+			for (int indiceParcours = 0;
+				indiceParcours < tableauLiensHuffman.length;
+				indiceParcours++) {
+
+				if (tableauLiensHuffman[indiceParcours] instanceof String 
+				&& tableauLiensHuffman[indiceParcours].toString().length()
+				> niveauProfondeur) {
+
+					tableauCheminsSousJacentHuffman[positionChemin] =
+						tableauLiensHuffman[indiceParcours].toString()
+						.substring(0, niveauProfondeur + 1);
+					positionChemin += 1;
+					presenceChemins = true;
+				}
+			}
+			niveauProfondeur += 1;
+		}
+
+		tableauCheminsSousJacentHuffman = Arrays.stream(tableauCheminsSousJacentHuffman)
+											.distinct()
+											.toArray();
+
+		System.arraycopy(tableauCheminsSousJacentHuffman, 0, tableauCheminsHuffman
+				, 0, tableauCheminsSousJacentHuffman.length);
+
+		System.arraycopy(tableauLiensHuffman, 0, tableauCheminsHuffman
+				, tableauCheminsSousJacentHuffman.length
+				, tableauLiensHuffman.length);
+
+		tableauCheminsHuffman = Arrays.stream(tableauCheminsHuffman)
+								.distinct()
+								.toArray();
+
+		for (Object lienHuffman : tableauCheminsHuffman) {
+			for (Object codeHuffman : tableauCodesHuffman) {
+				if (lienHuffman != null 
+				&& lienHuffman.toString().equals(codeHuffman.toString())) {
+					estValide = false;
+				}
+			}
+		}
+
+		if (!estValide) {
+			throw new IllegalArgumentException("Le tableau d'encodage est invalide !");
+		}
+
+		nouvelArbre = new ArbreBinaireHuffman("lien", null, null);
+		for (String[] caractereCompresse : tableauCaractereCompresse) {
+			nouvelArbre.insertionCaractere(caractereCompresse[0], caractereCompresse[1]);
+		}
+		return nouvelArbre;
     }
 
     /**
@@ -217,111 +209,110 @@ public class ArbreBinaireHuffman {
 	                                  double[] frequences
 	                              ) {
 
-	double plusPetiteFrequence;
-	double secondePlusPetiteFrequence;
-	double sommeFrequences;
-	
-	int indexPlusPetiteFrequence;
-	int indexSecondePlusPetiteFrequence;
-	int indexReequilibrage;
+		double plusPetiteFrequence;
+		double secondePlusPetiteFrequence;
+		double sommeFrequences;
+		
+		int indexPlusPetiteFrequence;
+		int indexSecondePlusPetiteFrequence;
+		int indexReequilibrage;
 
-	double[] frequenceCaracteres = Arrays.copyOf(frequences, frequences.length);
-	Object[] tblCaracteres = Arrays.copyOf(caracteres, caracteres.length);
+		double[] frequenceCaracteres = Arrays.copyOf(frequences, frequences.length);
+		Object[] tblCaracteres = Arrays.copyOf(caracteres, caracteres.length);
 
-	indexReequilibrage = 0;
-	
-	/* Initialisation avec des valeures minimales absurdes */
-	plusPetiteFrequence = secondePlusPetiteFrequence = 2.0f;
-	indexPlusPetiteFrequence = indexSecondePlusPetiteFrequence = -1;
-	sommeFrequences = 0;
-	for (double frequence : frequenceCaracteres) {
-	    sommeFrequences += frequence;
-	}
-
-	if (   sommeFrequences < 0.99
-	    || sommeFrequences > 1.01) {
-
-	    throw new IllegalArgumentException("Erreur de frequencage");
-	}
-
-	if (caracteres.length == 0 || frequences.length == 0) {
-		throw new IllegalArgumentException("Erreur de paramètres");
-	}
-
-	if (caracteres.length == 1) {
-		return new ArbreBinaireHuffman("lien", new ArbreBinaireHuffman(caracteres[0].toString(), null, null), null);
-	}
-
-	while (frequenceCaracteres.length > 1) {
-
-	    for (int indexDeParcours = 0;
-                indexDeParcours < frequenceCaracteres.length;
-                indexDeParcours++) {
-
-            if (frequenceCaracteres[indexDeParcours] < plusPetiteFrequence) {
-                plusPetiteFrequence = frequenceCaracteres[indexDeParcours];
-
-                indexPlusPetiteFrequence = indexDeParcours;
-            }
-        }
-
-	    for (int indexParcours = 0;
-		     indexParcours < frequenceCaracteres.length;
-		     indexParcours++) {
-
-		if (frequenceCaracteres[indexParcours] <= secondePlusPetiteFrequence 
-			&& frequenceCaracteres[indexParcours] >= plusPetiteFrequence
-			&& indexParcours != indexPlusPetiteFrequence) {
-
-		    secondePlusPetiteFrequence = frequenceCaracteres[indexParcours];
-		    indexSecondePlusPetiteFrequence = indexParcours;
+		indexReequilibrage = 0;
+		
+		/* Initialisation avec des valeures minimales absurdes */
+		plusPetiteFrequence = secondePlusPetiteFrequence = 2.0f;
+		indexPlusPetiteFrequence = indexSecondePlusPetiteFrequence = -1;
+		sommeFrequences = 0;
+		for (double frequence : frequenceCaracteres) {
+			sommeFrequences += frequence;
 		}
-	    }
 
-	    Object[] nouvelleTableCaracteres =
-		    new Object[tblCaracteres.length - 1];
-	    double[] nouvellesFrequencesDesCaracteres =
-		    new double[frequenceCaracteres.length - 1];
+		if (sommeFrequences < 0.99 || sommeFrequences > 1.01) {
 
-	    for (int indexParcours = 0; 
-		     indexParcours < frequenceCaracteres.length;
-		     indexParcours++) {
-
-		if (indexParcours ==
-			Math.min(indexPlusPetiteFrequence,
-				 indexSecondePlusPetiteFrequence)) {
-
-		    nouvelleTableCaracteres[indexParcours] =
-			    lienEntreDeuxObjets(
-				    tblCaracteres[indexPlusPetiteFrequence],
-				    tblCaracteres[indexSecondePlusPetiteFrequence],
-				    frequenceCaracteres[indexPlusPetiteFrequence],
-				    frequenceCaracteres[indexSecondePlusPetiteFrequence]
-			    );
-
-		    nouvellesFrequencesDesCaracteres[indexParcours] =
-			    plusPetiteFrequence + secondePlusPetiteFrequence;
-
-		} else if (indexParcours ==
-			Math.max(indexPlusPetiteFrequence,
-				 indexSecondePlusPetiteFrequence)) {
-		    indexReequilibrage = 1;
-		}else {
-		    nouvelleTableCaracteres[indexParcours - indexReequilibrage]
-			    = tblCaracteres[indexParcours];
-		    nouvellesFrequencesDesCaracteres[indexParcours - indexReequilibrage]
-			    = frequenceCaracteres[indexParcours];
+			throw new IllegalArgumentException("Erreur de frequencage");
 		}
-	    }
-	    tblCaracteres       = nouvelleTableCaracteres;
-	    frequenceCaracteres = nouvellesFrequencesDesCaracteres;
-	    indexPlusPetiteFrequence        = -1;
-	    indexSecondePlusPetiteFrequence = -1;
-	    indexReequilibrage = 0;
-	    plusPetiteFrequence = 1;
-	    secondePlusPetiteFrequence = 1;
-	}        
-	return (ArbreBinaireHuffman)(tblCaracteres[0]);
+
+		if (caracteres.length == 0 || frequences.length == 0) {
+			throw new IllegalArgumentException("Erreur de paramètres");
+		}
+
+		if (caracteres.length == 1) {
+			return new ArbreBinaireHuffman("lien", new ArbreBinaireHuffman(caracteres[0].toString(), null, null), null);
+		}
+
+		while (frequenceCaracteres.length > 1) {
+			for (int indexDeParcours = 0;
+					indexDeParcours < frequenceCaracteres.length;
+					indexDeParcours++) {
+
+				if (frequenceCaracteres[indexDeParcours] < plusPetiteFrequence) {
+					plusPetiteFrequence = frequenceCaracteres[indexDeParcours];
+
+					indexPlusPetiteFrequence = indexDeParcours;
+				}
+			}
+
+			for (int indexParcours = 0;
+				indexParcours < frequenceCaracteres.length;
+				indexParcours++) {
+
+				if (frequenceCaracteres[indexParcours] <= secondePlusPetiteFrequence 
+					&& frequenceCaracteres[indexParcours] >= plusPetiteFrequence
+					&& indexParcours != indexPlusPetiteFrequence) {
+
+					secondePlusPetiteFrequence = frequenceCaracteres[indexParcours];
+					indexSecondePlusPetiteFrequence = indexParcours;
+				}
+			}
+
+			Object[] nouvelleTableCaracteres =
+				new Object[tblCaracteres.length - 1];
+			double[] nouvellesFrequencesDesCaracteres =
+				new double[frequenceCaracteres.length - 1];
+
+			for (int indexParcours = 0; 
+				indexParcours < frequenceCaracteres.length;
+				indexParcours++) {
+
+				if (indexParcours ==
+					Math.min(indexPlusPetiteFrequence,
+						indexSecondePlusPetiteFrequence)) {
+
+					nouvelleTableCaracteres[indexParcours] =
+						lienEntreDeuxObjets(
+							tblCaracteres[indexPlusPetiteFrequence],
+							tblCaracteres[indexSecondePlusPetiteFrequence],
+							frequenceCaracteres[indexPlusPetiteFrequence],
+							frequenceCaracteres[indexSecondePlusPetiteFrequence]
+						);
+
+					nouvellesFrequencesDesCaracteres[indexParcours] =
+						plusPetiteFrequence + secondePlusPetiteFrequence;
+
+				} else if (indexParcours ==
+					Math.max(indexPlusPetiteFrequence,
+						indexSecondePlusPetiteFrequence)) {
+					indexReequilibrage = 1;
+				} else {
+					nouvelleTableCaracteres[indexParcours - indexReequilibrage]
+						= tblCaracteres[indexParcours];
+					nouvellesFrequencesDesCaracteres[indexParcours - indexReequilibrage]
+						= frequenceCaracteres[indexParcours];
+				}
+			}
+			tblCaracteres       = nouvelleTableCaracteres;
+			frequenceCaracteres = nouvellesFrequencesDesCaracteres;
+			indexPlusPetiteFrequence        = -1;
+			indexSecondePlusPetiteFrequence = -1;
+			indexReequilibrage = 0;
+			plusPetiteFrequence = 1;
+			secondePlusPetiteFrequence = 1;
+		}        
+
+		return (ArbreBinaireHuffman)(tblCaracteres[0]);
     }
 
     /**
@@ -331,117 +322,114 @@ public class ArbreBinaireHuffman {
      */
     public String[][] parcoursProfondeur() {
 
-	boolean profondeurEstValide;
+		boolean profondeurEstValide;
 
-	int indiceDonneesArbre;
-	int nombreLiens;
+		int indiceDonneesArbre;
+		int nombreLiens;
 
-	int[] cheminPossible;
-	
-	String valeurChemin;
+		int[] cheminPossible;
+		
+		String valeurChemin;
 
-	String[] liensExistants;
-	String[] cheminsPossibles;
-	String[] nouveauxCheminsPossibles;
-	String[] cheminPartitionne;
+		String[] liensExistants;
+		String[] cheminsPossibles;
+		String[] nouveauxCheminsPossibles;
+		String[] cheminPartitionne;
 
-	String[][] donneesArbre;
-	String[][] nouvellesDonneesArbres;
+		String[][] donneesArbre;
+		String[][] nouvellesDonneesArbres;
 
-	profondeurEstValide = true;
-	indiceDonneesArbre = 0;
-	nombreLiens = 0;
-	donneesArbre = new String[0][2];
-	nouvellesDonneesArbres = new String[1][2];
+		profondeurEstValide = true;
+		indiceDonneesArbre = 0;
+		nombreLiens = 0;
+		donneesArbre = new String[0][2];
 
-	cheminsPossibles = new String[]{"0", "1"};
-	liensExistants   = new String[4];
-	nouveauxCheminsPossibles = new String[4];
-	valeurChemin = "";    
-	while (profondeurEstValide) {
+		cheminsPossibles = new String[]{"0", "1"};
+		liensExistants   = new String[4];
+		while (profondeurEstValide) {
 
-	    for (int indiceParcours = 0;
-		    indiceParcours < cheminsPossibles.length;
-		    indiceParcours++) {
+			for (int indiceParcours = 0;
+				indiceParcours < cheminsPossibles.length;
+				indiceParcours++) {
 
-		if (cheminsPossibles[indiceParcours] != null 
-			&& !cheminsPossibles[indiceParcours].contains("null")){
+			if (cheminsPossibles[indiceParcours] != null 
+				&& !cheminsPossibles[indiceParcours].contains("null")){
 
-		    cheminPartitionne = cheminsPossibles[indiceParcours]
-			    .split(", ");
+				cheminPartitionne = cheminsPossibles[indiceParcours]
+					.split(", ");
 
-		    cheminPossible = new int[cheminPartitionne.length];
+				cheminPossible = new int[cheminPartitionne.length];
 
-		    for (int indiceRemplacement = 0; 
-			     indiceRemplacement < cheminPartitionne.length;
-			     indiceRemplacement++) {
+				for (int indiceRemplacement = 0; 
+					indiceRemplacement < cheminPartitionne.length;
+					indiceRemplacement++) {
 
-			cheminPossible[indiceRemplacement] = 
-				Integer.parseInt(
-					    cheminPartitionne[indiceRemplacement]
-					);
-		    }  
+				cheminPossible[indiceRemplacement] = 
+					Integer.parseInt(
+							cheminPartitionne[indiceRemplacement]
+						);
+				}  
 
-		    valeurChemin = this.valeurNoeudCherche(cheminPossible);
+				valeurChemin = this.valeurNoeudCherche(cheminPossible);
 
-		    if (valeurChemin != null && valeurChemin.equals("lien")) {
+				if (valeurChemin != null && valeurChemin.equals("lien")) {
 
-			liensExistants[nombreLiens] = 
-				cheminsPossibles[indiceParcours];
-			nombreLiens += 1;
+				liensExistants[nombreLiens] = 
+					cheminsPossibles[indiceParcours];
+				nombreLiens += 1;
 
-		    } else if (valeurChemin != null) {
+				} else if (valeurChemin != null) {
 
-			nouvellesDonneesArbres =
-				new String[donneesArbre.length + 1][2];
+				nouvellesDonneesArbres =
+					new String[donneesArbre.length + 1][2];
 
-			for (int indiceRemplacement = 0;
-				 indiceRemplacement < donneesArbre.length;
-				 indiceRemplacement++) {
+				for (int indiceRemplacement = 0;
+					indiceRemplacement < donneesArbre.length;
+					indiceRemplacement++) {
 
-			    nouvellesDonneesArbres[indiceRemplacement] 
-				    = donneesArbre[indiceRemplacement];
+					nouvellesDonneesArbres[indiceRemplacement] 
+						= donneesArbre[indiceRemplacement];
+				}
+
+				nouvellesDonneesArbres[indiceDonneesArbre][0] =
+					Integer.toBinaryString(
+							Character.hashCode(valeurChemin.charAt(0))
+						);
+
+				nouvellesDonneesArbres[indiceDonneesArbre][1] = 
+					cheminsPossibles[indiceParcours];
+
+				donneesArbre = nouvellesDonneesArbres;
+
+				indiceDonneesArbre++;
+				}
+			}
 			}
 
-			nouvellesDonneesArbres[indiceDonneesArbre][0] =
-				Integer.toBinaryString(
-					    Character.hashCode(valeurChemin.charAt(0))
-					);
+			if (liensExistants.length == 0) {
+			profondeurEstValide = false;
+			}
 
-			nouvellesDonneesArbres[indiceDonneesArbre][1] = 
-				cheminsPossibles[indiceParcours];
+			nouveauxCheminsPossibles = new String[nombreLiens * 2];
 
-			donneesArbre = nouvellesDonneesArbres;
+			if (profondeurEstValide) {
 
-			indiceDonneesArbre++;
-		    }
-		}
-	    }
+			for (int indiceParcours = 0;
+				indiceParcours < nouveauxCheminsPossibles.length;
+				indiceParcours+=2) {
 
-	    if (liensExistants.length == 0) {
-		profondeurEstValide = false;
-	    }
+				nouveauxCheminsPossibles[indiceParcours] =
+					liensExistants[indiceParcours / 2] + ", 0";
 
-	    nouveauxCheminsPossibles = new String[nombreLiens * 2];
-
-	    if (profondeurEstValide) {
-
-		for (int indiceParcours = 0;
-			indiceParcours < nouveauxCheminsPossibles.length;
-			indiceParcours+=2) {
-
-		    nouveauxCheminsPossibles[indiceParcours] =
-			    liensExistants[indiceParcours / 2] + ", 0";
-
-		    nouveauxCheminsPossibles[indiceParcours + 1] =
-			    liensExistants[indiceParcours / 2] + ", 1";
-		}
-	    }
-	    liensExistants = new String[nombreLiens * 2];
-	    cheminsPossibles = nouveauxCheminsPossibles;
-	    nombreLiens = 0;
-	}         
-	return donneesArbre; 
+				nouveauxCheminsPossibles[indiceParcours + 1] =
+					liensExistants[indiceParcours / 2] + ", 1";
+			}
+			}
+			liensExistants = new String[nombreLiens * 2];
+			cheminsPossibles = nouveauxCheminsPossibles;
+			nombreLiens = 0;
+		}         
+		return donneesArbre; 
     }
 
     /**
@@ -453,40 +441,40 @@ public class ArbreBinaireHuffman {
 
     public void insertionCaractere(String caractereInsere, String cheminInsertion) {
 
-	char cheminActuel;
+		char cheminActuel;
 
-	cheminActuel = cheminInsertion.charAt(0);
+		cheminActuel = cheminInsertion.charAt(0);
 
-	if (cheminActuel == 'f') {
-	    System.out.println("OUI");
-	}
-
-	if (cheminInsertion.length() == 1) {
-
-	    if (cheminActuel == '0') {
-		this.noeudGauche = new ArbreBinaireHuffman(caractereInsere, null, null);
-	    } else {
-		this.noeudDroit =  new ArbreBinaireHuffman(caractereInsere, null, null);
-	    }
-	} else {
-
-	    if (cheminActuel == '0') {
-
-		if (this.noeudGauche == null) {
-		    this.noeudGauche = new ArbreBinaireHuffman("lien", null, null);
+		if (cheminActuel == 'f') {
+			System.out.println("OUI");
 		}
 
-		this.noeudGauche.insertionCaractere(caractereInsere, cheminInsertion.substring(1, cheminInsertion.length()));
+		if (cheminInsertion.length() == 1) {
 
-	    } else {
+			if (cheminActuel == '0') {
+			this.noeudGauche = new ArbreBinaireHuffman(caractereInsere, null, null);
+			} else {
+			this.noeudDroit =  new ArbreBinaireHuffman(caractereInsere, null, null);
+			}
+		} else {
 
-		if (this.noeudDroit == null) {
-		    this.noeudDroit = new ArbreBinaireHuffman("lien", null, null);
+			if (cheminActuel == '0') {
+
+			if (this.noeudGauche == null) {
+				this.noeudGauche = new ArbreBinaireHuffman("lien", null, null);
+			}
+
+			this.noeudGauche.insertionCaractere(caractereInsere, cheminInsertion.substring(1, cheminInsertion.length()));
+
+			} else {
+
+			if (this.noeudDroit == null) {
+				this.noeudDroit = new ArbreBinaireHuffman("lien", null, null);
+			}
+
+			this.noeudDroit.insertionCaractere(caractereInsere, cheminInsertion.substring(1, cheminInsertion.length()));
+			}
 		}
-
-		this.noeudDroit.insertionCaractere(caractereInsere, cheminInsertion.substring(1, cheminInsertion.length()));
-	    }
-	}
     }
 
     /**
@@ -494,10 +482,10 @@ public class ArbreBinaireHuffman {
      * @return noeudDroit
      */
     public ArbreBinaireHuffman getNoeudDroit() {
-	if (noeudDroit != null) {
-	    return noeudDroit;
-	} 
-	return null;
+		if (noeudDroit != null) {
+			return noeudDroit;
+		} 
+		return null;
     }
 
     /**
@@ -505,10 +493,10 @@ public class ArbreBinaireHuffman {
      * @return noeudGauche
      */
     public ArbreBinaireHuffman getNoeudGauche() {
-	if (noeudGauche != null) {
-	    return noeudGauche;
-	} 
-	return null;
+		if (noeudGauche != null) {
+			return noeudGauche;
+		} 
+		return null;
     }
 
     /**
@@ -520,38 +508,38 @@ public class ArbreBinaireHuffman {
      * @return le caractère cherché stockés dans l'arborescence
      */
     public String valeurNoeudCherche(int[] tblDeRecherche) {
+		int[] nouveauTblDeRecherche;
 
-	int[] nouveauTblDeRecherche;
+		if (tblDeRecherche.length == 0) {
+			return valeurNoeud;
+		}
 
-	if (tblDeRecherche.length == 0) {
-	    return valeurNoeud;
-	}
+		nouveauTblDeRecherche = new int[tblDeRecherche.length - 1];
 
-	nouveauTblDeRecherche = new int[tblDeRecherche.length - 1];
+		for (int indexDeRecherche = 0;
+			indexDeRecherche < nouveauTblDeRecherche.length;
+			indexDeRecherche++) {
 
-	for (int indexDeRecherche = 0;
-		indexDeRecherche < nouveauTblDeRecherche.length;
-		indexDeRecherche++) {
+			nouveauTblDeRecherche[indexDeRecherche] 
+				= tblDeRecherche[indexDeRecherche + 1];
+		}
 
-	    nouveauTblDeRecherche[indexDeRecherche] 
-		    = tblDeRecherche[indexDeRecherche + 1];
-	}
+		/* Si le chemin suivant est 0, on va dans le noeud gauche */
+		if (tblDeRecherche[0] == 1) {
 
-	/* Si le chemin suivant est 0, on va dans le noeud gauche */
-	if (tblDeRecherche[0] == 1) {
+			if (getNoeudDroit() == null) {
+			return null;
+			}
 
-	    if (getNoeudDroit() == null) {
-		return null;
-	    }
+			return noeudDroit.valeurNoeudCherche(nouveauTblDeRecherche);
+		}
 
-	    return noeudDroit.valeurNoeudCherche(nouveauTblDeRecherche);
-	}
+		if (getNoeudGauche() == null) {
+			return null;
+		}
 
-	if (getNoeudGauche() == null) {
-	    return null;
-	}
-	/* Sinon (le chemin suivant est 1), on va dans le noeud droit */
-	return noeudGauche.valeurNoeudCherche(nouveauTblDeRecherche);
+		/* Sinon (le chemin suivant est 1), on va dans le noeud droit */
+		return noeudGauche.valeurNoeudCherche(nouveauTblDeRecherche);
     }
 
     /**
@@ -561,88 +549,85 @@ public class ArbreBinaireHuffman {
      * @return le texte décompressé
      */
     public String[] restitutionTexteOriginal(String donneesFichierBinaire) {
-	int nbZerosEnlevable;
-	int ligne;
-	int[] cheminSuivi;
-	String donneesAnalyse;
-	char symboleEncode;
-	String[] tabContenuDecompresse;
+		int nbZerosEnlevable;
+		int ligne;
+		int[] cheminSuivi;
+		String donneesAnalyse;
+		char symboleEncode;
+		String[] tabContenuDecompresse;
 
-	ArrayList<String> chaineDecompresse = new ArrayList<>();
-	ArrayList<Integer> cheminGenere = new ArrayList<>();
+		ArrayList<String> chaineDecompresse = new ArrayList<>();
+		ArrayList<Integer> cheminGenere = new ArrayList<>();
 
-	if (donneesFichierBinaire.length() % 8 != 0) {
-	    throw new IllegalArgumentException("Contenu binaire incorrect");
-	}
+		if (donneesFichierBinaire.length() % 8 != 0) {
+			throw new IllegalArgumentException("Contenu binaire incorrect");
+		}
 
-	nbZerosEnlevable 
-	= Integer.parseInt(donneesFichierBinaire
-		 .substring(donneesFichierBinaire.length() - 8,
-			donneesFichierBinaire.length()), 2);
+		nbZerosEnlevable 
+		= Integer.parseInt(donneesFichierBinaire
+			.substring(donneesFichierBinaire.length() - 8,
+					   donneesFichierBinaire.length()), 2);
 
-	donneesAnalyse = donneesFichierBinaire
-		.substring(0, donneesFichierBinaire.length() - 8);
+		donneesAnalyse = donneesFichierBinaire
+			.substring(0, donneesFichierBinaire.length() - 8);
 
-	donneesAnalyse = donneesAnalyse.substring(0, donneesAnalyse.length() - 8)
-		       + donneesAnalyse.substring(donneesAnalyse.length() - 8
-		       + nbZerosEnlevable,
-			 donneesAnalyse.length());
+		donneesAnalyse = donneesAnalyse.substring(0, donneesAnalyse.length() - 8)
+				+ donneesAnalyse.substring(donneesAnalyse.length() - 8
+				+ nbZerosEnlevable,	
+				donneesAnalyse.length());
 
-	ligne = 0;
-	chaineDecompresse.add("");
-	for (int indiceParcours = 0;
-		 indiceParcours < donneesAnalyse.length();
-		 indiceParcours++) {
+		ligne = 0;
+		chaineDecompresse.add("");
+		for (int indiceParcours = 0;
+			indiceParcours < donneesAnalyse.length();
+			indiceParcours++) {
 
-	    cheminGenere.add(Integer.valueOf(donneesAnalyse.charAt(indiceParcours)) - 48);
+			cheminGenere.add(Integer.valueOf(donneesAnalyse.charAt(indiceParcours)) - 48);
 
-	    cheminSuivi = cheminGenere.stream().mapToInt(i -> i).toArray();
+			cheminSuivi = cheminGenere.stream().mapToInt(i -> i).toArray();
 
-	    if (!this.valeurNoeudCherche(cheminSuivi).equals("lien")) {
-            if (this.valeurNoeudCherche(cheminSuivi).equals("\n")) {
-                ligne++;
-                chaineDecompresse.add("");
-            } else {
-                symboleEncode = (char) Integer.parseInt(this.valeurNoeudCherche(cheminSuivi), 2);
-                chaineDecompresse.set(ligne, chaineDecompresse.get(ligne) + symboleEncode);
+			if (!this.valeurNoeudCherche(cheminSuivi).equals("lien")) {
+				if (this.valeurNoeudCherche(cheminSuivi).equals("\n")) {
+					ligne++;
+					chaineDecompresse.add("");
+				} else {
+					symboleEncode = (char) Integer.parseInt(this.valeurNoeudCherche(cheminSuivi), 2);
+					chaineDecompresse.set(ligne, chaineDecompresse.get(ligne) + symboleEncode);
 
-                cheminGenere.clear();
-            }
-	    }
-	}
-	tabContenuDecompresse = new String[chaineDecompresse.size()];
-	chaineDecompresse.toArray(tabContenuDecompresse);
-	return tabContenuDecompresse;
+					cheminGenere.clear();
+				}
+			}
+		}
+		tabContenuDecompresse = new String[chaineDecompresse.size()];
+		chaineDecompresse.toArray(tabContenuDecompresse);
+		return tabContenuDecompresse;
     }
 
-    /**
+ /**
      * Calcul la taille de l'arbre
      * @return la taille de l'arbre en entier
      */
-    public int tailleMaxArbre() {
-	return 1 + Math.max(
-		(this.getNoeudGauche() != null
-	       ? this.getNoeudGauche().tailleMaxArbre() : 0),
-		(this.getNoeudDroit()  != null
-	       ? this.getNoeudDroit() .tailleMaxArbre() : 0));
-    }
-
+	public int calculateTreeSize() {
+		return 1 + Math.max(
+			(this.getNoeudGauche() != null ? this.getNoeudGauche().calculateTreeSize() : 0),
+			(this.getNoeudDroit() != null ? this.getNoeudDroit().calculateTreeSize() : 0));
+	}
     /**
      * renvoi la valeur de l'arbre 
      * @return valeurNoeud ou null si le noeud 
      */
     public String getValeurNoeud() {
-	if (valeurNoeud != "lien" && valeurNoeud != null) {
-	    return valeurNoeud;
-	} 
-	return null;
+		if (valeurNoeud != "lien" && valeurNoeud != null) {
+			return valeurNoeud;
+		} 
+		return null;
     }
 
     /**
      * Affiche l'arbre dans la console
      */
     public void afficherArbre() {
-	afficherArbre("", true);
+		afficherArbre("", true);
     }
 
     /**
@@ -651,17 +636,17 @@ public class ArbreBinaireHuffman {
      * @param isTail Permet de savoir si l'élément affiché est une feuille
      */
     private void afficherArbre(String prefix, boolean isTail) {
-	System.out.println(prefix + (isTail ? "└── " : "├── ") + valeurNoeud);
-	if (noeudGauche != null) {
-	    noeudGauche.afficherArbre(prefix + (isTail ? "    " : "│   "), noeudDroit == null);
-	}
-	if (noeudDroit != null) {
-	    noeudDroit.afficherArbre(prefix + (isTail ? "    " : "│   "), true);
-	}
+		System.out.println(prefix + (isTail ? "└── " : "├── ") + valeurNoeud);
+		if (noeudGauche != null) {
+			noeudGauche.afficherArbre(prefix + (isTail ? "    " : "│   "), noeudDroit == null);
+		}
+		if (noeudDroit != null) {
+			noeudDroit.afficherArbre(prefix + (isTail ? "    " : "│   "), true);
+		}
     }
 
     @Override
     public String toString() {
-	return this.valeurNoeud;
+		return this.valeurNoeud;
     }
 }

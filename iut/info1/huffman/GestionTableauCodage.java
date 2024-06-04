@@ -29,7 +29,7 @@ public class GestionTableauCodage {
      * @param tableauCodage
      */
     public GestionTableauCodage(String[][] tableauCodage) {
-	this.tabCodages = tableauCodage;
+		this.tabCodages = tableauCodage;
     }
 
     /**
@@ -52,30 +52,30 @@ public class GestionTableauCodage {
      * @return tabCodages
      */
     public void conversionTableauCodage(String[] tabFichierCodages) {
-	String ligneActuelle;
-	String codeHuffman;
-	String encode;
-	
-	String[] parties;
+		String ligneActuelle;
+		String codeHuffman;
+		String encode;
+		
+		String[] parties;
 
-	if(tabFichierCodages.length == 0) {
-	    throw new IllegalArgumentException(ERREUR_FORMAT_PARAMETRE);
-	}
+		if(tabFichierCodages.length == 0) {
+			throw new IllegalArgumentException(ERREUR_FORMAT_PARAMETRE);
+		}
 
-	this.tabCodages = new String[tabFichierCodages.length][2];
-	for (int index = 0; index < tabFichierCodages.length; index++) {
+		this.tabCodages = new String[tabFichierCodages.length][2];
+		for (int index = 0; index < tabFichierCodages.length; index++) {
 
-	    ligneActuelle = tabFichierCodages[index];
-	    if(!verifierFormatTableauCodage(ligneActuelle)) {
-		throw new IllegalArgumentException(ERREUR_FORMAT_PARAMETRE);
-	    }
+			ligneActuelle = tabFichierCodages[index];
+			if(!verifierFormatTableauCodage(ligneActuelle)) {
+			throw new IllegalArgumentException(ERREUR_FORMAT_PARAMETRE);
+			}
 
-	    parties     = ligneActuelle.split(";");
-	    codeHuffman = parties[0]   .split("=")[1].trim();
-	    encode      = parties[1]   .split("=")[1].trim();
-	    this.tabCodages[index][0] = encode;
-	    this.tabCodages[index][1] = codeHuffman;
-	}
+			parties     = ligneActuelle.split(";");
+			codeHuffman = parties[0]   .split("=")[1].trim();
+			encode      = parties[1]   .split("=")[1].trim();
+			this.tabCodages[index][0] = encode;
+			this.tabCodages[index][1] = codeHuffman;
+		}
     }
 
     /**
@@ -92,41 +92,41 @@ public class GestionTableauCodage {
      *
      */
     public String[] formaterABHuffman() {
-	String encodageCaractere;
-	String codeHuffman;
-	String symbole;
-	
-	String[] contenuFichier;
+		String encodageCaractere;
+		String codeHuffman;
+		String symbole;
+		
+		String[] contenuFichier;
 
-	contenuFichier = new String[tabCodages.length];
-	for (int indiceLigne = 0;
-		indiceLigne < this.tabCodages.length;
-		indiceLigne++) {
-	    encodageCaractere = this.tabCodages[indiceLigne][0];
+		contenuFichier = new String[tabCodages.length];
+		for (int indiceLigne = 0;
+			indiceLigne < this.tabCodages.length;
+			indiceLigne++) {
+			encodageCaractere = this.tabCodages[indiceLigne][0];
 
-	    codeHuffman = 
-		    String.join("",this.tabCodages[indiceLigne][1].split(", "));
+			codeHuffman = 
+				String.join("",this.tabCodages[indiceLigne][1].split(", "));
 
-	    symbole = 
-		    String.valueOf((char) Integer.parseInt(encodageCaractere,2));
+			symbole = 
+				String.valueOf((char) Integer.parseInt(encodageCaractere,2));
 
-	    if (symbole.equals("\n")){
-		symbole = "LF";
-	    }
+			if (symbole.equals("\n")){
+				symbole = "LF";
+			}
 
-	    contenuFichier[indiceLigne] =  String.format(
-		    "codeHuffman = %s ; encode = %s ; symbole = %s",
-		     codeHuffman, encodageCaractere, symbole
-		    );
-	}
-	return contenuFichier;
+			contenuFichier[indiceLigne] =  String.format(
+				"codeHuffman = %s ; encode = %s ; symbole = %s",
+				codeHuffman, encodageCaractere, symbole
+			);
+		}
+		return contenuFichier;
     }
 
     /**
      * @return tabCodages
      */
     public String[][] getTabCodages() {
-	return this.tabCodages;
+		return this.tabCodages;
     }
 
     /**
@@ -146,52 +146,52 @@ public class GestionTableauCodage {
      */
     public static boolean verifierFormatTableauCodage(String ligne) {
 
-	String codeHuffman;
-	String patternCodeHuffman;
-	String encode;
-	String patternEncode;
-	String patternSymbole;
-	
-	char symbole;
-	char symboleEncode;
-	char avantDernierCaractere;
-	
-	boolean estLF;
-	
-	String[] parties;
+		String codeHuffman;
+		String patternCodeHuffman;
+		String encode;
+		String patternEncode;
+		String patternSymbole;
+		
+		char symbole;
+		char symboleEncode;
+		char avantDernierCaractere;
+		
+		boolean estLF;
+		
+		String[] parties;
 
-	if (ligne.isEmpty()){
-	    err.println(ERREUR_FORMAT_PARAMETRE);
-	    return false;
-	}
+		if (ligne.isEmpty()){
+			err.println(ERREUR_FORMAT_PARAMETRE);
+			return false;
+		}
 
-	parties = ligne.split(";");
-	if(parties.length != 3) {
-	    err.println(ERREUR_FORMAT_PARAMETRE);
-	    return false;
-	}
+		parties = ligne.split(";");
+		if(parties.length != 3) {
+			err.println(ERREUR_FORMAT_PARAMETRE);
+			return false;
+		}
 
-	codeHuffman = parties[0].split("=")[1].trim();
-	encode      = parties[1].split("=")[1].trim();
-	symbole     = ligne.charAt(ligne.length()-1);
+		codeHuffman = parties[0].split("=")[1].trim();
+		encode      = parties[1].split("=")[1].trim();
+		symbole     = ligne.charAt(ligne.length()-1);
 
-	patternCodeHuffman = "^[01\\s]{"+ codeHuffman.length() +"}$";
-	patternEncode      = "^[01]{"+ encode.length() +"}$";
-	patternSymbole     = "^.$";
-	if (    !Pattern.matches(patternCodeHuffman, codeHuffman)
-	     || !Pattern.matches(patternEncode, encode)
-	     || !Pattern.matches(patternSymbole, String.valueOf(symbole))){
-	    err.println(ERREUR_FORMAT_PARAMETRE);
-	    return false;
-	}
+		patternCodeHuffman = "^[01\\s]{"+ codeHuffman.length() +"}$";
+		patternEncode      = "^[01]{"+ encode.length() +"}$";
+		patternSymbole     = "^.$";
+		if (    !Pattern.matches(patternCodeHuffman, codeHuffman)
+			|| !Pattern.matches(patternEncode, encode)
+			|| !Pattern.matches(patternSymbole, String.valueOf(symbole))){
+			err.println(ERREUR_FORMAT_PARAMETRE);
+			return false;
+		}
 
-	avantDernierCaractere = ligne.charAt(ligne.length()-2);
-	symboleEncode = (char) Integer.parseInt(encode, 2);
-	estLF = avantDernierCaractere == 'L' && symbole == 'F';
-	if(symbole != symboleEncode && !estLF ) {
-	    err.println(ERREUR_FORMAT_PARAMETRE);
-	    return false;
-	}
-	return true;
+		avantDernierCaractere = ligne.charAt(ligne.length()-2);
+		symboleEncode = (char) Integer.parseInt(encode, 2);
+		estLF = avantDernierCaractere == 'L' && symbole == 'F';
+		if(symbole != symboleEncode && !estLF ) {
+			err.println(ERREUR_FORMAT_PARAMETRE);
+			return false;
+		}
+		return true;
     }
 }

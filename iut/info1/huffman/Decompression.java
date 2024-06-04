@@ -54,10 +54,9 @@ public class Decompression {
         fichierCle = new Fichier(cheminFichierCle);
         fichierCompresse = new FichierBinaire(cheminFichierCompresse);
         
-        fichierRetour = 
-        	new Fichier( cheminRetour
-        		   + fichierCompresse.nomFichier() 
-        	           + ".txt");
+        fichierRetour = new Fichier(cheminRetour 
+                                  + fichierCompresse.nomFichier()
+                                  + ".txt");
 
         contenuFichierCle = fichierCle.contenuFichier();
         contenuFichierCompresse = fichierCompresse.contenuFichierBinaire();

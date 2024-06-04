@@ -94,11 +94,10 @@ public class Fichier {
 				if (!extensionValide()){
 					err.println(ERREUR_EXTENSION_FICHIER);
 				}
-				if (!fichierExploite.exists()) {
-					if (fichierExploite.createNewFile()) {
-						System.out.println("Fichier créé " + fichierExploite.getName());
-					}
+				if (!fichierExploite.exists() && fichierExploite.createNewFile()) {
+					System.out.println("Fichier créé " + fichierExploite.getName());
 				}
+				
 				if (!fichierExploite.canWrite()){
 					err.println(ERREUR_CREATION_FICHIER +cheminFichier);
 				}
@@ -124,14 +123,14 @@ public class Fichier {
      * 	       false si l'extension du fichier n'est pas valide.
      */
     public boolean extensionValide(){
-	for (String suffixe : SUFFIXE_FICHIERS) {
-	    if (fichierExploite.getName()
-		               .toLowerCase()
-		               .endsWith(suffixe)) {
-		return true;
-	    }
-	}
-	return false;
+		for (String suffixe : SUFFIXE_FICHIERS) {
+			if (fichierExploite.getName()
+						   .toLowerCase()
+						   .endsWith(suffixe)) {
+			return true;
+			}
+		}
+		return false;
     }
 
     /**
@@ -149,41 +148,40 @@ public class Fichier {
      *         ou null si une erreur survient.
      */
     public String[] contenuFichier() {
-	
-	int nbLignes = 0;
-	
-	String ligneAct;
-	
-	String[] contenu = null;
+		int nbLignes = 0;
 
-	try {
-	    while ((ligneAct = tamponFichier.readLine()) != null) {
-		nbLignes++;
-	    }
+		String ligneAct;
 
-	    try {
-		tamponFichier.close();
-	    } catch (IOException pbFermeture) {
-		err.println(ERREUR_FERMETURE_FICHIER);
-	    }
+		String[] contenu = null;
 
-	    /* Réinitialiser le BufferedReader pour relire le fichier */
-	    lecteurFichier = new FileReader(fichierExploite);
-	    tamponFichier  = new BufferedReader(lecteurFichier);
+		try {
+			while ((ligneAct = tamponFichier.readLine()) != null) {
+				nbLignes++;
+			}
 
-	    contenu = new String[nbLignes]; 
-	    int index = 0;
+			try {
+				tamponFichier.close();
+			} catch (IOException pbFermeture) {
+				err.println(ERREUR_FERMETURE_FICHIER);
+			}
 
-	    while ((ligneAct = tamponFichier.readLine()) != null) {
-		contenu[index] = ligneAct;
-		index++;
-	    }
+			/* Réinitialiser le BufferedReader pour relire le fichier */
+			lecteurFichier = new FileReader(fichierExploite);
+			tamponFichier  = new BufferedReader(lecteurFichier);
 
-	} catch (IOException pbContenu) {
-	    err.println(ERREUR_CONTENU_FICHIER);
-	    contenu = null;
-	}
-	return contenu;
+			contenu = new String[nbLignes];
+			int index = 0;
+
+			while ((ligneAct = tamponFichier.readLine()) != null) {
+				contenu[index] = ligneAct;
+				index++;
+			}
+
+		} catch (IOException pbContenu) {
+			err.println(ERREUR_CONTENU_FICHIER);
+			contenu = null;
+		}
+		return contenu;
     }
 
     /**
@@ -193,15 +191,15 @@ public class Fichier {
      * Si le fichier n'existe pas ou ne peut pas être lu, retourne -1.
      */
     public double tailleFichier() {
-	
-	double tailleFichier;
 
-	tailleFichier = -1.0;
+		double tailleFichier;
 
-	if (fichierExploite.length() > 1) {
-	    return fichierExploite.length();
-	}
-	return tailleFichier; //STUB
+		tailleFichier = -1.0;
+
+		if (fichierExploite.length() > 1) {
+			return fichierExploite.length();
+		}
+		return tailleFichier; //STUB
     }
 
     /**
@@ -211,11 +209,11 @@ public class Fichier {
      * Les sauts de ligne vides sont conservés dans l'affichage.
      */
     public void affichageFichier() {
-	String[] contenu = contenuFichier();
+		String[] contenu = contenuFichier();
 
-	for (String ligne : contenu) {
-	    System.out.println(ligne);
-	}
+		for (String ligne : contenu) {
+			System.out.println(ligne);
+		}
     }
 
     /**
@@ -236,13 +234,12 @@ public class Fichier {
      * @throws IllegalArgumentException Si la taille du fichier à comparer est inférieure ou égale à 0.
      */
     public double rapportEntreDeuxFichiers(double tailleFichierCompare) {
-	
-	double tailleFichierActuel = tailleFichier();
+		double tailleFichierActuel = tailleFichier();
 
-	if (tailleFichierCompare <= 0) {
-	    throw new IllegalArgumentException(ERREUR_NUMERATEUR_INVALIDE);
-	}
-	return tailleFichierActuel / tailleFichierCompare;
+		if (tailleFichierCompare <= 0) {
+			throw new IllegalArgumentException(ERREUR_NUMERATEUR_INVALIDE);
+		}
+		return tailleFichierActuel / tailleFichierCompare;
     }
 
     /**
@@ -250,13 +247,13 @@ public class Fichier {
      * @return nom du fichier
      */
     public String nomFichier(){
-	String nomFichier = fichierExploite.getName();
-	int pointIndex = nomFichier.lastIndexOf(".");
+		String nomFichier = fichierExploite.getName();
+		int pointIndex = nomFichier.lastIndexOf(".");
 
-	if (pointIndex == -1) {
-	    return nomFichier;
-	}
-	return nomFichier.substring(0, pointIndex);
+		if (pointIndex == -1) {
+			return nomFichier;
+		}
+		return nomFichier.substring(0, pointIndex);
     }
 
     /**
@@ -266,24 +263,23 @@ public class Fichier {
      *                         du fichier qui va être généré.
      */
     public void ecritureFichier(String[] contenuFichier){
+		try {
+			FileWriter ecritureFichier;
+			BufferedWriter tamponEcritureFichier;
 
-	try {
-	    FileWriter ecritureFichier;
-	    BufferedWriter tamponEcritureFichier;
+			ecritureFichier = new FileWriter(fichierExploite);
+			tamponEcritureFichier = new BufferedWriter(ecritureFichier);
 
-	    ecritureFichier = new FileWriter(fichierExploite);
-	    tamponEcritureFichier = new BufferedWriter(ecritureFichier);
+			for (String ligne : contenuFichier) {
+				tamponEcritureFichier.write(ligne);
+				tamponEcritureFichier.newLine();
+			}
 
-	    for (String ligne : contenuFichier) {
-		tamponEcritureFichier.write(ligne);
-		tamponEcritureFichier.newLine();
-	    }
-
-	    tamponEcritureFichier.close();
-	    ecritureFichier.close();
-	} catch (IOException e) {
-	    err.println(ERREUR_ECRITURE_FICHIER);
-	}
+			tamponEcritureFichier.close();
+			ecritureFichier.close();
+		} catch (IOException e) {
+			err.println(ERREUR_ECRITURE_FICHIER);
+		}
     }
 
     /**
@@ -292,6 +288,6 @@ public class Fichier {
      * @return fichier exploité.
      */
     public File getFichierExploite() {
-	return fichierExploite;
+		return fichierExploite;
     }
 }

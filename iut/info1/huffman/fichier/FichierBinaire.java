@@ -19,12 +19,11 @@ public class FichierBinaire extends Fichier {
             "erreur : Le format du paramètre renseigné invalide.";
 
     /** chemin du fichier exploité */
-    private static String cheminFichier;
+    //private static String cheminFichier;
 
     /** Constructeur de FichierBinaire */
     public FichierBinaire(String cheminFichier) {
         super(cheminFichier);
-        FichierBinaire.cheminFichier = cheminFichier;
     }
 
     /**
@@ -92,7 +91,7 @@ public class FichierBinaire extends Fichier {
         
         byte[] donnees = new byte[longueurDonnees+1];
 
-        if (chaineBinaire.isEmpty() || cheminFichier.isEmpty()) {
+        if (chaineBinaire.isEmpty()) {
             err.println(ERREUR_FORMAT_PARAMETRE);
             return;
         }
@@ -111,7 +110,7 @@ public class FichierBinaire extends Fichier {
         donnees[longueurDonnees] = (byte) nbZeroComplementaire;
 
         try {
-            FileOutputStream fluxEcriture = new FileOutputStream(cheminFichier);
+            FileOutputStream fluxEcriture = new FileOutputStream(this.getFichierExploite());
             fluxEcriture.write(donnees);
             fluxEcriture.close(); // TODO ERREUR FERMETURE
 

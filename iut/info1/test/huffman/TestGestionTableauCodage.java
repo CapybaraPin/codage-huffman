@@ -3,7 +3,6 @@ package iut.info1.test.huffman;
 import iut.info1.huffman.GestionTableauCodage;
 import static org.junit.jupiter.api.Assertions.*;
 
-import iut.info1.huffman.fichier.GestionFichier;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
@@ -96,7 +95,7 @@ class TestGestionTableauCodage {
     void testVerifierFormatTableauCodage(){
         for (String[] tabCodages : FICHIER_ARBRE_HUFFMAN_CONTENU_VALIDE) {
             for (String ligne : tabCodages) {
-                assertTrue(GestionFichier.verifierFormatTableauCodage(ligne));
+                assertTrue(GestionTableauCodage.verifierFormatTableauCodage(ligne));
             }
         }
     }

@@ -42,47 +42,47 @@ public class ApplicationHuffman {
      * @param args non utilisés
      */
     public static void main(String[] args) {
-	Compression compression;
-	Decompression decompression;
-	String action;
-	String cheminFichier;
-	String cheminFichierBin;
-	String cheminFichierCle;
-	String dossierRetour;
+		Compression compression;
+		Decompression decompression;
+		String action;
+		String cheminFichier;
+		String cheminFichierBin;
+		String cheminFichierCle;
+		String dossierRetour;
 
-	if (args.length == 0) {
-	    // TODO : Appel de l'IHM
+		if (args.length == 0) {
+			// TODO : Appel de l'IHM
 
-	    return;
-	}
+			return;
+		}
 
-	action = args[0];
+		action = args[0];
 
-	switch (action){
-	case "-h":
-	    System.out.println(AIDE);
-	    break;
-	    
-	case "-c":
-	    cheminFichier = args[1];
-	    dossierRetour = args[2];
-	    compression = new Compression(cheminFichier, dossierRetour);
-	    compression.execute();
-	    break;
-	    
-	case "-d":
-	    cheminFichierBin = args[1];
-	    cheminFichierCle = args[2];
-	    dossierRetour = args[3];
-	    decompression = new Decompression(cheminFichierBin, 
-		                              cheminFichierCle, 
-		                              dossierRetour   );
-	    decompression.execute();
-	    break;
-	    
-	default:
-	    System.out.println(AIDE);
-	    break;
-	}
+		switch (action){
+		case "-h":
+			System.out.println(AIDE);
+			break;
+			
+		case "-c":
+			cheminFichier = args[1];
+			dossierRetour = args[2];
+			compression = new Compression(cheminFichier, dossierRetour);
+			compression.execute();
+			break;
+			
+		case "-d":
+			cheminFichierBin = args[1];
+			cheminFichierCle = args[2];
+			dossierRetour = args[3];
+			decompression = new Decompression(cheminFichierBin, 
+										cheminFichierCle, 
+										dossierRetour   );
+			decompression.execute();
+			break;
+			
+		default:
+			System.out.println(AIDE);
+			break;
+		}
     }
 }
