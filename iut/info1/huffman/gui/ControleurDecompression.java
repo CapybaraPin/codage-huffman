@@ -146,6 +146,6 @@ public class ControleurDecompression {
 
     @FXML
     void annuler(ActionEvent event) {
-	Main.activerMenu();
+	ControleurPrincipal.activerMenu();
     }
 }

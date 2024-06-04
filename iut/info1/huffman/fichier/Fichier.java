@@ -87,7 +87,7 @@ public class Fichier {
      * @param cheminFichier : Le chemin du fichier à lire.
      */
     public Fichier(String cheminFichier) {
-		if (!cheminFichier.isEmpty()) {
+		if (!cheminFichier.isEmpty()) { 
 			try {
 				fichierExploite = new File(cheminFichier);
 

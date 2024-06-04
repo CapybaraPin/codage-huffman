@@ -4,6 +4,9 @@
  */
 package iut.info1.huffman;
 
+import iut.info1.huffman.gui.ControleurPrincipal;
+import javafx.application.Application;
+
 /**
  * Permet d'effectuer des operations de compression et
  * de decompression de fichiers
@@ -51,7 +54,7 @@ public class ApplicationHuffman {
 		String dossierRetour;
 
 		if (args.length == 0) {
-			// TODO : Appel de l'IHM
+	        Application.launch(ControleurPrincipal.class, args);
 
 			return;
 		}

@@ -13,27 +13,27 @@ import javafx.scene.image.ImageView;
 
 public class ControleurMenuApp {
 
-    @FXML
-    private Button compresser;
+	@FXML
+	private Button compresser;
 
-    @FXML
-    private Button decompresser;
+	@FXML
+	private Button decompresser;
 
-    @FXML
-    private ImageView logoIUT;
-    
-    @FXML
-    public void initialize() {
+	@FXML
+	private ImageView logoIUT;
 
-    }
+	@FXML
+	public void initialize() {
 
-    @FXML
-    void activerCompresser(ActionEvent event) {
-	Main.activerCompression();
-    }
+	}
 
-    @FXML
-    void activerDecompresser(ActionEvent event) {
-	Main.activerDecompression();
-    }
+	@FXML
+	void activerCompresser(ActionEvent event) {
+		ControleurPrincipal.activerCompression();
+	}
+
+	@FXML
+	void activerDecompresser(ActionEvent event) {
+		ControleurPrincipal.activerDecompression();
+	}
 }
